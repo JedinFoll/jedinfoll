@@ -3,18 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Jediñ Foll — Boutique</title>
+  <title>Jediñ Foll — Boutique & Règles</title>
   <style>
     body { margin: 0; font-family: Arial, sans-serif; background-color: #2ec4b6; color: #fff; }
     header, footer { text-align: center; padding: 1rem; background: #1a1a1a; }
     main { max-width: 900px; margin: auto; padding: 1rem; }
-    .card { background: #1a1a1a; border-radius: 20px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
+    .card { background: #1a1a1a; border-radius: 20px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.5); margin-bottom: 2rem; }
     h1, h2, h3 { color: #2ec4b6; }
     .price { font-size: 1.8rem; font-weight: bold; margin: 1rem 0; }
     .btn { display: inline-block; padding: 0.8rem 1.2rem; border-radius: 10px; background: linear-gradient(90deg, #00b4d8, #ffcb77); color: #000; font-weight: bold; text-decoration: none; }
     .btn.secondary { background: linear-gradient(90deg, #9d4edd, #ffcb77); color: #000; }
+    .btn.tertiary { background: linear-gradient(90deg, #ff595e, #ffca3a); color: #000; }
     .qr { text-align: center; margin-top: 2rem; }
-    ul { line-height: 1.6; }
+    video { max-width: 100%; border-radius: 10px; margin-top: 1rem; }
   </style>
 </head>
 <body>
@@ -33,11 +34,26 @@
       </ul>
       <div class="price">14,99 €</div>
       <a href="https://www.paypal.com/ncp/payment/AFCR5XL2VSGK8" class="btn">Acheter France / Europe</a>
-      <a href="https://www.paypal.com/ncp/payment/PYMYEBRDT5WUE" class="btn secondary" style="margin-left:10px;">Acheter DOM/TOM</a>
+      <a href="https://www.paypal.com/ncp/payment/VBE8X4ZKM43P2" class="btn secondary" style="margin-left:10px;">Acheter DOM/TOM</a>
+      <a href="https://www.paypal.com/ncp/payment/8BSJ9NH8TDBGU" class="btn tertiary" style="margin-left:10px;">Acheter sans livraison</a>
       <p style="margin-top:1rem; font-size:0.9rem; color:#ccc;">Livraison sous 15 jours ouvrés</p>
     </div>
 
-    <div class="card" style="margin-top:2rem;">
+    <div class="card">
+      <h2>Règles du Jeu</h2>
+      <p>Ici, vous pourrez détailler toutes les règles du jeu Jediñ Foll. Vous pouvez modifier ce texte pour y inclure vos explications, exemples, et variantes.</p>
+    </div>
+
+    <div class="card">
+      <h2>Vidéos</h2>
+      <p>Découvrez Jediñ Foll en action :</p>
+      <video controls>
+        <source src="video-exemple.mp4" type="video/mp4">
+        Votre navigateur ne supporte pas la lecture vidéo.
+      </video>
+    </div>
+
+    <div class="card">
       <h2>QR Code</h2>
       <p>Scannez pour accéder directement au site :</p>
       <div class="qr">
