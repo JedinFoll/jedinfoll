@@ -1,15 +1,20 @@
+Je vais te donner directement le contenu de chaque fichier à copier-coller dans GitHub.
+
+---
+**index.html** (FR) :
+```html
 <!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Jediñ Foll - Site Officiel</title>
+  <link rel="alternate" hreflang="en" href="index-en.html">
   <style>
     body { font-family: Arial, sans-serif; margin: 0; padding: 1rem; background-color: #f9f9f9; color: #333; }
     h1 { color: #2c3e50; }
     footer { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #ccc; font-size: 0.9rem; color: #555; }
     .avis-section { margin-top: 2rem; background: #fff; padding: 1rem; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
-    .avis-section h2 { margin-top: 0; }
     .avis-list { margin: 1rem 0; padding: 0; list-style: none; }
     .avis-list li { border-bottom: 1px solid #eee; padding: 0.5rem 0; }
     .avis-form textarea { width: 100%; height: 80px; margin-bottom: 0.5rem; }
@@ -18,19 +23,17 @@
   </style>
 </head>
 <body>
+  <a href="index-en.html">EN</a>
   <h1>Jediñ Foll</h1>
-  
   <a href="order.html" class="btn">Commander (formulaire)</a>
 
-  <h2>QR Code du site</h2>
-  <p>Téléchargez votre QR code en PDF haute définition :</p>
+  <h2>QR Code</h2>
   <a href="https://api.qrserver.com/v1/create-qr-code/?size=2000x2000&data=https://jedinfoll.github.io/jedinfoll/" download="QR-JedinFoll.pdf">
     <img src="https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=https://jedinfoll.github.io/jedinfoll/" alt="QR Code Jediñ Foll">
   </a>
-  <p>Cliquez sur l'image pour télécharger en PDF.</p>
 
   <div class="avis-section">
-    <h2>Vos avis sur Jediñ Foll</h2>
+    <h2>Vos avis</h2>
     <ul class="avis-list" id="avis-list">
       <li>⭐⭐⭐⭐⭐ — Excellent jeu, très amusant !</li>
     </ul>
@@ -41,8 +44,7 @@
   </div>
 
   <footer>
-    <p>
-      👁️ Visites :
+    <p>👁️ Visites :
       <img src="https://hitcounter.pythonanywhere.com/count/tag.svg?url=https://jedinfoll.github.io/jedinfoll" alt="Compteur de visites">
     </p>
   </footer>
@@ -62,3 +64,7 @@
   </script>
 </body>
 </html>
+```
+
+---
+**index-en.html** et **order.html** seront construits de la même façon. Veux-tu que je t’écrive aussi ces deux fichiers directement ici pour que tu n’aies qu’à coller ?
