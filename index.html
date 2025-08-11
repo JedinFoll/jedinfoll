@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jediñ Foll — Boutique & Règles</title>
-  <link rel="alternate" hreflang="en" href="index-en.html">
+  <title>Jediñ Foll — Jeu éducatif, drôle et stratégique</title>
+  <link rel="alternate" hreflang="en" href="/jedinfoll/index-en.html">
   <style>
     :root{--mint:#2ec4b6;--bg:#1a1a1a}
     *{box-sizing:border-box}
@@ -27,10 +27,10 @@
     .mentions { font-size: 0.95rem; color: #ddd; margin-top: 1rem; text-align: left; line-height: 1.55; }
     .flags-inline { display:inline-flex; align-items:center; gap:6px; }
     .flag { height: 16px; border-radius:2px; border:1px solid #333; }
-    .avis-section { margin-top: 2rem; background: #101010; padding: 1rem; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,.3); }
-    .avis-list { list-style:none; padding:0; margin:.6rem 0; }
-    .avis-list li { border-bottom:1px solid #222; padding:.6rem 0; }
-    .avis-form textarea { width:100%; height:80px; border-radius:10px; border:1px solid #333; padding:.6rem; background:#0f0f0f; color:#fff }
+    .reviews-section { margin-top: 2rem; background: #101010; padding: 1rem; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,.3); }
+    .reviews-list { list-style:none; padding:0; margin:.6rem 0; }
+    .reviews-list li { border-bottom:1px solid #222; padding:.6rem 0; }
+    .reviews-form textarea { width:100%; height:80px; border-radius:10px; border:1px solid #333; padding:.6rem; background:#0f0f0f; color:#fff }
     .small { color:#bbb; font-size:.9rem }
     ul { padding-left: 1.2rem; }
   </style>
@@ -39,7 +39,7 @@
   <header>
     <div class="topbar">
       <div></div>
-      <div class="lang">FR / <a href="./index-en.html">EN</a></div>
+      <div class="lang">FR / <a href="/jedinfoll/index-en.html">EN</a></div>
     </div>
     <h1>Jediñ Foll</h1>
     <p>Le jeu de cartes éducatif, drôle et stratégique</p>
@@ -49,26 +49,26 @@
     <div class="card">
       <h2>Jediñ Foll</h2>
       <ul>
-        <li>1–4 joueurs · 10–30 minutes</li>
-        <li>dès 6 ans</li>
-        <li>5 modes de jeu — il faut atteindre le résultat exact demandé suivant le mode choisi</li>
+        <li>1 à 4 joueurs · 10 à 30 minutes</li>
+        <li>À partir de 6 ans</li>
+        <li>5 modes de jeu — atteindre exactement le résultat demandé selon le mode choisi</li>
         <li>La boîte contient 102 cartes</li>
       </ul>
       <div class="price">14,99 €</div>
       <a href="https://www.paypal.com/ncp/payment/YTGSTLCPBDEL2" class="btn">Acheter France / Europe</a>
       <a href="https://www.paypal.com/ncp/payment/VBE8X4ZKM43P2" class="btn secondary" style="margin-left:10px;">Acheter DOM/TOM</a>
       <a href="https://www.paypal.com/ncp/payment/8BSJ9NH8TDBGU" class="btn tertiary" style="margin-left:10px;">Acheter sans livraison</a>
-      <p class="small">Livraison sous 15 jours ouvrés</p>
+      <p class="small">Prévoir un envoi sous 15 jours ouvrés</p>
     </div>
 
     <div class="card">
-      <h2>Règles du Jeu</h2>
-      <p>Ici, vous pouvez détailler les règles de Jediñ Foll : mise en place, déroulé d’un tour, cartes actions, conditions de victoire, variantes (5 modes), etc.</p>
+      <h2>Règles du jeu</h2>
+      <p>Ajoutez ici les règles complètes de Jediñ Foll : mise en place, déroulement du tour, cartes spéciales, conditions de victoire, variantes (5 modes), etc.</p>
     </div>
 
     <div class="card">
       <h2>Vidéos</h2>
-      <p>Découvrez Jediñ Foll en action :</p>
+      <p>Découvrez Jediñ Foll en vidéo :</p>
       <div style="aspect-ratio:16/9; max-width:100%;">
         <iframe width="100%" height="100%" src="https://www.youtube.com/embed/ID_DE_TA_VIDEO" title="Jediñ Foll — Démo" frameborder="0" allowfullscreen></iframe>
       </div>
@@ -76,32 +76,32 @@
 
     <div class="card">
       <h2>QR Code</h2>
-      <p>Scannez pour accéder directement au site :</p>
+      <p>Scannez pour accéder au site :</p>
       <div class="qr">
         <a href="https://api.qrserver.com/v1/create-qr-code/?size=2000x2000&data=https://jedinfoll.github.io/jedinfoll/" download>
           <img src="https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=https://jedinfoll.github.io/jedinfoll/" alt="QR Code vers Jediñ Foll" style="max-width:300px;">
         </a>
       </div>
-      <p class="small">Cliquez sur le QR code pour télécharger en haute définition (PNG).</p>
+      <p class="small">Cliquez sur le QR pour télécharger en HD.</p>
     </div>
 
-    <div class="card avis-section">
-      <h2>Vos avis</h2>
-      <ul class="avis-list" id="avis-list">
+    <div class="card reviews-section">
+      <h2>Avis</h2>
+      <ul class="reviews-list" id="reviews-list">
         <li>⭐⭐⭐⭐⭐ — Excellent jeu, très amusant !</li>
       </ul>
-      <div class="avis-form">
-        <textarea id="avis-text" placeholder="Écrivez votre avis ici..."></textarea><br>
-        <button class="btn" onclick="ajouterAvis()">Envoyer</button>
-        <p class="small">(Les avis s’affichent immédiatement mais ne sont pas enregistrés de façon permanente.)</p>
+      <div class="reviews-form">
+        <textarea id="review-text" placeholder="Écrivez votre avis..."></textarea><br>
+        <button class="btn" onclick="addReview()">Envoyer</button>
+        <p class="small">(Les avis s’affichent immédiatement mais ne sont pas enregistrés.)</p>
       </div>
     </div>
 
     <div class="card mentions">
       <h2>Mentions légales</h2>
-      <p><strong>Éditeur du site :</strong> Jediñ Foll — Email : <a href="mailto:jedinfoll@gmail.com">jedinfoll@gmail.com</a></p>
+      <p><strong>Éditeur :</strong> Jediñ Foll — Email : <a href="mailto:jedinfoll@gmail.com">jedinfoll@gmail.com</a></p>
       <p><strong>Responsable de publication :</strong> Jessica Lechertier</p>
-      <p><strong>Fabrication :</strong> Jeu créé en
+      <p><strong>Fabrication :</strong> Créé en
         <span class="flags-inline">Martinique
           <img src="https://raw.githubusercontent.com/jedinfoll/jedinfoll/main/1000079688.jpg" alt="" class="flag">
         </span>
@@ -110,34 +110,34 @@
           <img src="https://upload.wikimedia.org/wikipedia/commons/2/29/Flag_of_Brittany_%28Gwenn_ha_du%29.svg" alt="" class="flag">
         </span>.
       </p>
-      <p><strong>Hébergement :</strong> GitHub Pages — GitHub Inc., 88 Colin P Kelly Jr St, San Francisco, CA 94107, États-Unis.</p>
-      <p><strong>Propriété intellectuelle :</strong> Contenus (textes, images, logo, vidéos) © Jediñ Foll. Reproduction interdite sans autorisation.</p>
-      <p><strong>Protection des données :</strong> Les données collectées (commandes, emails) servent uniquement au traitement des achats et ne sont jamais revendues.</p>
+      <p><strong>Hébergement :</strong> GitHub Pages — GitHub Inc., 88 Colin P Kelly Jr St, San Francisco, CA 94107, USA.</p>
+      <p><strong>Propriété intellectuelle :</strong> Contenus © Jediñ Foll. Reproduction interdite sans autorisation.</p>
+      <p><strong>Données personnelles :</strong> Les données collectées (commandes, emails) servent uniquement au traitement des achats et ne sont jamais revendues.</p>
     </div>
   </main>
 
   <footer>
     <div class="social-links">
-      <a href="https://www.instagram.com/jedinfoll" target="_blank">Instagram : @jedinfoll</a> |
-      <a href="https://www.facebook.com/Jedi%C3%B1%20Foll" target="_blank">Facebook : Jediñ Foll</a> |
-      <a href="mailto:jedinfoll@gmail.com">Email : jedinfoll@gmail.com</a>
+      <a href="https://www.instagram.com/jedinfoll" target="_blank">Instagram: @jedinfoll</a> |
+      <a href="https://www.facebook.com/Jedi%C3%B1%20Foll" target="_blank">Facebook: Jediñ Foll</a> |
+      <a href="mailto:jedinfoll@gmail.com">Email: jedinfoll@gmail.com</a>
     </div>
     <p>👁️ Visites :
-      <img src="https://hitcounter.pythonanywhere.com/count/tag.svg?url=https://jedinfoll.github.io/jedinfoll" alt="Compteur de visites">
+      <img src="https://hitcounter.pythonanywhere.com/count/tag.svg?url=https%3A%2F%2Fjedinfoll.github.io%2Fjedinfoll" alt="Compteur de visites">
     </p>
     <p>© 2025 Jediñ Foll — Tous droits réservés.</p>
   </footer>
 
   <script>
-    function ajouterAvis() {
-      const texte = document.getElementById('avis-text').value.trim();
-      if (texte) {
-        const li = document.createElement('li');
-        li.textContent = texte;
-        document.getElementById('avis-list').appendChild(li);
-        document.getElementById('avis-text').value = '';
+    function addReview(){
+      const txt = document.getElementById('review-text').value.trim();
+      if(txt){
+        const li=document.createElement('li');
+        li.textContent = txt;
+        document.getElementById('reviews-list').appendChild(li);
+        document.getElementById('review-text').value='';
       } else {
-        alert('Veuillez écrire un avis avant de l’envoyer.');
+        alert('Veuillez écrire un avis avant d’envoyer.');
       }
     }
   </script>
