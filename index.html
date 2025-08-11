@@ -3,26 +3,62 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QR Code Jediñ Foll - PDF</title>
+  <title>Jediñ Foll - Site Officiel</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 1rem; background-color: #f9f9f9; color: #333; }
+    h1 { color: #2c3e50; }
+    footer { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #ccc; font-size: 0.9rem; color: #555; }
+    .avis-section { margin-top: 2rem; background: #fff; padding: 1rem; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    .avis-section h2 { margin-top: 0; }
+    .avis-list { margin: 1rem 0; padding: 0; list-style: none; }
+    .avis-list li { border-bottom: 1px solid #eee; padding: 0.5rem 0; }
+    .avis-form textarea { width: 100%; height: 80px; margin-bottom: 0.5rem; }
+    .btn { display: inline-block; padding: 10px 20px; background: #27ae60; color: #fff; text-decoration: none; border-radius: 5px; }
+    .btn:hover { background: #219150; }
+  </style>
 </head>
 <body>
-  <h1>QR Code Jediñ Foll</h1>
+  <h1>Jediñ Foll</h1>
+  
+  <a href="order.html" class="btn">Commander (formulaire)</a>
+
+  <h2>QR Code du site</h2>
   <p>Téléchargez votre QR code en PDF haute définition :</p>
   <a href="https://api.qrserver.com/v1/create-qr-code/?size=2000x2000&data=https://jedinfoll.github.io/jedinfoll/" download="QR-JedinFoll.pdf">
     <img src="https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=https://jedinfoll.github.io/jedinfoll/" alt="QR Code Jediñ Foll">
   </a>
-  <p>Cliquez sur l'image pour télécharger en PDF. Vous pouvez aussi :</p>
-  <ol>
-    <li>Ouvrir <a href="https://api.qrserver.com/v1/create-qr-code/?size=2000x2000&data=https://jedinfoll.github.io/jedinfoll/" target="_blank">ce lien</a> dans un nouvel onglet.</li>
-    <li>Faire <strong>Clic droit > Imprimer</strong>.</li>
-    <li>Choisir <strong>Enregistrer en PDF</strong> ou <strong>Microsoft Print to PDF</strong>.</li>
-    <li>Nommer le fichier et enregistrer.</li>
-  </ol>
+  <p>Cliquez sur l'image pour télécharger en PDF.</p>
+
+  <div class="avis-section">
+    <h2>Vos avis sur Jediñ Foll</h2>
+    <ul class="avis-list" id="avis-list">
+      <li>⭐⭐⭐⭐⭐ — Excellent jeu, très amusant !</li>
+    </ul>
+    <div class="avis-form">
+      <textarea id="avis-text" placeholder="Écrivez votre avis ici..."></textarea><br>
+      <button onclick="ajouterAvis()">Envoyer</button>
+    </div>
+  </div>
+
   <footer>
     <p>
       👁️ Visites :
       <img src="https://hitcounter.pythonanywhere.com/count/tag.svg?url=https://jedinfoll.github.io/jedinfoll" alt="Compteur de visites">
     </p>
   </footer>
+
+  <script>
+    function ajouterAvis() {
+      const texte = document.getElementById('avis-text').value.trim();
+      if (texte) {
+        const li = document.createElement('li');
+        li.textContent = texte;
+        document.getElementById('avis-list').appendChild(li);
+        document.getElementById('avis-text').value = '';
+      } else {
+        alert('Veuillez écrire un avis avant de l’envoyer.');
+      }
+    }
+  </script>
 </body>
 </html>
