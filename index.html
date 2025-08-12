@@ -122,9 +122,7 @@
       <a href="https://www.facebook.com/Jedi%C3%B1%20Foll" target="_blank">Facebook: Jediñ Foll</a> |
       <a href="mailto:jedinfoll@gmail.com">Email: jedinfoll@gmail.com</a>
     </div>
-    <p>👁️ Visites :
-      <img src="https://hitcounter.pythonanywhere.com/count/tag.svg?url=https%3A%2F%2Fjedinfoll.github.io%2Fjedinfoll" alt="Compteur de visites">
-    </p>
+    <p>👁️ Visites : <span id="visits">…</span></p>
     <p>© 2025 Jediñ Foll — Tous droits réservés.</p>
   </footer>
 
@@ -140,6 +138,21 @@
         alert('Veuillez écrire un avis avant d’envoyer.');
       }
     }
+  </script>
+  <script>
+    // Compteur de visites (CountAPI) — FR
+    (function () {
+      fetch('https://api.countapi.xyz/hit/jedinfoll.github.io/jedinfoll')
+        .then(r => r.json())
+        .then(d => {
+          const el = document.getElementById('visits');
+          if (el) el.textContent = d.value.toLocaleString('fr-FR');
+        })
+        .catch(() => {
+          const el = document.getElementById('visits');
+          if (el) el.textContent = '—';
+        });
+    })();
   </script>
 </body>
 </html>
