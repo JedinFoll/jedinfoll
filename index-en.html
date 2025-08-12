@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jediñ Foll — Educational, Fun & Strategic Card Game</title>
+  <title>Jediñ Foll — Educational, Funny & Strategic Card Game</title>
   <link rel="alternate" hreflang="fr" href="/jedinfoll/index.html">
   <style>
     :root{--mint:#2ec4b6;--bg:#1a1a1a}
@@ -122,9 +122,7 @@
       <a href="https://www.facebook.com/Jedi%C3%B1%20Foll" target="_blank">Facebook: Jediñ Foll</a> |
       <a href="mailto:jedinfoll@gmail.com">Email: jedinfoll@gmail.com</a>
     </div>
-    <p>👁️ Visits:
-      <img src="https://hitcounter.pythonanywhere.com/count/tag.svg?url=https%3A%2F%2Fjedinfoll.github.io%2Fjedinfoll" alt="Visit counter">
-    </p>
+    <p>👁️ Visits: <span id="visits">…</span></p>
     <p>© 2025 Jediñ Foll — All rights reserved.</p>
   </footer>
 
@@ -141,6 +139,20 @@
       }
     }
   </script>
+  <script>
+    // Visit counter (CountAPI) — EN
+    (function () {
+      fetch('https://api.countapi.xyz/hit/jedinfoll.github.io/jedinfoll')
+        .then(r => r.json())
+        .then(d => {
+          const el = document.getElementById('visits');
+          if (el) el.textContent = d.value.toLocaleString('en-US');
+        })
+        .catch(() => {
+          const el = document.getElementById('visits');
+          if (el) el.textContent = '—';
+        });
+    })();
+  </script>
 </body>
 </html>
-
