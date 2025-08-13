@@ -22,7 +22,6 @@
     .btn.secondary { background: linear-gradient(90deg, #9d4edd, #ffcb77); }
     .btn.tertiary { background: linear-gradient(90deg, #ff595e, #ffca3a); }
     .qr { text-align: center; margin-top: 1rem; }
-    video { max-width: 100%; border-radius: 10px; margin-top: 1rem; }
     .social-links a { color: var(--mint); text-decoration: none; margin: 0 10px; font-weight: bold; }
     .mentions { font-size: 0.95rem; color: #ddd; margin-top: 1rem; text-align: left; line-height: 1.55; }
     .flags-inline { display:inline-flex; align-items:center; gap:6px; }
@@ -30,9 +29,23 @@
     .reviews-section { margin-top: 2rem; background: #101010; padding: 1rem; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,.3); }
     .reviews-list { list-style:none; padding:0; margin:.6rem 0; }
     .reviews-list li { border-bottom:1px solid #222; padding:.6rem 0; }
-    .reviews-form textarea { width:100%; height:80px; border-radius:10px; border:1px solid #333; padding:.6rem; background:#0f0f0f; color:#fff }
+    .reviews-form textarea { width:100%; height:90px; border-radius:10px; border:1px solid #333; padding:.6rem; background:#0f0f0f; color:#fff }
+    .stars { font-size: 1.4rem; cursor: pointer; user-select:none; }
+    .star { padding: 0 .1rem; }
+    .star.active { filter: drop-shadow(0 0 2px rgba(255,215,0,0.7)); }
+    .toggle { cursor:pointer; font-weight:bold; margin-bottom:.6rem; display:inline-block; }
     .small { color:#bbb; font-size:.9rem }
     ul { padding-left: 1.2rem; }
+    /* Impression : ne garder que la section règles */
+    @media print {
+      body { background: #fff; color: #000; }
+      header, footer, .card:not(#rules), .reviews-section { display: none !important; }
+      #rules { box-shadow:none; border: none; background:#fff; color:#000; }
+      #rules h2 { color:#000; }
+    }
+    /* Lecteur PDF responsive */
+    .pdf-frame { width:100%; aspect-ratio: 1/1.414; max-height:80vh; border:0; background:#fff; }
+    @media (max-width:600px){ .pdf-frame{ aspect-ratio:auto; height:70vh; } }
   </style>
 </head>
 <body>
@@ -56,9 +69,14 @@
       </ul>
     </div>
 
-    <div class="card">
+    <div class="card" id="rules">
       <h2>Règles du jeu</h2>
-      <p>Ajoutez ici les règles complètes de Jediñ Foll : mise en place, déroulement du tour, cartes spéciales, conditions de victoire, variantes (5 modes), etc.</p>
+      <p class="small">Lecture directe ci-dessous • <a class="btn" href="/jedinfoll/regles.pdf" download>Télécharger le PDF</a></p>
+      <object data="/jedinfoll/regles.pdf" type="application/pdf" class="pdf-frame">
+        <iframe src="/jedinfoll/regles.pdf" class="pdf-frame"></iframe>
+      </object>
+      <p class="small">Si le PDF ne s’affiche pas, <a href="/jedinfoll/regles.pdf" download>cliquez ici pour le télécharger</a>.</p>
+      <button class="btn" onclick="window.print()">📄 Imprimer la section Règles</button>
     </div>
 
     <div class="card">
@@ -69,7 +87,7 @@
       </div>
     </div>
 
-    <!-- PRIX & PAIEMENT déplacés ici, après la vidéo -->
+    <!-- PRIX & PAIEMENT après la vidéo -->
     <div class="card">
       <h2>Tarif & Paiement</h2>
       <div class="price">14,99 €</div>
@@ -91,14 +109,24 @@
     </div>
 
     <div class="card reviews-section">
-      <h2>Avis</h2>
-      <ul class="reviews-list" id="reviews-list">
-        <li>⭐⭐⭐⭐⭐ — Excellent jeu, très amusant !</li>
-      </ul>
-      <div class="reviews-form">
-        <textarea id="review-text" placeholder="Écrivez votre avis..."></textarea><br>
-        <button class="btn" onclick="addReview()">Envoyer</button>
-        <p class="small">(Les avis s’affichent immédiatement mais ne sont pas enregistrés.)</p>
+      <span class="toggle" id="toggleReviews">💬 Avis (cliquer pour ouvrir/fermer)</span>
+      <div id="reviewsBox" style="display:none">
+        <h2>Avis</h2>
+        <ul class="reviews-list" id="reviews-list">
+          <li>⭐⭐⭐⭐⭐ — Excellent jeu, très amusant !</li>
+        </ul>
+        <div class="reviews-form">
+          <div class="stars" id="stars" aria-label="Note">
+            <span class="star" data-v="1">☆</span>
+            <span class="star" data-v="2">☆</span>
+            <span class="star" data-v="3">☆</span>
+            <span class="star" data-v="4">☆</span>
+            <span class="star" data-v="5">☆</span>
+          </div>
+          <textarea id="review-text" placeholder="Écrivez votre avis..."></textarea><br>
+          <button class="btn" id="sendReview">Envoyer</button>
+          <p class="small">(Les avis s’affichent immédiatement mais ne sont pas enregistrés.)</p>
+        </div>
       </div>
     </div>
 
@@ -127,38 +155,65 @@
       <a href="https://www.facebook.com/Jedi%C3%B1%20Foll" target="_blank">Facebook: Jediñ Foll</a> |
       <a href="mailto:jedinfoll@gmail.com">Email: jedinfoll@gmail.com</a>
     </div>
-    <p>👁️ Visites : <span id="visits">…</span></p>
+    <!-- Fallback image (marche même si JS est bloqué) + texte CountAPI si dispo -->
+    <p>👁️ Visites :
+      <img id="visitsImg" src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fjedinfoll.github.io%2Fjedinfoll&title=visites" alt="Compteur de visites">
+      <span id="visitsText" class="small"></span>
+    </p>
     <p>© 2025 Jediñ Foll — Tous droits réservés.</p>
   </footer>
 
   <script>
-    function addReview(){
-      const txt = document.getElementById('review-text').value.trim();
-      if(txt){
-        const li=document.createElement('li');
-        li.textContent = txt;
-        document.getElementById('reviews-list').appendChild(li);
-        document.getElementById('review-text').value='';
-      } else {
-        alert('Veuillez écrire un avis avant d’envoyer.');
+    // --- Avis : étoiles + envoi + ouverture persistée ---
+    (function(){
+      const stars = document.querySelectorAll('#stars .star');
+      const text = document.getElementById('review-text');
+      const list = document.getElementById('reviews-list');
+      const send = document.getElementById('sendReview');
+      const box = document.getElementById('reviewsBox');
+      const toggle = document.getElementById('toggleReviews');
+      let rating = 0;
+
+      const open = localStorage.getItem('reviewsOpen') === '1';
+      box.style.display = open ? 'block' : 'none';
+      toggle.addEventListener('click', ()=>{
+        const visible = box.style.display !== 'none';
+        box.style.display = visible ? 'none' : 'block';
+        localStorage.setItem('reviewsOpen', box.style.display !== 'none' ? '1' : '0');
+      });
+
+      function paint(n){
+        stars.forEach(s=>{
+          const v = Number(s.dataset.v);
+          s.textContent = v <= n ? '★' : '☆';
+          s.classList.toggle('active', v <= n);
+        });
       }
-    }
+      stars.forEach(s=>{
+        s.addEventListener('mouseenter', ()=>paint(Number(s.dataset.v)));
+        s.addEventListener('mouseleave', ()=>paint(rating));
+        s.addEventListener('click', ()=>{ rating = Number(s.dataset.v); paint(rating); });
+      });
+
+      send.addEventListener('click', ()=>{
+        const t = (text.value||'').trim();
+        if(!rating){ alert('Choisissez une note (étoiles).'); return; }
+        if(!t){ alert('Écrivez votre avis.'); return; }
+        const li = document.createElement('li');
+        li.textContent = '★'.repeat(rating) + ' — ' + t;
+        list.appendChild(li);
+        text.value=''; rating=0; paint(0);
+      });
+    })();
   </script>
   <script>
-    // Compteur de visites : CountAPI + fallback image si échec
+    // --- Compteur : tenter CountAPI (texte), sinon laisser l'image ---
     (function () {
-      const el = document.getElementById('visits');
+      const txt = document.getElementById('visitsText');
       fetch('https://api.countapi.xyz/hit/jedinfoll.github.io/jedinfoll')
         .then(r => r.json())
-        .then(d => { if (el) el.textContent = d.value.toLocaleString('fr-FR'); })
-        .catch(() => {
-          if (!el) return;
-          const img = document.createElement('img');
-          img.src = 'https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fjedinfoll.github.io%2Fjedinfoll&title=visites';
-          img.alt = 'Compteur de visites';
-          img.style.verticalAlign = 'middle';
-          el.replaceWith(img);
-        });
+        .then(d => { if (txt && d && typeof d.value==='number') txt.textContent = ' ('+ d.value.toLocaleString('fr-FR') + ')'; })
+        .catch(()=>{ /* on laisse l'image faire le job */ });
     })();
   </script>
 </body>
