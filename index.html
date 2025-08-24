@@ -15,7 +15,7 @@
     .lang { font-weight:bold; }
     .lang a { color:#ffcb77; text-decoration:none; margin-left:.5rem; }
     .card { background: var(--bg); border-radius: 20px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.5); margin: 1rem auto 2rem; }
-    h1, h2, h3 { color: #ffffff; margin:0 0 .5rem; }
+    h1, h2 { color: #ffffff; margin:0 0 .5rem; }
     h2 { color: var(--mint); }
     .price { font-size: 1.8rem; font-weight: bold; margin: 1rem 0; }
     .btn { display: inline-block; padding: 0.8rem 1.2rem; border-radius: 10px; background: linear-gradient(90deg, #00b4d8, #ffcb77); color: #000; font-weight: bold; text-decoration: none; }
@@ -28,20 +28,15 @@
     .flag { height: 16px; border-radius:2px; border:1px solid #333; }
     .small { color:#bbb; font-size:.9rem }
     ul { padding-left: 1.2rem; }
-
-    /* PDF responsive */
     .pdf-frame { width:100%; aspect-ratio: 1/1.414; max-height:80vh; border:0; background:#fff; }
     @media (max-width:600px){ .pdf-frame{ aspect-ratio:auto; height:70vh; } }
-
-    /* Impression : ne garder que la section règles */
     @media print {
       body { background: #fff; color: #000; }
       header, footer, .card:not(#rules) { display: none !important; }
       #rules { box-shadow:none; border: none; background:#fff; color:#000; }
       #rules h2 { color:#000; }
     }
-
-    /* Étoiles (toujours visibles) */
+    /* Étoiles */
     .stars { font-size: 1.6rem; user-select:none; }
     .rating-line { display:flex; align-items:center; gap:.5rem; flex-wrap:wrap; }
     .rating-summary { font-weight:bold; }
@@ -82,7 +77,6 @@
 
     <div class="card">
       <h2>Vidéos</h2>
-      <p>Découvrez Jediñ Foll en vidéo :</p>
       <div style="aspect-ratio:16/9; max-width:100%;">
         <iframe width="100%" height="100%" src="https://www.youtube.com/embed/ID_DE_TA_VIDEO" title="Jediñ Foll — Démo" frameborder="0" allowfullscreen></iframe>
       </div>
@@ -99,7 +93,6 @@
 
     <div class="card">
       <h2>QR Code</h2>
-      <p>Scannez pour accéder au site :</p>
       <div class="qr">
         <a href="https://api.qrserver.com/v1/create-qr-code/?size=2000x2000&data=https://jedinfoll.github.io/jedinfoll/" download>
           <img src="https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=https://jedinfoll.github.io/jedinfoll/" alt="QR Code vers Jediñ Foll" style="max-width:300px;">
@@ -108,15 +101,15 @@
       <p class="small">Cliquez sur le QR pour télécharger en HD.</p>
     </div>
 
-    <!-- NOTE & AVIS PERSISTANTS -->
+    <!-- NOTE & AVIS (une seule section) -->
     <div class="card">
       <h2>Note & Avis</h2>
       <!-- Note toujours visible -->
       <div class="rating-line">
-        <div id="avgStars" class="stars" aria-label="Note moyenne" style="pointer-events:none;">★★★★★</div>
+        <div id="avgStars" class="stars" aria-label="Note moyenne" style="pointer-events:none;">☆☆☆☆☆</div>
         <div class="rating-summary"><span id="avgValue">—</span> / 5 · <span id="totalVotes">0</span> notes</div>
       </div>
-      <div class="small">Donnez votre note :</div>
+      <div class="small">Votre note :</div>
       <div class="stars rate-stars" id="rateStars" aria-label="Noter">
         <span class="star" data-v="1">☆</span>
         <span class="star" data-v="2">☆</span>
@@ -156,63 +149,66 @@
       <a href="https://www.facebook.com/Jedi%C3%B1%20Foll" target="_blank">Facebook: Jediñ Foll</a> |
       <a href="mailto:jedinfoll@gmail.com">Email: jedinfoll@gmail.com</a>
     </div>
-    <p>👁️ Visites : <span id="visits">…</span></p>
+    <!-- Badge image (fiable) + nombre texte -->
+    <p>👁️ Visites :
+      <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fjedinfoll.github.io%2Fjedinfoll%2Findex.html&title=visites" alt="Compteur" style="vertical-align:middle">
+      <span id="visits" class="small"></span>
+    </p>
     <p>© 2025 Jediñ Foll — Tous droits réservés.</p>
   </footer>
 
+  <!-- Compteur texte (CountAPI) -->
   <script>
-    // --- Compteur de visites (texte) ---
     (function () {
       const el = document.getElementById('visits');
-      fetch('https://api.countapi.xyz/hit/jedinfoll.github.io/jedinfoll')
+      fetch('https://api.countapi.xyz/hit/jedinfoll.github.io/index.html')
         .then(r => r.json())
-        .then(d => { if (el) el.textContent = (d && d.value) ? d.value.toLocaleString('fr-FR') : '—'; })
-        .catch(() => { if (el) el.textContent = '—'; });
+        .then(d => { if (el) el.textContent = ' (' + (d?.value || 0).toLocaleString('fr-FR') + ')'; })
+        .catch(() => { if (el) el.textContent = ''; });
     })();
   </script>
+
+  <!-- Note persistante (CountAPI) -->
   <script>
-    // --- Note persistante (CountAPI) ---
     (function(){
       const avgStars = document.getElementById('avgStars');
       const avgValue = document.getElementById('avgValue');
       const totalVotes = document.getElementById('totalVotes');
       const rateStars = document.querySelectorAll('#rateStars .star');
 
-      function paintStars(elem, n){
-        const s = ['☆','☆','☆','☆','☆'];
-        for(let i=0;i<n;i++) s[i]='★';
-        elem.textContent = s.join('');
+      function paint(elem, n){
+        const arr = ['☆','☆','☆','☆','☆'];
+        for(let i=0;i<n;i++) arr[i]='★';
+        elem.textContent = arr.join('');
       }
 
       function refresh(){
-        const promises = [1,2,3,4,5].map(v =>
+        Promise.all([1,2,3,4,5].map(v =>
           fetch(`https://api.countapi.xyz/get/jedinfoll.github.io/rating${v}`).then(r=>r.json()).catch(()=>({value:0}))
-        );
-        Promise.all(promises).then(vals=>{
-          const counts = vals.map(v => Number((v && v.value) || 0));
+        )).then(vals=>{
+          const counts = vals.map(v => Number(v?.value || 0));
           const total = counts.reduce((a,b)=>a+b,0);
           const sum = counts.reduce((a,b,i)=>a+b*(i+1),0);
-          const avg = total ? (sum/total) : 0;
+          const avg = total ? sum/total : 0;
           totalVotes.textContent = total.toLocaleString('fr-FR');
           avgValue.textContent = total ? avg.toFixed(1) : '—';
-          paintStars(avgStars, Math.round(avg));
+          paint(avgStars, Math.round(avg));
         });
       }
 
-      rateStars.forEach(s=>{
-        s.addEventListener('mouseenter', ()=>paintStars(s.parentElement, Number(s.dataset.v)));
-        s.addEventListener('mouseleave', ()=>paintStars(s.parentElement, 0));
-        s.addEventListener('click', ()=>{
-          const v = Number(s.dataset.v);
-          fetch(`https://api.countapi.xyz/hit/jedinfoll.github.io/rating${v}`)
-            .then(()=>refresh())
-            .catch(()=>alert("Impossible d'enregistrer votre note maintenant."));
-        });
+      // afficher tout de suite des étoiles vides (au cas où JS lente)
+      paint(avgStars, 0);
+
+      document.getElementById('rateStars').addEventListener('click', (e)=>{
+        const s = e.target.closest('.star'); if(!s) return;
+        const v = Number(s.dataset.v||0);
+        fetch(`https://api.countapi.xyz/hit/jedinfoll.github.io/rating${v}`).then(()=>refresh());
       });
 
       refresh();
     })();
   </script>
+
   <!-- Avis persistants (Utterances) -->
   <script src="https://utteranc.es/client.js"
           repo="jedinfoll/jedinfoll"
