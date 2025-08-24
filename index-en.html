@@ -26,23 +26,24 @@
     .mentions { font-size: 0.95rem; color: #ddd; margin-top: 1rem; text-align: left; line-height: 1.55; }
     .flags-inline { display:inline-flex; align-items:center; gap:6px; }
     .flag { height: 16px; border-radius:2px; border:1px solid #333; }
-    .reviews-section { margin-top: 2rem; background: #101010; padding: 1rem; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
     .small { color:#bbb; font-size:.9rem }
     ul { padding-left: 1.2rem; }
+
+    .pdf-frame { width:100%; aspect-ratio: 1/1.414; max-height:80vh; border:0; background:#fff; }
+    @media (max-width:600px){ .pdf-frame{ aspect-ratio:auto; height:70vh; } }
+
     @media print {
       body { background:#fff; color:#000; }
       header, footer, .card:not(#rules) { display:none !important; }
       #rules { box-shadow:none; border:none; background:#fff; color:#000; }
       #rules h2 { color:#000; }
     }
-    .pdf-frame { width:100%; aspect-ratio: 1/1.414; max-height:80vh; border:0; background:#fff; }
-    @media (max-width:600px){ .pdf-frame{ aspect-ratio:auto; height:70vh; } }
 
-    .stars { font-size: 1.6rem; cursor: pointer; user-select:none; }
-    .stars .star { padding: 0 .08rem; }
-    .stars .star.active { filter: drop-shadow(0 0 2px rgba(255,215,0,0.7)); }
+    .stars { font-size: 1.6rem; user-select:none; }
     .rating-line { display:flex; align-items:center; gap:.5rem; flex-wrap:wrap; }
     .rating-summary { font-weight:bold; }
+    .rate-stars { cursor:pointer; }
+    .rate-stars .star { padding:0 .08rem; }
   </style>
 </head>
 <body>
@@ -104,15 +105,14 @@
       <p class="small">Click the QR to download in HD.</p>
     </div>
 
-    <div class="card reviews-section">
+    <div class="card">
       <h2>Rating & Reviews</h2>
-
       <div class="rating-line">
-        <div id="avgStars" aria-label="Average rating" class="stars" style="pointer-events:none;">★★★★★</div>
+        <div id="avgStars" class="stars" aria-label="Average rating" style="pointer-events:none;">★★★★★</div>
         <div class="rating-summary"><span id="avgValue">—</span> / 5 · <span id="totalVotes">0</span> ratings</div>
       </div>
       <div class="small">Give your rating:</div>
-      <div class="stars" id="rateStars" aria-label="Rate">
+      <div class="stars rate-stars" id="rateStars" aria-label="Rate">
         <span class="star" data-v="1">☆</span>
         <span class="star" data-v="2">☆</span>
         <span class="star" data-v="3">☆</span>
@@ -121,8 +121,7 @@
       </div>
 
       <hr style="border-color:#222; margin:1rem 0">
-
-      <p class="small">Reviews are stored publicly in the repository’s <em>Issues</em> so everyone can read them.</p>
+      <p class="small">Reviews are public and stored in the repository <em>Issues</em>.</p>
       <div id="comments"></div>
     </div>
 
@@ -156,7 +155,7 @@
   </footer>
 
   <script>
-    // Pure text visit counter (CountAPI)
+    // Visit counter (text)
     (function () {
       const el = document.getElementById('visits');
       fetch('https://api.countapi.xyz/hit/jedinfoll.github.io/jedinfoll')
@@ -174,8 +173,8 @@
       const rateStars = document.querySelectorAll('#rateStars .star');
 
       function paintStars(elem, n){
-        const s = elem.textContent.replace(/./g,'☆').split('');
-        for(let i=0;i<5;i++){ s[i] = (i < n) ? '★' : '☆'; }
+        const s = ['☆','☆','☆','☆','☆'];
+        for(let i=0;i<n;i++) s[i]='★';
         elem.textContent = s.join('');
       }
 
@@ -184,7 +183,7 @@
           fetch(`https://api.countapi.xyz/get/jedinfoll.github.io/rating${v}`).then(r=>r.json()).catch(()=>({value:0}))
         );
         Promise.all(promises).then(vals=>{
-          const counts = vals.map(v => Number(v && v.value || 0));
+          const counts = vals.map(v => Number((v && v.value) || 0));
           const total = counts.reduce((a,b)=>a+b,0);
           const sum = counts.reduce((a,b,i)=>a+b*(i+1),0);
           const avg = total ? (sum/total) : 0;
@@ -208,6 +207,7 @@
       refresh();
     })();
   </script>
+  <!-- Persistent reviews (Utterances) -->
   <script src="https://utteranc.es/client.js"
           repo="jedinfoll/jedinfoll"
           issue-term="pathname"
