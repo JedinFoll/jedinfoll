@@ -100,8 +100,11 @@
       <p class="small">Click the QR to download in HD.</p>
     </div>
 
-    <div class="card">
+    <!-- RATING & REVIEWS (SINGLE BLOCK AT END) -->
+    <div class="card" id="reviews">
       <h2>Rating & Reviews</h2>
+
+      <!-- STARS ON TOP -->
       <div class="rating-line">
         <div id="avgStars" class="stars" aria-label="Average rating" style="pointer-events:none;">☆☆☆☆☆</div>
         <div class="rating-summary"><span id="avgValue">—</span> / 5 · <span id="totalVotes">0</span> ratings</div>
@@ -116,6 +119,7 @@
       </div>
 
       <hr style="border-color:#222; margin:1rem 0">
+      <!-- Persistent reviews (Utterances) -->
       <p class="small">Reviews are public and stored in the repository <em>Issues</em>.</p>
       <div id="comments"></div>
     </div>
@@ -145,25 +149,22 @@
       <a href="https://www.facebook.com/Jedi%C3%B1%20Foll" target="_blank">Facebook: Jediñ Foll</a> |
       <a href="mailto:jedinfoll@gmail.com">Email: jedinfoll@gmail.com</a>
     </div>
-    <p>👁️ Visits:
-      <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fjedinfoll.github.io%2Fjedinfoll%2Findex-en.html&title=visits" alt="Counter" style="vertical-align:middle">
-      <span id="visits" class="small"></span>
-    </p>
+    <p>👁️ Visits: <span id="visits">…</span></p>
     <p>© 2025 Jediñ Foll — All rights reserved.</p>
   </footer>
 
-  <!-- Text counter (CountAPI) -->
+  <!-- Visit counter (text) : dedicated key for EN page -->
   <script>
     (function () {
       const el = document.getElementById('visits');
-      fetch('https://api.countapi.xyz/hit/jedinfoll.github.io/index-en.html')
+      fetch('https://api.countapi.xyz/hit/jedinfoll.github.io/jedinfoll_index_en')
         .then(r => r.json())
-        .then(d => { if (el) el.textContent = ' (' + (d?.value || 0).toLocaleString('en-US') + ')'; })
-        .catch(() => { if (el) el.textContent = ''; });
+        .then(d => { if (el) el.textContent = (d && typeof d.value==='number') ? d.value.toLocaleString('en-US') : '—'; })
+        .catch(() => { if (el) el.textContent = '—'; });
     })();
   </script>
 
-  <!-- Rating (CountAPI) -->
+  <!-- Persistent rating (CountAPI) -->
   <script>
     (function(){
       const avgStars = document.getElementById('avgStars');
@@ -197,7 +198,6 @@
         const v = Number(s.dataset.v||0);
         fetch(`https://api.countapi.xyz/hit/jedinfoll.github.io/rating${v}`).then(()=>refresh());
       });
-
       refresh();
     })();
   </script>
