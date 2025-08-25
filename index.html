@@ -101,10 +101,11 @@
       <p class="small">Cliquez sur le QR pour télécharger en HD.</p>
     </div>
 
-    <!-- NOTE & AVIS (une seule section) -->
-    <div class="card">
+    <!-- NOTE & AVIS (UN SEUL BLOC, EN BAS) -->
+    <div class="card" id="reviews">
       <h2>Note & Avis</h2>
-      <!-- Note toujours visible -->
+
+      <!-- ÉTOILES AU-DESSUS -->
       <div class="rating-line">
         <div id="avgStars" class="stars" aria-label="Note moyenne" style="pointer-events:none;">☆☆☆☆☆</div>
         <div class="rating-summary"><span id="avgValue">—</span> / 5 · <span id="totalVotes">0</span> notes</div>
@@ -149,22 +150,18 @@
       <a href="https://www.facebook.com/Jedi%C3%B1%20Foll" target="_blank">Facebook: Jediñ Foll</a> |
       <a href="mailto:jedinfoll@gmail.com">Email: jedinfoll@gmail.com</a>
     </div>
-    <!-- Badge image (fiable) + nombre texte -->
-    <p>👁️ Visites :
-      <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fjedinfoll.github.io%2Fjedinfoll%2Findex.html&title=visites" alt="Compteur" style="vertical-align:middle">
-      <span id="visits" class="small"></span>
-    </p>
+    <p>👁️ Visites : <span id="visits">…</span></p>
     <p>© 2025 Jediñ Foll — Tous droits réservés.</p>
   </footer>
 
-  <!-- Compteur texte (CountAPI) -->
+  <!-- Compteur de visites (texte) : clé dédiée à la page FR -->
   <script>
     (function () {
       const el = document.getElementById('visits');
-      fetch('https://api.countapi.xyz/hit/jedinfoll.github.io/index.html')
+      fetch('https://api.countapi.xyz/hit/jedinfoll.github.io/jedinfoll_index_fr')
         .then(r => r.json())
-        .then(d => { if (el) el.textContent = ' (' + (d?.value || 0).toLocaleString('fr-FR') + ')'; })
-        .catch(() => { if (el) el.textContent = ''; });
+        .then(d => { if (el) el.textContent = (d && typeof d.value==='number') ? d.value.toLocaleString('fr-FR') : '—'; })
+        .catch(() => { if (el) el.textContent = '—'; });
     })();
   </script>
 
@@ -196,15 +193,12 @@
         });
       }
 
-      // afficher tout de suite des étoiles vides (au cas où JS lente)
       paint(avgStars, 0);
-
       document.getElementById('rateStars').addEventListener('click', (e)=>{
         const s = e.target.closest('.star'); if(!s) return;
         const v = Number(s.dataset.v||0);
         fetch(`https://api.countapi.xyz/hit/jedinfoll.github.io/rating${v}`).then(()=>refresh());
       });
-
       refresh();
     })();
   </script>
