@@ -101,10 +101,9 @@
       <p class="small">Cliquez sur le QR pour télécharger en HD.</p>
     </div>
 
-    <!-- NOTE & AVIS (UN SEUL BLOC, EN BAS) -->
+    <!-- NOTE (étoiles) — PAS d'espace commentaires -->
     <div class="card" id="reviews">
-      <h2>Note & Avis</h2>
-      <!-- ÉTOILES AU-DESSUS -->
+      <h2>Note</h2>
       <div class="rating-line">
         <div id="avgStars" class="stars" aria-label="Note moyenne" style="pointer-events:none;">☆☆☆☆☆</div>
         <div class="rating-summary"><span id="avgValue">—</span> / 5 · <span id="totalVotes">0</span> notes</div>
@@ -117,11 +116,6 @@
         <span class="star" data-v="4">☆</span>
         <span class="star" data-v="5">☆</span>
       </div>
-
-      <hr style="border-color:#222; margin:1rem 0">
-      <!-- Avis persistants (Utterances) : même fil FR/EN -->
-      <p class="small">Les avis sont publics et stockés dans les <em>Issues</em> du dépôt GitHub.</p>
-      <div id="comments"></div>
     </div>
 
     <div class="card mentions">
@@ -153,7 +147,7 @@
     <p>© 2025 Jediñ Foll — Tous droits réservés.</p>
   </footer>
 
-  <!-- Compteur VISITEURS : clé PARTAGÉE sur tout le site -->
+  <!-- Compteur VISITES partagé (FR+EN) -->
   <script>
     (function () {
       const el = document.getElementById('visits');
@@ -164,7 +158,7 @@
     })();
   </script>
 
-  <!-- Note persistante (CountAPI) : partagée FR/EN -->
+  <!-- Note persistante (partagée FR/EN) -->
   <script>
     (function(){
       const avgStars = document.getElementById('avgStars');
@@ -200,15 +194,6 @@
       refresh();
     })();
   </script>
-
-  <!-- Avis persistants (Utterances) : fil unique pour FR & EN -->
-  <script src="https://utteranc.es/client.js"
-          repo="jedinfoll/jedinfoll"
-          issue-term="JEDINFOLL-REVIEWS"
-          label="review"
-          theme="github-dark"
-          crossorigin="anonymous"
-          async>
-  </script>
 </body>
 </html>
+
