@@ -104,7 +104,6 @@
     <!-- NOTE & AVIS (UN SEUL BLOC, EN BAS) -->
     <div class="card" id="reviews">
       <h2>Note & Avis</h2>
-
       <!-- ÉTOILES AU-DESSUS -->
       <div class="rating-line">
         <div id="avgStars" class="stars" aria-label="Note moyenne" style="pointer-events:none;">☆☆☆☆☆</div>
@@ -120,7 +119,7 @@
       </div>
 
       <hr style="border-color:#222; margin:1rem 0">
-      <!-- Avis persistants (Utterances) -->
+      <!-- Avis persistants (Utterances) : même fil FR/EN -->
       <p class="small">Les avis sont publics et stockés dans les <em>Issues</em> du dépôt GitHub.</p>
       <div id="comments"></div>
     </div>
@@ -150,28 +149,27 @@
       <a href="https://www.facebook.com/Jedi%C3%B1%20Foll" target="_blank">Facebook: Jediñ Foll</a> |
       <a href="mailto:jedinfoll@gmail.com">Email: jedinfoll@gmail.com</a>
     </div>
-    <p>👁️ Visites : <span id="visits">…</span></p>
+    <p>👁️ Visites (site entier) : <span id="visits">…</span></p>
     <p>© 2025 Jediñ Foll — Tous droits réservés.</p>
   </footer>
 
-  <!-- Compteur de visites (texte) : clé dédiée à la page FR -->
+  <!-- Compteur VISITEURS : clé PARTAGÉE sur tout le site -->
   <script>
     (function () {
       const el = document.getElementById('visits');
-      fetch('https://api.countapi.xyz/hit/jedinfoll.github.io/jedinfoll_index_fr')
+      fetch('https://api.countapi.xyz/hit/jedinfoll.github.io/site_total')
         .then(r => r.json())
         .then(d => { if (el) el.textContent = (d && typeof d.value==='number') ? d.value.toLocaleString('fr-FR') : '—'; })
         .catch(() => { if (el) el.textContent = '—'; });
     })();
   </script>
 
-  <!-- Note persistante (CountAPI) -->
+  <!-- Note persistante (CountAPI) : partagée FR/EN -->
   <script>
     (function(){
       const avgStars = document.getElementById('avgStars');
       const avgValue = document.getElementById('avgValue');
       const totalVotes = document.getElementById('totalVotes');
-      const rateStars = document.querySelectorAll('#rateStars .star');
 
       function paint(elem, n){
         const arr = ['☆','☆','☆','☆','☆'];
@@ -203,10 +201,10 @@
     })();
   </script>
 
-  <!-- Avis persistants (Utterances) -->
+  <!-- Avis persistants (Utterances) : fil unique pour FR & EN -->
   <script src="https://utteranc.es/client.js"
           repo="jedinfoll/jedinfoll"
-          issue-term="pathname"
+          issue-term="JEDINFOLL-REVIEWS"
           label="review"
           theme="github-dark"
           crossorigin="anonymous"
