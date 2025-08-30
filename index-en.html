@@ -100,10 +100,9 @@
       <p class="small">Click the QR to download in HD.</p>
     </div>
 
-    <!-- RATING & REVIEWS (SINGLE BLOCK AT END) -->
+    <!-- RATING ONLY — no comments -->
     <div class="card" id="reviews">
-      <h2>Rating & Reviews</h2>
-      <!-- STARS ON TOP -->
+      <h2>Rating</h2>
       <div class="rating-line">
         <div id="avgStars" class="stars" aria-label="Average rating" style="pointer-events:none;">☆☆☆☆☆</div>
         <div class="rating-summary"><span id="avgValue">—</span> / 5 · <span id="totalVotes">0</span> ratings</div>
@@ -116,11 +115,6 @@
         <span class="star" data-v="4">☆</span>
         <span class="star" data-v="5">☆</span>
       </div>
-
-      <hr style="border-color:#222; margin:1rem 0">
-      <!-- Persistent reviews (Utterances) : single thread for FR & EN -->
-      <p class="small">Reviews are public and stored in the repository <em>Issues</em>.</p>
-      <div id="comments"></div>
     </div>
 
     <div class="card mentions">
@@ -152,7 +146,7 @@
     <p>© 2025 Jediñ Foll — All rights reserved.</p>
   </footer>
 
-  <!-- VISIT COUNTER: SHARED KEY across the whole site -->
+  <!-- Shared VISIT counter -->
   <script>
     (function () {
       const el = document.getElementById('visits');
@@ -163,7 +157,7 @@
     })();
   </script>
 
-  <!-- Shared rating (FR & EN) -->
+  <!-- Shared rating -->
   <script>
     (function(){
       const avgStars = document.getElementById('avgStars');
@@ -198,16 +192,6 @@
       });
       refresh();
     })();
-  </script>
-
-  <!-- Reviews (Utterances) : single thread for FR & EN -->
-  <script src="https://utteranc.es/client.js"
-          repo="jedinfoll/jedinfoll"
-          issue-term="JEDINFOLL-REVIEWS"
-          label="review"
-          theme="github-dark"
-          crossorigin="anonymous"
-          async>
   </script>
 </body>
 </html>
