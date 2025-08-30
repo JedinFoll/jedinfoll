@@ -103,7 +103,6 @@
     <!-- RATING & REVIEWS (SINGLE BLOCK AT END) -->
     <div class="card" id="reviews">
       <h2>Rating & Reviews</h2>
-
       <!-- STARS ON TOP -->
       <div class="rating-line">
         <div id="avgStars" class="stars" aria-label="Average rating" style="pointer-events:none;">☆☆☆☆☆</div>
@@ -119,7 +118,7 @@
       </div>
 
       <hr style="border-color:#222; margin:1rem 0">
-      <!-- Persistent reviews (Utterances) -->
+      <!-- Persistent reviews (Utterances) : single thread for FR & EN -->
       <p class="small">Reviews are public and stored in the repository <em>Issues</em>.</p>
       <div id="comments"></div>
     </div>
@@ -149,28 +148,27 @@
       <a href="https://www.facebook.com/Jedi%C3%B1%20Foll" target="_blank">Facebook: Jediñ Foll</a> |
       <a href="mailto:jedinfoll@gmail.com">Email: jedinfoll@gmail.com</a>
     </div>
-    <p>👁️ Visits: <span id="visits">…</span></p>
+    <p>👁️ Visits (whole site): <span id="visits">…</span></p>
     <p>© 2025 Jediñ Foll — All rights reserved.</p>
   </footer>
 
-  <!-- Visit counter (text) : dedicated key for EN page -->
+  <!-- VISIT COUNTER: SHARED KEY across the whole site -->
   <script>
     (function () {
       const el = document.getElementById('visits');
-      fetch('https://api.countapi.xyz/hit/jedinfoll.github.io/jedinfoll_index_en')
+      fetch('https://api.countapi.xyz/hit/jedinfoll.github.io/site_total')
         .then(r => r.json())
         .then(d => { if (el) el.textContent = (d && typeof d.value==='number') ? d.value.toLocaleString('en-US') : '—'; })
         .catch(() => { if (el) el.textContent = '—'; });
     })();
   </script>
 
-  <!-- Persistent rating (CountAPI) -->
+  <!-- Shared rating (FR & EN) -->
   <script>
     (function(){
       const avgStars = document.getElementById('avgStars');
       const avgValue = document.getElementById('avgValue');
       const totalVotes = document.getElementById('totalVotes');
-      const rateStars = document.querySelectorAll('#rateStars .star');
 
       function paint(elem, n){
         const arr = ['☆','☆','☆','☆','☆'];
@@ -202,10 +200,10 @@
     })();
   </script>
 
-  <!-- Reviews (Utterances) -->
+  <!-- Reviews (Utterances) : single thread for FR & EN -->
   <script src="https://utteranc.es/client.js"
           repo="jedinfoll/jedinfoll"
-          issue-term="pathname"
+          issue-term="JEDINFOLL-REVIEWS"
           label="review"
           theme="github-dark"
           crossorigin="anonymous"
