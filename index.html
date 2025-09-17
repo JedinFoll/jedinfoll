@@ -19,8 +19,6 @@
     h2 { color: var(--mint); }
     .price { font-size: 1.8rem; font-weight: bold; margin: 1rem 0; }
     .btn { display: inline-block; padding: 0.8rem 1.2rem; border-radius: 10px; background: linear-gradient(90deg, #00b4d8, #ffcb77); color: #000; font-weight: bold; text-decoration: none; }
-    .btn.secondary { background: linear-gradient(90deg, #9d4edd, #ffcb77); }
-    .btn.tertiary { background: linear-gradient(90deg, #ff595e, #ffca3a); }
     .qr { text-align: center; margin-top: 1rem; }
     .social-links a { color: var(--mint); text-decoration: none; margin: 0 10px; font-weight: bold; }
     .mentions { font-size: 0.95rem; color: #ddd; margin-top: 1rem; text-align: left; line-height: 1.55; }
@@ -83,37 +81,25 @@
       </div>
     </div>
 
-    <!-- NOUVEAU : TARIF & PAIEMENT sous la vidéo -->
+    <!-- NOUVEAU : TARIF & PAIEMENT -->
     <div class="card" id="pricing">
-      <h2>Tarif & Paiement</h2>
+      <h2>Précommande</h2>
       <div class="price">14,99 €</div>
 
-      <!-- France & Europe -->
-      <a href="https://www.paypal.com/ncp/payment/YTGSTLCPBDEL2" class="btn">
-        🇫🇷🇪🇺 France & Europe
+      <!-- Précommande France -->
+      <a href="https://www.paypal.com/ncp/payment/PAYPAL_FRANCE_LINK" class="btn">
+        🇫🇷 Précommande France — 14,99 € + 5 € livraison
       </a>
 
-      <!-- International -->
-      <a href="https://www.paypal.com/ncp/payment/72PCSSBL8TJ38" class="btn secondary" style="margin-left:10px;">
-        🌍 International
-      </a>
-
-      <!-- Martinique : retrait sur place, pas de livraison -->
-      <a href="https://www.paypal.com/ncp/payment/8BSJ9NH8TDBGU" class="btn tertiary" style="margin-left:10px;">
-        🇲🇶 Martinique — Retrait sur place (sans livraison)
-      </a>
-
-      <!-- Précommande -->
-      <a href="https://www.paypal.com/ncp/payment/PAYPAL_PRECOMMANDE_LINK"
-         class="btn"
-         style="margin-left:10px; background:linear-gradient(90deg,#06d6a0,#ffd166);">
-        ⏳ Précommande
+      <!-- Précommande Martinique -->
+      <a href="https://www.paypal.com/ncp/payment/PAYPAL_MARTINIQUE_LINK" class="btn" style="margin-left:10px; background:linear-gradient(90deg,#06d6a0,#ffd166);">
+        🇲🇶 Précommande Martinique — 14,99 € (Retrait sur place)
       </a>
 
       <p class="small" style="margin-top:.8rem;">
-        ✅ Choisis l’option selon ta zone.<br>
-        📦 Martinique : retrait sur place uniquement (pas d’expédition).<br>
-        ⏳ Précommande : disponible à partir de <strong>mi-juin 2026</strong> (ou plus tôt selon la production).
+        ⏳ Disponible à partir de <strong>mi-juin 2026</strong> (ou plus tôt selon la production).<br>
+        📦 France : ajouter 5 € pour la livraison.<br>
+        📍 Martinique : retrait sur place uniquement (pas d’expédition).
       </p>
     </div>
 
@@ -128,7 +114,7 @@
       <p class="small">Cliquez sur le QR pour télécharger en HD.</p>
     </div>
 
-    <!-- NOTE (étoiles) — PAS d'espace commentaires -->
+    <!-- NOTE (étoiles) -->
     <div class="card" id="reviews">
       <h2>Note</h2>
       <div class="rating-line">
@@ -174,7 +160,7 @@
     <p>© 2025 Jediñ Foll — Tous droits réservés.</p>
   </footer>
 
-  <!-- Compteur VISITES partagé (FR+EN) -->
+  <!-- Compteur VISITES -->
   <script>
     (function () {
       const el = document.getElementById('visits');
@@ -185,7 +171,7 @@
     })();
   </script>
 
-  <!-- Note persistante (partagée FR/EN) -->
+  <!-- Note persistante -->
   <script>
     (function(){
       const avgStars = document.getElementById('avgStars');
@@ -216,4 +202,10 @@
       document.getElementById('rateStars').addEventListener('click', (e)=>{
         const s = e.target.closest('.star'); if(!s) return;
         const v = Number(s.dataset.v||0);
-        fetch(`https://api.countapi.xy
+        fetch(`https://api.countapi.xyz/hit/jedinfoll.github.io/rating${v}`).then(()=>refresh());
+      });
+      refresh();
+    })();
+  </script>
+</body>
+</html>
