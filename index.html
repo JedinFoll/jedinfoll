@@ -54,37 +54,7 @@
     <p>Le jeu de cartes éducatif, drôle et stratégique</p>
   </header>
 
-  <main><div class="card">
-  <h2>Tarif & Paiement</h2>
-  <div class="price">14,99 €</div>
-
-  <!-- France & Europe -->
-  <a href="https://www.paypal.com/ncp/payment/YTGSTLCPBDEL2" class="btn">
-    🇫🇷🇪🇺 France & Europe
-  </a>
-
-  <!-- International -->
-  <a href="https://www.paypal.com/ncp/payment/72PCSSBL8TJ38" class="btn secondary" style="margin-left:10px;">
-    🌍 International
-  </a>
-
-  <!-- Martinique : retrait sur place, pas de livraison -->
-  <a href="https://www.paypal.com/ncp/payment/8BSJ9NH8TDBGU" class="btn tertiary" style="margin-left:10px;">
-    🇲🇶 Martinique — Retrait sur place (sans livraison)
-  </a>
-
-  <!-- Précommande -->
-  <a href="https://www.paypal.com/ncp/payment/XXXXXXXXXXXXX" class="btn" style="margin-left:10px; background:linear-gradient(90deg,#06d6a0,#ffd166);">
-    ⏳ Précommande
-  </a>
-
-  <p class="small" style="margin-top:.8rem;">
-    ✅ Choisis l’option selon ta zone.<br>
-    📦 Martinique : retrait sur place uniquement (pas d’expédition).<br>
-    ⏳ Précommande : disponible à partir de <strong>mi-juin 2026</strong> (ou plus tôt si la production le permet).
-  </p>
-</div>
-
+  <main>
     <div class="card">
       <h2>Jediñ Foll</h2>
       <ul>
@@ -105,22 +75,49 @@
       <button class="btn" onclick="window.print()">📄 Imprimer la section Règles</button>
     </div>
 
-    <div class="card">
+    <!-- VIDÉO -->
+    <div class="card" id="videos">
       <h2>Vidéos</h2>
       <div style="aspect-ratio:16/9; max-width:100%;">
         <iframe width="100%" height="100%" src="https://www.youtube.com/embed/ID_DE_TA_VIDEO" title="Jediñ Foll — Démo" frameborder="0" allowfullscreen></iframe>
       </div>
     </div>
 
-    <div class="card">
+    <!-- NOUVEAU : TARIF & PAIEMENT sous la vidéo -->
+    <div class="card" id="pricing">
       <h2>Tarif & Paiement</h2>
       <div class="price">14,99 €</div>
-      <a href="https://www.paypal.com/ncp/payment/YTGSTLCPBDEL2" class="btn">Acheter France / Europe</a>
-      <a href="https://www.paypal.com/ncp/payment/72PCSSBL8TJ38" class="btn secondary" style="margin-left:10px;">Acheter International</a>
-      <a href="https://www.paypal.com/ncp/payment/8BSJ9NH8TDBGU" class="btn tertiary" style="margin-left:10px;">Acheter sans livraison</a>
-      <p class="small">Prévoir un envoi sous 15 jours ouvrés</p>
+
+      <!-- France & Europe -->
+      <a href="https://www.paypal.com/ncp/payment/YTGSTLCPBDEL2" class="btn">
+        🇫🇷🇪🇺 France & Europe
+      </a>
+
+      <!-- International -->
+      <a href="https://www.paypal.com/ncp/payment/72PCSSBL8TJ38" class="btn secondary" style="margin-left:10px;">
+        🌍 International
+      </a>
+
+      <!-- Martinique : retrait sur place, pas de livraison -->
+      <a href="https://www.paypal.com/ncp/payment/8BSJ9NH8TDBGU" class="btn tertiary" style="margin-left:10px;">
+        🇲🇶 Martinique — Retrait sur place (sans livraison)
+      </a>
+
+      <!-- Précommande -->
+      <a href="https://www.paypal.com/ncp/payment/PAYPAL_PRECOMMANDE_LINK"
+         class="btn"
+         style="margin-left:10px; background:linear-gradient(90deg,#06d6a0,#ffd166);">
+        ⏳ Précommande
+      </a>
+
+      <p class="small" style="margin-top:.8rem;">
+        ✅ Choisis l’option selon ta zone.<br>
+        📦 Martinique : retrait sur place uniquement (pas d’expédition).<br>
+        ⏳ Précommande : disponible à partir de <strong>mi-juin 2026</strong> (ou plus tôt selon la production).
+      </p>
     </div>
 
+    <!-- QR CODE -->
     <div class="card">
       <h2>QR Code</h2>
       <div class="qr">
@@ -219,11 +216,4 @@
       document.getElementById('rateStars').addEventListener('click', (e)=>{
         const s = e.target.closest('.star'); if(!s) return;
         const v = Number(s.dataset.v||0);
-        fetch(`https://api.countapi.xyz/hit/jedinfoll.github.io/rating${v}`).then(()=>refresh());
-      });
-      refresh();
-    })();
-  </script>
-</body>
-</html>
-
+        fetch(`https://api.countapi.xy
