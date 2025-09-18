@@ -40,6 +40,20 @@
     .rating-summary { font-weight:bold; }
     .rate-stars { cursor:pointer; }
     .rate-stars .star { padding:0 .08rem; }
+
+    /* Avis (liste) */
+    .reviews-list{display:flex; flex-direction:column; gap:1rem; margin-top:1rem;}
+    .review{background:#111; border:1px solid #2a2a2a; border-radius:12px; padding:1rem;}
+    .review-header{display:flex; align-items:center; gap:.6rem; margin-bottom:.4rem; font-size:.95rem; color:#ddd}
+    .review-author{font-weight:bold; color:#fff}
+    .review-date{color:#bbb; font-size:.9rem}
+    .review-stars{color:#ffcb77; letter-spacing:.05em}
+    .review-body{white-space:pre-wrap; line-height:1.45}
+    .reviews-actions{margin-top:.5rem}
+    .reviews-actions a{color:var(--mint); text-decoration:none; font-weight:bold}
+    .review-empty{color:#bbb; font-style:italic}
+    textarea#reviewText{width:100%; min-height:110px; border-radius:12px; border:1px solid #2a2a2a; padding:.8rem; background:#0f0f0f; color:#fff; resize:vertical}
+    .review-send{margin-top:.6rem}
   </style>
 </head>
 <body>
@@ -81,7 +95,7 @@
       </div>
     </div>
 
-    <!-- NOUVEAU : PRÉCOMMANDE -->
+    <!-- PRÉCOMMANDE -->
     <div class="card" id="pricing">
       <h2>Précommande</h2>
       <div class="price">14,99 €</div>
@@ -114,13 +128,17 @@
       <p class="small">Cliquez sur le QR pour télécharger en HD.</p>
     </div>
 
-    <!-- NOTE (étoiles) -->
+    <!-- AVIS & NOTE -->
     <div class="card" id="reviews">
-      <h2>Note</h2>
-      <div class="rating-line">
+      <h2>Avis & Note</h2>
+
+      <!-- Note moyenne -->
+      <div class="rating-line" style="margin-bottom:.5rem;">
         <div id="avgStars" class="stars" aria-label="Note moyenne" style="pointer-events:none;">☆☆☆☆☆</div>
         <div class="rating-summary"><span id="avgValue">—</span> / 5 · <span id="totalVotes">0</span> notes</div>
       </div>
+
+      <!-- Votre note (clic étoiles) -->
       <div class="small">Votre note :</div>
       <div class="stars rate-stars" id="rateStars" aria-label="Noter">
         <span class="star" data-v="1">☆</span>
@@ -128,6 +146,27 @@
         <span class="star" data-v="3">☆</span>
         <span class="star" data-v="4">☆</span>
         <span class="star" data-v="5">☆</span>
+      </div>
+
+      <!-- Formulaire avis (client-side, ouverture issue GitHub) -->
+      <div class="review-form" style="margin-top:1rem;">
+        <label for="reviewText" class="small">Votre avis (quelques lignes) :</label>
+        <textarea id="reviewText" placeholder="Dites-nous ce que vous avez pensé du jeu…"></textarea>
+        <div class="review-send">
+          <button class="btn" id="sendReviewBtn">✍️ Laisser un avis</button>
+        </div>
+        <p class="small" style="margin-top:.4rem;">
+          💡 En cliquant, une page GitHub s’ouvre avec votre avis pré-rempli. Validez pour le publier.
+        </p>
+      </div>
+
+      <!-- Derniers avis -->
+      <div class="reviews-list" id="latestReviews">
+        <div class="review-empty">Chargement des derniers avis…</div>
+      </div>
+
+      <div class="reviews-actions">
+        <a id="allReviewsLink" href="#" target="_blank" rel="noopener">Lire tous les avis</a>
       </div>
     </div>
 
@@ -160,7 +199,7 @@
     <p>© 2025 Jediñ Foll — Tous droits réservés.</p>
   </footer>
 
-  <!-- COMPTEUR VISITES FIABLE -->
+  <!-- COMPTEUR VISITES (uniques/jour + filtre bots) -->
   <script>
     (function () {
       const el = document.getElementById('visits');
@@ -208,12 +247,23 @@
     })();
   </script>
 
-  <!-- NOTE persistante -->
+  <!-- NOTE + AVIS -->
   <script>
     (function(){
+      /* ---------- CONFIG Répo pour les avis ---------- */
+      const OWNER = 'jedinfoll';   // <-- change si besoin
+      const REPO  = 'jedinfoll';   // <-- change si besoin
+      const LABEL = 'avis';         // label appliqué aux issues "avis"
+
+      /* ---------- Gestion étoiles (CountAPI) ---------- */
       const avgStars = document.getElementById('avgStars');
       const avgValue = document.getElementById('avgValue');
       const totalVotes = document.getElementById('totalVotes');
+      const rateStars = document.getElementById('rateStars');
+      const reviewText = document.getElementById('reviewText');
+      const sendBtn = document.getElementById('sendReviewBtn');
+      const latestReviews = document.getElementById('latestReviews');
+      const allReviewsLink = document.getElementById('allReviewsLink');
 
       function paint(elem, n){
         const arr = ['☆','☆','☆','☆','☆'];
@@ -221,7 +271,7 @@
         elem.textContent = arr.join('');
       }
 
-      function refresh(){
+      function refreshRating(){
         Promise.all([1,2,3,4,5].map(v =>
           fetch(`https://api.countapi.xyz/get/jedinfoll.github.io/rating${v}`).then(r=>r.json()).catch(()=>({value:0}))
         )).then(vals=>{
@@ -236,12 +286,74 @@
       }
 
       paint(avgStars, 0);
-      document.getElementById('rateStars').addEventListener('click', (e)=>{
+      refreshRating();
+
+      rateStars.addEventListener('click', (e)=>{
         const s = e.target.closest('.star'); if(!s) return;
         const v = Number(s.dataset.v||0);
-        fetch(`https://api.countapi.xyz/hit/jedinfoll.github.io/rating${v}`).then(()=>refresh());
+        fetch(`https://api.countapi.xyz/hit/jedinfoll.github.io/rating${v}`)
+          .then(()=>refreshRating());
+        // On mémorise la dernière note choisie pour préremplir l'avis
+        rateStars.dataset.selected = String(v);
       });
-      refresh();
+
+      /* ---------- Lien "tous les avis" ---------- */
+      const issuesQuery = `https://github.com/${OWNER}/${REPO}/issues?q=is%3Aissue+is%3Aopen+label%3A${encodeURIComponent(LABEL)}`;
+      allReviewsLink.href = issuesQuery;
+
+      /* ---------- Envoi avis (ouvre Issue pré-rempli) ---------- */
+      sendBtn.addEventListener('click', ()=>{
+        const note = Number(rateStars.dataset.selected || 0);
+        const txt = (reviewText.value || '').trim();
+        const stars = note ? '★'.repeat(note) + '☆'.repeat(5 - note) : '(pas de note)';
+        const title = encodeURIComponent(`Avis: ${stars}`);
+        const body = encodeURIComponent(
+`Note: ${note || '—'}/5
+${'-'.repeat(20)}
+${txt || 'Votre avis ici…'}
+
+(Envoyé depuis le site jedinfoll.github.io)`
+        );
+
+        // URL "New issue" (sans token, l'utilisateur valide côté GitHub)
+        const newIssueUrl = `https://github.com/${OWNER}/${REPO}/issues/new?title=${title}&body=${body}&labels=${encodeURIComponent(LABEL)}`;
+        window.open(newIssueUrl, '_blank', 'noopener');
+      });
+
+      /* ---------- Chargement des 3 derniers avis ---------- */
+      function renderEmpty(msg){
+        latestReviews.innerHTML = `<div class="review-empty">${msg}</div>`;
+      }
+
+      fetch(`https://api.github.com/repos/${OWNER}/${REPO}/issues?labels=${encodeURIComponent(LABEL)}&state=open&per_page=3&sort=created&direction=desc`, { cache: 'no-store' })
+        .then(r => r.ok ? r.json() : Promise.reject(r))
+        .then(items => {
+          if (!Array.isArray(items) || items.length === 0){
+            renderEmpty("Pas encore d'avis. Soyez le premier !");
+            return;
+          }
+          latestReviews.innerHTML = items.map(it => {
+            const user = (it.user && it.user.login) ? it.user.login : 'Anonyme';
+            const date = new Date(it.created_at).toLocaleDateString('fr-FR');
+            const body = (it.body || '').replace(/^Note:\s*.*$/mi,'').trim();
+            // Essayer d'extraire une note depuis le titre "Avis: ★★★☆☆"
+            const m = (it.title || '').match(/★/g);
+            const starsCount = m ? m.length : 0;
+            const stars = '★'.repeat(starsCount) + '☆'.repeat(5 - starsCount);
+
+            return `
+              <div class="review">
+                <div class="review-header">
+                  <span class="review-author">@${user}</span>
+                  <span class="review-date">· ${date}</span>
+                  <span class="review-stars">— ${stars}</span>
+                </div>
+                <div class="review-body">${body ? body.replaceAll('<','&lt;') : '<em>(sans texte)</em>'}</div>
+              </div>
+            `;
+          }).join('');
+        })
+        .catch(() => renderEmpty("Impossible de charger les avis pour le moment."));
     })();
   </script>
 </body>
