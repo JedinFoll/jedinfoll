@@ -46,4 +46,144 @@
   <header>
     <div class="topbar">
       <div></div>
-      <div class="lang">FR / <a href
+      <div class="lang">FR / <a href="/jedinfoll/index-en.html">EN</a></div>
+    </div>
+    <h1>Jediñ Foll</h1>
+    <p>Le jeu de cartes éducatif, drôle et stratégique</p>
+  </header>
+
+  <main>
+    <div class="card">
+      <h2>Jediñ Foll</h2>
+      <ul>
+        <li>1 à 4 joueurs · 10 à 30 minutes</li>
+        <li>À partir de 6 ans</li>
+        <li>5 modes de jeu — atteindre exactement le résultat demandé selon le mode choisi</li>
+        <li>La boîte contient 102 cartes</li>
+      </ul>
+    </div>
+
+    <div class="card" id="rules">
+      <h2>Règles du jeu</h2>
+      <p class="small">Lecture directe ci-dessous • <a class="btn" href="/jedinfoll/regles.pdf" download>Télécharger le PDF</a></p>
+      <object data="/jedinfoll/regles.pdf" type="application/pdf" class="pdf-frame">
+        <iframe src="/jedinfoll/regles.pdf" class="pdf-frame" title="Règles"></iframe>
+      </object>
+      <p class="small">Si le PDF ne s’affiche pas, <a href="/jedinfoll/regles.pdf" download>cliquez ici pour le télécharger</a>.</p>
+      <button class="btn" onclick="window.print()">📄 Imprimer la section Règles</button>
+    </div>
+
+    <!-- VIDÉO -->
+    <div class="card" id="videos">
+      <h2>Vidéos</h2>
+      <div style="aspect-ratio:16/9; max-width:100%;">
+        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/ID_DE_TA_VIDEO" title="Jediñ Foll — Démo" frameborder="0" allowfullscreen></iframe>
+      </div>
+    </div>
+
+    <!-- PRÉCOMMANDE -->
+    <div class="card" id="pricing">
+      <h2>Précommande</h2>
+      <div class="price">14,99 €</div>
+
+      <!-- Précommande France -->
+      <a href="https://www.paypal.com/ncp/payment/3MJTT9P62VJKY" class="btn">
+        🇫🇷 Précommande France — 14,99 € + 5 € livraison
+      </a>
+
+      <!-- Précommande Martinique -->
+      <a href="https://www.paypal.com/ncp/payment/B3JBUBJQBNQWJ" class="btn" style="margin-left:10px; background:linear-gradient(90deg,#06d6a0,#ffd166);">
+        🇲🇶 Précommande Martinique — 14,99 € (Retrait sur place)
+      </a>
+
+      <p class="small" style="margin-top:.8rem;">
+        ⏳ Disponible à partir de <strong>mi-juin 2026</strong> (ou plus tôt selon la production).<br>
+        📦 France : ajouter 5 € pour la livraison.<br>
+        📍 Martinique : retrait sur place uniquement (pas d’expédition).
+      </p>
+    </div>
+
+    <!-- (QR Code retiré) -->
+
+    <!-- (Section Note & Avis retirée) -->
+
+    <div class="card mentions">
+      <h2>Mentions légales</h2>
+      <p><strong>Éditeur :</strong> Jediñ Foll — Email : <a href="mailto:jedinfoll@gmail.com">jedinfoll@gmail.com</a></p>
+      <p><strong>Responsable de publication :</strong> Jessica Lechertier</p>
+      <p><strong>Fabrication :</strong> Créé en
+        <span class="flags-inline">Martinique
+          <img src="https://raw.githubusercontent.com/jedinfoll/jedinfoll/main/1000079688.jpg" alt="" class="flag">
+        </span>
+        et imprimé en
+        <span class="flags-inline">Bretagne
+          <img src="https://upload.wikimedia.org/wikipedia/commons/2/29/Flag_of_Brittany_%28Gwenn_ha_du%29.svg" alt="" class="flag">
+        </span>.
+      </p>
+      <p><strong>Hébergement :</strong> GitHub Pages — GitHub Inc., 88 Colin P Kelly Jr St, San Francisco, CA 94107, USA.</p>
+      <p><strong>Propriété intellectuelle :</strong> Contenus © Jediñ Foll. Reproduction interdite sans autorisation.</p>
+      <p><strong>Données personnelles :</strong> Les données collectées (commandes, emails) servent uniquement au traitement des achats et ne sont jamais revendues.</p>
+    </div>
+  </main>
+
+  <footer>
+    <div class="social-links">
+      <a href="https://www.instagram.com/jedinfoll" target="_blank">Instagram: @jedinfoll</a> |
+      <a href="https://www.facebook.com/Jedi%C3%B1%20Foll" target="_blank">Facebook: Jediñ Foll</a> |
+      <a href="mailto:jedinfoll@gmail.com">Email: jedinfoll@gmail.com</a>
+    </div>
+    <p>👁️ Visites uniques (approx.) : <span id="visits">…</span></p>
+    <p>© 2025 Jediñ Foll — Tous droits réservés.</p>
+  </footer>
+
+  <!-- COMPTEUR VISITES (approx., évite les bots et double comptage quotidien) -->
+  <script>
+    (function () {
+      const el = document.getElementById('visits');
+      if (!el) return;
+
+      const NAMESPACE = 'jedinfoll.github.io';
+      const KEY = 'site_total_unique';
+
+      const isBot = () => {
+        const ua = navigator.userAgent || '';
+        return /bot|crawler|spider|crawling|headless|lighthouse|selenium|phantom/i.test(ua)
+               || navigator.webdriver === true;
+      };
+
+      if (location.hostname === 'localhost') {
+        el.textContent = '—';
+        return;
+      }
+
+      const todayKey = 'visited_' + new Date().toISOString().slice(0, 10);
+
+      const getCount = () =>
+        fetch(`https://api.countapi.xyz/get/${NAMESPACE}/${KEY}`, { cache: 'no-store' })
+          .then(r => r.json())
+          .catch(() => ({ value: 0 }));
+
+      const hitCount = () =>
+        fetch(`https://api.countapi.xyz/hit/${NAMESPACE}/${KEY}`, { cache: 'no-store' })
+          .then(r => r.json())
+          .catch(() => null);
+
+      getCount().then(d => {
+        const v = Number(d && d.value || 0);
+        el.textContent = v.toLocaleString('fr-FR');
+      });
+
+      if (!isBot() && !localStorage.getItem(todayKey)) {
+        hitCount().then(d => {
+          if (d && typeof d.value === 'number') {
+            el.textContent = d.value.toLocaleString('fr-FR');
+          }
+          localStorage.setItem(todayKey, '1');
+        });
+      }
+    })();
+  </script>
+
+  <!-- (Script des étoiles/avis supprimé) -->
+</body>
+</html>
