@@ -51,8 +51,10 @@
     .counter-wrap{display:flex;justify-content:center;gap:.5rem;align-items:center;flex-wrap:wrap}
     .counter-hide{display:none}
     /* Bandeau moyenne visible */
-    .avg-banner{display:flex;gap:.5rem;align-items:center;margin:.25rem 0 .75rem}
+    .avg-banner{display:flex;gap:.5rem;align-items:center;margin:.25rem 0 .75rem;flex-wrap:wrap}
     .avg-stars{font-size:1.6rem}
+    .avg-badges{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+    .badge{background:#0f0f0f;border:1px solid #2a2a2a;color:#fff;border-radius:999px;padding:.2rem .6rem;font-size:.85rem}
     /* Panneau "tous les avis" */
     #allReviewsPanel{margin-top:1rem;border-top:1px dashed #2a2a2a;padding-top:1rem}
     #allReviewsList{display:flex;flex-direction:column;gap:1rem}
@@ -138,7 +140,11 @@
       <!-- Bandeau moyenne TOUJOURS visible -->
       <div class="avg-banner" aria-live="polite">
         <div id="avgStars" class="stars avg-stars" aria-label="Note moyenne">☆☆☆☆☆</div>
-        <div class="rating-summary">Moyenne : <span id="avgValue">—</span>/5 · <span id="totalVotes">0</span> votes</div>
+        <div class="avg-badges">
+          <span class="badge">Moyenne : <strong><span id="avgValue">—</span>/5</strong></span>
+          <span class="badge">Votes : <strong><span id="totalVotes">0</span></strong></span>
+          <span class="badge">Avis : <strong><span id="totalReviews">0</span></strong></span>
+        </div>
       </div>
 
       <!-- Votre note (boutons étoiles) -->
@@ -171,7 +177,6 @@
       <!-- Actions & panneau "tous les avis" -->
       <div class="reviews-actions">
         <button id="showAllReviewsBtn" class="btn" type="button">📖 Lire tous les avis</button>
-        <a id="allReviewsLink" href="#" target="_blank" rel="noopener" class="btn">↗️ Ouvrir sur GitHub</a>
       </div>
 
       <div id="allReviewsPanel" hidden>
@@ -188,10 +193,6 @@
       <p><strong>Fabrication :</strong> Créé en
         <span class="flags-inline">Martinique
           <img src="https://raw.githubusercontent.com/jedinfoll/jedinfoll/main/1000079688.jpg" alt="" class="flag">
-        </span>
-        et imprimé en
-        <span class="flags-inline">Bretagne
-          <img src="https://upload.wikimedia.org/wikipedia/commons/2/29/Flag_of_Brittany_%28Gwenn_ha_du%29.svg" alt="" class="flag">
         </span>.
       </p>
       <p><strong>Hébergement :</strong> GitHub Pages — GitHub Inc., 88 Colin P Kelly Jr St, San Francisco, CA 94107, USA.</p>
@@ -221,12 +222,12 @@
     <p>© 2025 Jediñ Foll — Tous droits réservés.</p>
   </footer>
 
-  <!-- NOTE + AVIS + COMPTEUR fallback + LECTURE "tous les avis" -->
+  <!-- NOTE + AVIS + COMPTEUR fallback + LECTURE "tous les avis" + COMPTEUR TOTAL D'AVIS -->
   <script>
     (function(){
       /* ---------- CONFIG Répo pour les avis ---------- */
       const OWNER='jedinfoll', REPO='jedinfoll', LABEL='avis';
-      const GITHUB_API = `https://api.github.com/repos/${OWNER}/${REPO}/issues`;
+      const GITHUB_API = `https://api.github.com/repos/${OWNER}/${REPO}`;
 
       /* ---------- Helpers ---------- */
       const escapeHTML=s=>s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
@@ -236,6 +237,7 @@
 
       /* ---------- Étoiles / moyenne (CountAPI) ---------- */
       const avgStars=byId('avgStars'), avgValue=byId('avgValue'), totalVotes=byId('totalVotes');
+      const totalReviewsEl=byId('totalReviews');
       const rateStars=byId('rateStars'), starButtons=Array.from(rateStars.querySelectorAll('.star-btn'));
       const COUNT_NS='jedinfoll.github.io';
 
@@ -256,8 +258,27 @@
         });
       }
 
+      // Compteur TOTAL d'avis (ouverts + fermés) via Search API (total_count)
+      function refreshTotalReviews(){
+        const q = `repo:${OWNER}/${REPO}+label:${encodeURIComponent(LABEL)}`;
+        const url = `https://api.github.com/search/issues?q=${q}&per_page=1`;
+        return fetch(url, {cache:'no-store'})
+          .then(r=>r.ok?r.json():Promise.reject(r))
+          .then(d=>{ totalReviewsEl.textContent = Number(d.total_count||0).toLocaleString('fr-FR'); })
+          .catch(()=>{ /* silencieux */ });
+      }
+
       paintAvg(0);
       refreshRating().catch(()=>{});
+      refreshTotalReviews().catch(()=>{});
+
+      // Mettre à jour au retour sur l'onglet (nouveaux votes/avis éventuels)
+      document.addEventListener('visibilitychange', ()=>{
+        if(!document.hidden){
+          refreshRating().catch(()=>{});
+          refreshTotalReviews().catch(()=>{});
+        }
+      });
 
       function paintStars(count){ starButtons.forEach((b,i)=>{ b.textContent=(i<count)?'★':'☆'; b.classList.toggle('filled', i<count); }); }
       paintStars(0);
@@ -278,8 +299,6 @@
         btn.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); sendVote(); }});
       });
 
-      document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) refreshRating().catch(()=>{}); });
-
       /* ---------- Derniers avis (3) ---------- */
       const latestReviews=byId('latestReviews');
       function renderReview(it){
@@ -298,7 +317,7 @@
         </div>`;
       }
 
-      fetch(`${GITHUB_API}?labels=${encodeURIComponent(LABEL)}&state=open&per_page=3&sort=created&direction=desc`, {cache:'no-store'})
+      fetch(`${GITHUB_API}/issues?labels=${encodeURIComponent(LABEL)}&state=open&per_page=3&sort=created&direction=desc`, {cache:'no-store'})
         .then(r=>r.ok?r.json():Promise.reject(r))
         .then(items=>{
           if(!Array.isArray(items)||items.length===0){ latestReviews.innerHTML = `<div class="review-empty">Pas encore d'avis. Soyez le premier !</div>`; return; }
@@ -308,7 +327,113 @@
 
       /* ---------- Tous les avis (dans la page, paginé) ---------- */
       const showAllBtn = byId('showAllReviewsBtn');
-      const allLink    = byId('allReviewsLink');
       const panel      = byId('allReviewsPanel');
       const statusEl   = byId('allReviewsStatus');
-      const listAllEl  = byId('a
+      const listAllEl  = byId('allReviewsList');
+      const loadMoreBtn= byId('loadMoreBtn');
+
+      let currentPage = 1;
+      const PER_PAGE  = 20;
+      let loading     = false;
+      let exhausted   = false;
+
+      function appendReviews(items){
+        const html = items.map(renderReview).join('');
+        const wrap = document.createElement('div');
+        wrap.className = 'reviews-list';
+        wrap.innerHTML = html || `<div class="review-empty">Aucun avis pour le moment.</div>`;
+        listAllEl.appendChild(wrap);
+      }
+
+      async function loadPage(page){
+        loading = true;
+        statusEl.textContent = 'Chargement…';
+        try{
+          const url = `${GITHUB_API}/issues?labels=${encodeURIComponent(LABEL)}&state=all&per_page=${PER_PAGE}&page=${page}&sort=created&direction=desc`;
+          const r = await fetch(url, {cache:'no-store'});
+          if(!r.ok) throw new Error('HTTP '+r.status);
+          const items = await r.json();
+          appendReviews(items);
+          if(items.length < PER_PAGE){
+            exhausted = true;
+            loadMoreBtn.style.display = 'none';
+            statusEl.textContent = 'Tous les avis ont été chargés.';
+          }else{
+            loadMoreBtn.style.display = 'inline-block';
+            statusEl.textContent = '';
+          }
+        }catch(e){
+          statusEl.textContent = "Impossible de charger les avis. Réessayez plus tard.";
+          loadMoreBtn.style.display = 'inline-block';
+        }finally{
+          loading = false;
+        }
+      }
+
+      showAllBtn.addEventListener('click', ()=>{
+        panel.hidden = false;
+        if(listAllEl.childElementCount === 0 && !loading){
+          currentPage = 1;
+          exhausted = false;
+          listAllEl.innerHTML = '';
+          loadMoreBtn.style.display = 'none';
+          loadPage(currentPage);
+        }
+      });
+
+      loadMoreBtn.addEventListener('click', ()=>{
+        if(loading || exhausted) return;
+        currentPage += 1;
+        loadPage(currentPage);
+      });
+
+      /* ---------- Envoi avis (ouvre GitHub issue) ---------- */
+      const reviewText=byId('reviewText');
+      const sendBtn=byId('sendReviewBtn');
+      sendBtn.addEventListener('click',()=>{
+        const note = Number(rateStars.dataset.selected || 0);
+        const txt  = (reviewText.value || '').trim();
+        const stars= note ? formatStars(note) : '(pas de note)';
+        const title= encodeURIComponent(`Avis: ${stars}`);
+        const body = encodeURIComponent(`Note: ${note||'—'}/5
+--------------------
+${txt||'Votre avis ici…'}
+
+(Envoyé depuis le site jedinfoll.github.io)`);
+        window.open(`https://github.com/${OWNER}/${REPO}/issues/new?title=${title}&body=${body}&labels=${encodeURIComponent(LABEL)}`,'_blank','noopener');
+      });
+
+      /* ---------- Compteur : badge image + fallback numérique ---------- */
+      const badge = byId('hitBadge');
+      const numeric = byId('numericCounter');
+      badge.addEventListener('error', ()=>{ startNumericCounter(); });
+      badge.addEventListener('load',  ()=>{ numeric.classList.add('counter-hide'); });
+
+      function startNumericCounter(){
+        badge.classList.add('counter-hide');
+        numeric.classList.remove('counter-hide');
+
+        const NS='jedinfoll.github.io';
+        const KEY='counter_unique_daily_v2';
+        const todayKey='visited_'+new Date().toISOString().slice(0,10);
+        const isBot=()=>/bot|crawler|spider|crawling|headless|lighthouse|selenium|phantom/i.test(navigator.userAgent||'')||navigator.webdriver===true;
+
+        const get =()=>fetch(`https://api.countapi.xyz/get/${NS}/${KEY}`,{cache:'no-store'}).then(r=>r.json()).catch(()=>null);
+        const create=()=>fetch(`https://api.countapi.xyz/create?namespace=${encodeURIComponent(NS)}&key=${encodeURIComponent(KEY)}&value=0`,{cache:'no-store'}).then(r=>r.json()).catch(()=>null);
+        const hit =()=>fetch(`https://api.countapi.xyz/hit/${NS}/${KEY}`,{cache:'no-store'}).then(r=>r.json()).catch(()=>null);
+        const setText=v=>numeric.textContent=Number(v).toLocaleString('fr-FR');
+
+        (async ()=>{
+          let d=await get();
+          if(!d||typeof d.value!=='number'){ await create(); d=await get(); }
+          if(d&&typeof d.value==='number'){ setText(d.value); } else { numeric.textContent='—'; }
+          if(!isBot() && !localStorage.getItem(todayKey)){
+            const h=await hit(); if(h&&typeof h.value==='number'){ setText(h.value); }
+            localStorage.setItem(todayKey,'1');
+          }
+        })();
+      }
+    })();
+  </script>
+</body>
+</html>
