@@ -94,7 +94,6 @@
       <button class="btn" onclick="window.print()">📄 Imprimer la section Règles</button>
     </div>
 
-    <!-- VIDÉO -->
     <div class="card" id="videos">
       <h2>Vidéos</h2>
       <div style="aspect-ratio:16/9; max-width:100%;">
@@ -102,14 +101,11 @@
       </div>
     </div>
 
-    <!-- PRÉCOMMANDE -->
     <div class="card" id="pricing">
       <h2>Précommande</h2>
       <div class="price">14,99 €</div>
-
       <a href="https://www.paypal.com/ncp/payment/PAYPAL_FRANCE_LINK" class="btn">🇫🇷 Précommande France — 14,99 € + 5 € livraison</a>
       <a href="https://www.paypal.com/ncp/payment/PAYPAL_MARTINIQUE_LINK" class="btn" style="margin-left:10px; background:linear-gradient(90deg,#06d6a0,#ffd166);">🇲🇶 Précommande Martinique — 14,99 € (Retrait sur place)</a>
-
       <p class="small" style="margin-top:.8rem;">
         ⏳ Disponible à partir de <strong>mi-juin 2026</strong> (ou plus tôt selon la production).<br>
         📦 France : ajouter 5 € pour la livraison.<br>
@@ -117,7 +113,6 @@
       </p>
     </div>
 
-    <!-- QR CODE -->
     <div class="card">
       <h2>QR Code</h2>
       <div class="qr">
@@ -128,11 +123,9 @@
       <p class="small">Cliquez sur le QR pour télécharger en HD.</p>
     </div>
 
-    <!-- AVIS & NOTE -->
     <div class="card" id="reviews">
       <h2>Avis & Note</h2>
 
-      <!-- Bandeau moyenne -->
       <div class="avg-banner" aria-live="polite">
         <div id="avgStars" class="stars avg-stars" aria-label="Note moyenne">☆☆☆☆☆</div>
         <div class="avg-badges">
@@ -142,7 +135,6 @@
         </div>
       </div>
 
-      <!-- Votre note (cliquable) -->
       <div class="small">Votre note :</div>
       <div class="stars" id="rateStars" aria-label="Noter">
         <button type="button" class="star-btn" data-v="1" aria-label="1 étoile">☆</button>
@@ -153,7 +145,6 @@
       </div>
       <div id="voteHint" class="hint"></div>
 
-      <!-- Formulaire avis -->
       <div class="review-form" style="margin-top:1rem;">
         <label for="reviewText" class="small">Votre avis (quelques lignes) :</label>
         <textarea id="reviewText" placeholder="Dites-nous ce que vous avez pensé du jeu…"></textarea>
@@ -161,17 +152,12 @@
           <button class="btn" id="sendReviewBtn">✍️ Laisser un avis</button>
         </div>
         <div id="reviewAlt" class="hint"></div>
-        <p class="small" style="margin-top:.4rem;">
-          💡 Après clic, une page GitHub s’ouvre. Il faut valider avec <em>“Submit new issue”</em> pour publier l’avis.
-        </p>
       </div>
 
-      <!-- Derniers avis (3) -->
       <div class="reviews-list" id="latestReviews">
         <div class="review-empty">Chargement des derniers avis…</div>
       </div>
 
-      <!-- Tous les avis -->
       <div class="reviews-actions">
         <button id="showAllReviewsBtn" class="btn" type="button">📖 Lire tous les avis</button>
       </div>
@@ -205,7 +191,6 @@
       <a href="mailto:jedinfoll@gmail.com">Email: jedinfoll@gmail.com</a>
     </div>
 
-    <!-- Compteur : badge image + fallback numérique -->
     <div id="counterRow" class="counter-wrap" aria-live="polite">
       <span>👁️ Visites :</span>
       <img id="hitBadge" alt="Compteur de visites"
@@ -219,215 +204,151 @@
     <p>© 2025 Jediñ Foll — Tous droits réservés.</p>
   </footer>
 
-  <!-- JS : notes + avis + compteur -->
   <script>
     (function(){
-      /* ===== CONFIG ===== */
-      const OWNER='jedinfoll', REPO='jedinfoll.github.io', LABEL='avis';
-      const GITHUB_API_BASE = `https://api.github.com/repos/${OWNER}/${REPO}`;
-      const COUNT_NS='jedinfoll.github.io';
+      /* ====== CONFIG ====== */
+      const API = 'YOUR_WEB_APP_URL'; // <<<<<<<<<<<<<<<<<<<<<<<<<<< remplace par l’URL Apps Script publiée
+      const PER_PAGE = 20;
 
-      /* ===== Utils DOM / rendu ===== */
       const $ = id => document.getElementById(id);
       const escapeHTML = s => s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
-      const formatStars = n => '★'.repeat(n)+'☆'.repeat(5-n);
-      const parseStarsFromTitle = t => ((t||'').match(/★/g)||[]).length;
-      const starsText = n => {
-        const arr=['☆','☆','☆','☆','☆']; for(let i=0;i<n;i++) arr[i]='★'; return arr.join('');
-      };
 
-      /* ===== Notes (CountAPI + fallback local) ===== */
-      const avgStars=$('avgStars'), avgValue=$('avgValue'), totalVotes=$('totalVotes'), totalReviewsEl=$('totalReviews');
-      const rateStars=$('rateStars'), starButtons=Array.from(rateStars.querySelectorAll('.star-btn')), voteHint=$('voteHint');
+      /* ====== Affichage étoiles / moyenne ====== */
+      const avgStars=$('avgStars'), avgValue=$('avgValue'), totalVotes=$('totalVotes'), totalReviews=$('totalReviews');
+      const rateStars=$('rateStars'), starBtns=Array.from(rateStars.querySelectorAll('.star-btn')), voteHint=$('voteHint');
+      const reviewText=$('reviewText'), sendBtn=$('sendReviewBtn'), reviewAlt=$('reviewAlt');
 
+      function starsText(n){ const a=['☆','☆','☆','☆','☆']; for(let i=0;i<n;i++) a[i]='★'; return a.join(''); }
       function paintAvg(n){ avgStars.textContent = starsText(n); }
+      function paintStars(n){ starBtns.forEach((b,i)=>{ b.textContent=(i<n)?'★':'☆'; b.classList.toggle('filled', i<n); }); }
 
-      function refreshRating(){
-        return Promise.all([1,2,3,4,5].map(v =>
-          fetch(`https://api.countapi.xyz/get/${COUNT_NS}/rating${v}`, {cache:'no-store'})
-            .then(r=>r.json()).catch(()=>({value:0}))
-        )).then(vals=>{
-          const counts=vals.map(v=>Number(v?.value||0));
-          const total=counts.reduce((a,b)=>a+b,0);
-          const sum=counts.reduce((a,b,i)=>a+b*(i+1),0);
-          const avg=total?sum/total:0;
-          totalVotes.textContent = total.toLocaleString('fr-FR');
-          avgValue.textContent   = total ? avg.toFixed(1) : '—';
-          paintAvg(Math.round(avg));
-        }).catch(()=>{
-          // Fallback affichage local uniquement
-          const local = localStorage.getItem('local_rating_last');
-          if(local){
-            const v = Number(local);
-            paintAvg(v); avgValue.textContent='—'; totalVotes.textContent='—';
-          }
-        });
+      async function fetchStats(){
+        const r = await fetch(`${API}?fn=stats`, {cache:'no-store'});
+        const d = await r.json();
+        avgValue.textContent = d.totalVotes ? d.avg.toFixed(1) : '—';
+        totalVotes.textContent = d.totalVotes.toLocaleString('fr-FR');
+        totalReviews.textContent = d.totalReviews.toLocaleString('fr-FR');
+        paintAvg(Math.round(d.avg || 0));
       }
 
-      function paintStars(count){ starButtons.forEach((b,i)=>{ b.textContent=(i<count)?'★':'☆'; b.classList.toggle('filled', i<count); }); }
-      paintAvg(0); paintStars(0); refreshRating();
+      async function postRating(v){
+        voteHint.textContent = 'Enregistrement…';
+        const r = await fetch(API, {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({fn:'rate', rating:v})
+        });
+        if(!r.ok) throw new Error('rate failed');
+        voteHint.textContent = '✅ Merci ! Votre note a été enregistrée.';
+      }
 
-      starButtons.forEach(btn=>{
-        btn.addEventListener('mouseenter', ()=>paintStars(Number(btn.dataset.v)));
-        btn.addEventListener('mouseleave', ()=>paintStars(Number(rateStars.dataset.selected||0)));
-        btn.addEventListener('focus',      ()=>paintStars(Number(btn.dataset.v)));
-        btn.addEventListener('blur',       ()=>paintStars(Number(rateStars.dataset.selected||0)));
-        const sendVote=()=>{
-          const v=Number(btn.dataset.v);
-          rateStars.dataset.selected=String(v);
-          paintStars(v);
-          localStorage.setItem('local_rating_last', String(v));
-          // tentative CountAPI
-          fetch(`https://api.countapi.xyz/hit/${COUNT_NS}/rating${v}?${Date.now()}`, {cache:'no-store'})
-            .then(()=>{ voteHint.textContent='✅ Merci ! Votre note a été enregistrée.'; refreshRating(); })
-            .catch(()=>{ voteHint.innerHTML='⚠️ Votre note est enregistrée localement. Réessayez plus tard.'; });
-        };
-        btn.addEventListener('click', sendVote);
-        btn.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); sendVote(); }});
+      async function postReview(text){
+        reviewAlt.textContent = 'Envoi de votre avis…';
+        const r = await fetch(API, {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({fn:'review', text})
+        });
+        if(!r.ok) throw new Error('review failed');
+        reviewAlt.textContent = '✅ Merci ! Votre avis a été publié.';
+        reviewText.value = '';
+      }
+
+      // étoiles : hover + click
+      paintAvg(0); paintStars(0);
+      starBtns.forEach(btn=>{
+        btn.addEventListener('mouseenter',()=>paintStars(Number(btn.dataset.v)));
+        btn.addEventListener('mouseleave',()=>paintStars(0));
+        btn.addEventListener('click', async ()=>{
+          const v = Number(btn.dataset.v);
+          try { await postRating(v); await fetchStats(); }
+          catch{ voteHint.textContent='⚠️ Désolé, impossible d’enregistrer pour le moment.'; }
+        });
       });
 
-      document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) refreshRating(); });
+      // Avis : POST direct (pas de popup)
+      sendBtn.addEventListener('click', async ()=>{
+        const text = (reviewText.value||'').trim();
+        if(!text){ reviewAlt.textContent='⚠️ Écris quelques mots avant d’envoyer.'; return; }
+        try { await postReview(text); await fetchStats(); loadLatest(); }
+        catch { reviewAlt.textContent='⚠️ Impossible d’enregistrer pour le moment.'; }
+      });
 
-      /* ===== Avis : 3 derniers + tous les avis (GitHub Issues) ===== */
+      /* ====== Derniers avis (3) ====== */
       const latestReviews=$('latestReviews');
-      function renderReview(it){
-        const user=(it.user&&it.user.login)?it.user.login:'Anonyme';
-        const date=new Date(it.created_at).toLocaleDateString('fr-FR');
-        const body=(it.body||'').replace(/^Note:\s*.*$/mi,'').trim();
-        const sc=parseStarsFromTitle(it.title||'');
-        const stars=formatStars(sc);
+      function renderReview(row){
+        const date = new Date(row.timestamp).toLocaleDateString('fr-FR');
+        const stars = '★'.repeat(row.rating) + '☆'.repeat(5-row.rating);
+        const user = row.name || 'Visiteur';
+        const body = row.text ? escapeHTML(row.text) : '<em>(sans texte)</em>';
         return `<div class="review">
           <div class="review-header">
             <span class="review-author">@${escapeHTML(user)}</span>
             <span class="review-date">· ${escapeHTML(date)}</span>
             <span class="review-stars">— ${stars}</span>
           </div>
-          <div class="review-body">${body?escapeHTML(body):'<em>(sans texte)</em>'}</div>
+          <div class="review-body">${body}</div>
         </div>`;
       }
-
-      fetch(`${GITHUB_API_BASE}/issues?labels=${encodeURIComponent(LABEL)}&state=open&per_page=3&sort=created&direction=desc`, {cache:'no-store'})
-        .then(r=>r.ok?r.json():Promise.reject(r))
-        .then(items=>{
-          if(!Array.isArray(items)||items.length===0){ latestReviews.innerHTML = `<div class="review-empty">Pas encore d'avis. Soyez le premier !</div>`; return; }
-          latestReviews.innerHTML = items.map(renderReview).join('');
-        })
-        .catch(()=>{ latestReviews.innerHTML = `<div class="review-empty">Impossible de charger les avis pour le moment.</div>`; });
-
-      // Total d’avis (ouverts + fermés)
-      function refreshTotalReviews(){
-        const q = `repo:${OWNER}/${REPO}+label:${LABEL}`;
-        return fetch(`https://api.github.com/search/issues?q=${encodeURIComponent(q)}&per_page=1`, {cache:'no-store'})
-          .then(r=>r.ok?r.json():Promise.reject(r))
-          .then(d=>{ totalReviewsEl.textContent = Number(d.total_count||0).toLocaleString('fr-FR'); })
-          .catch(()=>{ /* silencieux */ });
+      async function loadLatest(){
+        latestReviews.innerHTML = `<div class="review-empty">Chargement…</div>`;
+        try{
+          const r = await fetch(`${API}?fn=list&per=${3}&page=1`, {cache:'no-store'});
+          const d = await r.json();
+          latestReviews.innerHTML = d.items.length ? d.items.map(renderReview).join('') : `<div class="review-empty">Pas encore d'avis.</div>`;
+        }catch{
+          latestReviews.innerHTML = `<div class="review-empty">Impossible de charger les avis.</div>`;
+        }
       }
-      refreshTotalReviews();
 
-      // Tous les avis (paginé)
-      const showAllBtn = $('showAllReviewsBtn');
-      const panel      = $('allReviewsPanel');
-      const statusEl   = $('allReviewsStatus');
-      const listAllEl  = $('allReviewsList');
-      const loadMoreBtn= $('loadMoreBtn');
+      /* ====== Tous les avis paginés ====== */
+      const showAllBtn=$('showAllReviewsBtn'), panel=$('allReviewsPanel'), statusEl=$('allReviewsStatus'), listAllEl=$('allReviewsList'), loadMoreBtn=$('loadMoreBtn');
+      let curPage = 0, exhausted=false, loading=false;
 
-      let currentPage = 1;
-      const PER_PAGE  = 20;
-      let loading     = false;
-      let exhausted   = false;
-
-      function appendReviews(items){
-        const html = items.map(renderReview).join('');
-        const wrap = document.createElement('div');
-        wrap.className = 'reviews-list';
-        wrap.innerHTML = html || `<div class="review-empty">Aucun avis pour le moment.</div>`;
+      function appendList(items){
+        const wrap=document.createElement('div'); wrap.className='reviews-list';
+        wrap.innerHTML = items.map(renderReview).join('');
         listAllEl.appendChild(wrap);
       }
-
-      async function loadPage(page){
-        loading = true;
-        statusEl.textContent = 'Chargement…';
-        try{
-          const url = `${GITHUB_API_BASE}/issues?labels=${encodeURIComponent(LABEL)}&state=all&per_page=${PER_PAGE}&page=${page}&sort=created&direction=desc`;
-          const r = await fetch(url, {cache:'no-store'});
-          if(!r.ok) throw new Error('HTTP '+r.status);
-          const items = await r.json();
-          appendReviews(items);
-          if(items.length < PER_PAGE){ exhausted = true; loadMoreBtn.style.display = 'none'; statusEl.textContent = 'Tous les avis ont été chargés.'; }
-          else { loadMoreBtn.style.display = 'inline-block'; statusEl.textContent = ''; }
-        }catch(e){ statusEl.textContent = "Impossible de charger les avis. Réessayez plus tard."; loadMoreBtn.style.display = 'inline-block'; }
-        finally{ loading = false; }
-      }
-
-      showAllBtn.addEventListener('click', ()=>{
-        panel.hidden = false;
-        if(listAllEl.childElementCount === 0 && !loading){
-          currentPage = 1; exhausted = false; listAllEl.innerHTML = ''; loadMoreBtn.style.display = 'none';
-          loadPage(currentPage);
-        }
-      });
-
-      loadMoreBtn.addEventListener('click', ()=>{
+      async function loadPage(){
         if(loading || exhausted) return;
-        currentPage += 1; loadPage(currentPage);
-      });
-
-      /* ===== Envoi d’un avis : ouvre GitHub + lien alternatif si popup bloqué ===== */
-      const reviewText=$('reviewText');
-      const sendBtn=$('sendReviewBtn');
-      const reviewAlt=$('reviewAlt');
-
-      sendBtn.addEventListener('click', ()=>{
-        const note = Number(rateStars.dataset.selected || 0);
-        const txt  = (reviewText.value || '').trim();
-        const stars= note ? formatStars(note) : '(pas de note)';
-        const title= encodeURIComponent(`Avis: ${stars}`);
-        const body = encodeURIComponent(`Note: ${note||'—'}/5
---------------------
-${txt||'Votre avis ici…'}
-
-(Envoyé depuis le site jedinfoll.github.io)`);
-
-        const url = `https://github.com/${OWNER}/${REPO}/issues/new?title=${title}&body=${body}&labels=${encodeURIComponent(LABEL)}`;
-        const w = window.open(url, '_blank', 'noopener');
-
-        // Popup bloqué → on affiche un lien cliquable pour publier manuellement
-        if(!w){
-          reviewAlt.innerHTML = `<span class="error">Pop-up bloqué.</span> Cliquez ici pour publier votre avis : <a href="${url}" target="_blank" rel="noopener">Ouvrir la page d’avis</a>`;
-        }else{
-          reviewAlt.textContent = 'La page pour publier votre avis est ouverte. Cliquez sur “Submit new issue”.';
+        loading=true; statusEl.textContent='Chargement…';
+        try{
+          const next = curPage + 1;
+          const r = await fetch(`${API}?fn=list&per=${PER_PAGE}&page=${next}`, {cache:'no-store'});
+          const d = await r.json();
+          if(next===1) listAllEl.innerHTML='';
+          appendList(d.items);
+          curPage = next;
+          if(d.items.length < PER_PAGE){ exhausted=true; loadMoreBtn.style.display='none'; statusEl.textContent='Tous les avis ont été chargés.'; }
+          else{ loadMoreBtn.style.display='inline-block'; statusEl.textContent=''; }
+        }catch{
+          statusEl.textContent='Erreur de chargement.';
+          loadMoreBtn.style.display='inline-block';
+        }finally{
+          loading=false;
         }
-      });
+      }
+      showAllBtn.addEventListener('click', ()=>{ panel.hidden=false; if(curPage===0) loadPage(); });
+      loadMoreBtn.addEventListener('click', loadPage);
 
-      /* ===== Compteur de visites : badge + fallback ===== */
+      // init
+      fetchStats(); loadLatest();
+
+      /* ====== Compteur de visites : badge + fallback ====== */
       const badge = document.getElementById('hitBadge');
       const numeric = document.getElementById('numericCounter');
       badge.addEventListener('error', ()=>{ startNumericCounter(); });
       badge.addEventListener('load',  ()=>{ numeric.classList.add('counter-hide'); });
-
       function startNumericCounter(){
         badge.classList.add('counter-hide');
         numeric.classList.remove('counter-hide');
-
-        const NS='jedinfoll.github.io';
-        const KEY='counter_unique_daily_v2';
-        const todayKey='visited_'+new Date().toISOString().slice(0,10);
-        const isBot=()=>/bot|crawler|spider|crawling|headless|lighthouse|selenium|phantom/i.test(navigator.userAgent||'')||navigator.webdriver===true;
-
+        const NS='jedinfoll.github.io', KEY='counter_unique_daily_v2', today='visited_'+new Date().toISOString().slice(0,10);
         const get =()=>fetch(`https://api.countapi.xyz/get/${NS}/${KEY}`,{cache:'no-store'}).then(r=>r.json()).catch(()=>null);
         const create=()=>fetch(`https://api.countapi.xyz/create?namespace=${encodeURIComponent(NS)}&key=${encodeURIComponent(KEY)}&value=0`,{cache:'no-store'}).then(r=>r.json()).catch(()=>null);
         const hit =()=>fetch(`https://api.countapi.xyz/hit/${NS}/${KEY}`,{cache:'no-store'}).then(r=>r.json()).catch(()=>null);
-        const setText=v=>numeric.textContent=Number(v).toLocaleString('fr-FR');
-
-        (async ()=>{
-          let d=await get();
-          if(!d||typeof d.value!=='number'){ await create(); d=await get(); }
-          if(d&&typeof d.value==='number'){ setText(d.value); } else { numeric.textContent='—'; }
-          if(!isBot() && !localStorage.getItem(todayKey)){
-            const h=await hit(); if(h&&typeof h.value==='number'){ setText(h.value); }
-            localStorage.setItem(todayKey,'1');
-          }
-        })();
+        const set=v=>numeric.textContent=Number(v).toLocaleString('fr-FR');
+        (async ()=>{ let d=await get(); if(!d||typeof d.value!=='number'){ await create(); d=await get(); } if(d&&typeof d.value==='number'){ set(d.value); } if(!localStorage.getItem(today)){ const h=await hit(); if(h&&typeof h.value==='number') set(h.value); localStorage.setItem(today,'1'); } })();
       }
     })();
   </script>
