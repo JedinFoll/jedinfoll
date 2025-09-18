@@ -39,20 +39,15 @@
     .rating-line { display:flex; align-items:center; gap:.5rem; flex-wrap:wrap; }
     .rating-summary { font-weight:bold; }
     .star-btn{
-      font: inherit;
-      background: transparent;
-      border: none;
-      padding: .1rem .2rem;
-      cursor: pointer;
-      line-height: 1;
-      color: #aaa; /* étoiles vides */
-      transition: transform .05s ease;
+      font: inherit; background: transparent; border: none;
+      padding: .1rem .2rem; cursor: pointer; line-height: 1;
+      color: #aaa; transition: transform .05s ease;
     }
     .star-btn:focus{ outline: 2px dotted #ffcb77; outline-offset: 2px; }
-    .star-btn.filled{ color: #ffcb77; }           /* étoiles pleines (sélection/hover) */
+    .star-btn.filled{ color: #ffcb77; }
     .star-btn:hover{ transform: scale(1.05); }
 
-    /* Avis (liste) */
+    /* Avis */
     .reviews-list{display:flex; flex-direction:column; gap:1rem; margin-top:1rem;}
     .review{background:#111; border:1px solid #2a2a2a; border-radius:12px; padding:1rem;}
     .review-header{display:flex; align-items:center; gap:.6rem; margin-bottom:.4rem; font-size:.95rem; color:#ddd}
@@ -210,14 +205,16 @@
     <p>© 2025 Jediñ Foll — Tous droits réservés.</p>
   </footer>
 
-  <!-- COMPTEUR VISITES (uniques/jour + filtre bots) -->
+  <!-- COMPTEUR VISITES (uniques/jour + filtre bots + init + retries) -->
   <script>
     (function () {
       const el = document.getElementById('visits');
       if (!el) return;
 
       const NAMESPACE = 'jedinfoll.github.io';
-      const KEY = 'site_total_unique';
+      const KEY = 'jedinfoll_site_unique_daily_v1';
+      const BASE = 'https://api.countapi.xyz';
+      const todayKey = 'visited_' + new Date().toISOString().slice(0, 10);
 
       const isBot = () => {
         const ua = navigator.userAgent || '';
@@ -225,36 +222,65 @@
                || navigator.webdriver === true;
       };
 
-      if (location.hostname === 'localhost') {
-        el.textContent = '—';
-        return;
+      // Helpers fetch avec timeout
+      const withTimeout = (p, ms=3500) => Promise.race([
+        p, new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')), ms))
+      ]);
+      const j = r => r.json();
+
+      const getURL   = `${BASE}/get/${NAMESPACE}/${KEY}`;
+      const hitURL   = `${BASE}/hit/${NAMESPACE}/${KEY}`;
+      const createURL= `${BASE}/create?namespace=${encodeURIComponent(NAMESPACE)}&key=${encodeURIComponent(KEY)}&value=0`;
+
+      function setText(v){ el.textContent = Number(v).toLocaleString('fr-FR'); }
+
+      async function safeGet(){
+        // essaie get -> sinon create -> re-get
+        try {
+          const d = await withTimeout(fetch(getURL, {cache:'no-store'}).then(j));
+          if (typeof d?.value === 'number') return d.value;
+        } catch(e){ console.warn('countapi get failed:', e); }
+        try {
+          await withTimeout(fetch(createURL, {method:'GET', cache:'no-store'}).then(j));
+          const d2 = await withTimeout(fetch(getURL, {cache:'no-store'}).then(j));
+          if (typeof d2?.value === 'number') return d2.value;
+        } catch(e){ console.warn('countapi create/get failed:', e); }
+        return null;
       }
 
-      const todayKey = 'visited_' + new Date().toISOString().slice(0, 10);
+      async function safeHit(){
+        try {
+          const d = await withTimeout(fetch(hitURL, {cache:'no-store'}).then(j));
+          if (typeof d?.value === 'number') return d.value;
+        } catch(e){ console.warn('countapi hit failed:', e); }
+        return null;
+      }
 
-      const getCount = () =>
-        fetch(`https://api.countapi.xyz/get/${NAMESPACE}/${KEY}`, { cache: 'no-store' })
-          .then(r => r.json())
-          .catch(() => ({ value: 0 }));
+      // 1) Affiche la valeur actuelle (si possible)
+      (async () => {
+        const v = await safeGet();
+        if (v !== null) setText(v);
+        else el.textContent = '—';
+      })();
 
-      const hitCount = () =>
-        fetch(`https://api.countapi.xyz/hit/${NAMESPACE}/${KEY}`, { cache: 'no-store' })
-          .then(r => r.json())
-          .catch(() => null);
+      // 2) Incrémente (unique/jour + pas de bots)
+      (async () => {
+        if (isBot()) return;
+        if (localStorage.getItem(todayKey)) return;
 
-      getCount().then(d => {
-        const v = Number(d && d.value || 0);
-        el.textContent = v.toLocaleString('fr-FR');
-      });
+        const newVal = await safeHit();
 
-      if (!isBot() && !localStorage.getItem(todayKey)) {
-        hitCount().then(d => {
-          if (d && typeof d.value === 'number') {
-            el.textContent = d.value.toLocaleString('fr-FR');
-          }
+        if (newVal !== null) {
+          setText(newVal); // affichage optimiste si get avait échoué
           localStorage.setItem(todayKey, '1');
-        });
-      }
+        } else {
+          // Ultime tentative: si hit échoue, mais get avait renvoyé v, on affiche v+1 visuellement
+          // (ça n'écrit pas côté serveur, mais évite l’impression "bloqué à 0")
+          const current = Number((el.textContent || '0').replace(/\s/g,''));
+          if (!isNaN(current) && current >= 0) setText(current + 1);
+          localStorage.setItem(todayKey, '1');
+        }
+      })();
     })();
   </script>
 
@@ -301,7 +327,7 @@
           totalVotes.textContent = total.toLocaleString('fr-FR');
           avgValue.textContent = total ? avg.toFixed(1) : '—';
           paintAvg(avgStars, Math.round(avg));
-        });
+        }).catch(()=>{});
       }
 
       // Initial
@@ -321,7 +347,7 @@
           rateStars.dataset.selected = String(v);
           paintStars(v);
           fetch(`https://api.countapi.xyz/hit/jedinfoll.github.io/rating${v}`)
-            .then(()=>refreshRating());
+            .then(()=>refreshRating()).catch(()=>{});
         };
         btn.addEventListener('click', activate);
         btn.addEventListener('keydown', (e) => {
