@@ -19,7 +19,6 @@
     h2 { color: var(--mint); }
     .price { font-size: 1.8rem; font-weight: bold; margin: 1rem 0; }
     .btn { display: inline-block; padding: 0.8rem 1.2rem; border-radius: 10px; background: linear-gradient(90deg, #00b4d8, #ffcb77); color: #000; font-weight: bold; text-decoration: none; }
-    .qr { text-align: center; margin-top: 1rem; }
     .social-links a { color: var(--mint); text-decoration: none; margin: 0 10px; font-weight: bold; }
     .mentions { font-size: 0.95rem; color: #ddd; margin-top: 1rem; text-align: left; line-height: 1.55; }
     .flags-inline { display:inline-flex; align-items:center; gap:6px; }
@@ -34,12 +33,6 @@
       #rules { box-shadow:none; border: none; background:#fff; color:#000; }
       #rules h2 { color:#000; }
     }
-    /* (styles étoiles conservés mais non utilisés) */
-    .stars { font-size: 1.6rem; user-select:none; }
-    .rating-line { display:flex; align-items:center; gap:.5rem; flex-wrap:wrap; }
-    .rating-summary { font-weight:bold; }
-    .rate-stars { cursor:pointer; }
-    .rate-stars .star { padding:0 .08rem; }
   </style>
 </head>
 <body>
@@ -73,14 +66,6 @@
       <button class="btn" onclick="window.print()">📄 Imprimer la section Règles</button>
     </div>
 
-    <!-- VIDÉO -->
-    <div class="card" id="videos">
-      <h2>Vidéos</h2>
-      <div style="aspect-ratio:16/9; max-width:100%;">
-        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/ID_DE_TA_VIDEO" title="Jediñ Foll — Démo" frameborder="0" allowfullscreen></iframe>
-      </div>
-    </div>
-
     <!-- PRÉCOMMANDE -->
     <div class="card" id="pricing">
       <h2>Précommande</h2>
@@ -103,10 +88,6 @@
       </p>
     </div>
 
-    <!-- (QR Code retiré) -->
-
-    <!-- (Section Note & Avis retirée) -->
-
     <div class="card mentions">
       <h2>Mentions légales</h2>
       <p><strong>Éditeur :</strong> Jediñ Foll — Email : <a href="mailto:jedinfoll@gmail.com">jedinfoll@gmail.com</a></p>
@@ -114,10 +95,6 @@
       <p><strong>Fabrication :</strong> Créé en
         <span class="flags-inline">Martinique
           <img src="https://raw.githubusercontent.com/jedinfoll/jedinfoll/main/1000079688.jpg" alt="" class="flag">
-        </span>
-        et imprimé en
-        <span class="flags-inline">Bretagne
-          <img src="https://upload.wikimedia.org/wikipedia/commons/2/29/Flag_of_Brittany_%28Gwenn_ha_du%29.svg" alt="" class="flag">
         </span>.
       </p>
       <p><strong>Hébergement :</strong> GitHub Pages — GitHub Inc., 88 Colin P Kelly Jr St, San Francisco, CA 94107, USA.</p>
@@ -132,58 +109,31 @@
       <a href="https://www.facebook.com/Jedi%C3%B1%20Foll" target="_blank">Facebook: Jediñ Foll</a> |
       <a href="mailto:jedinfoll@gmail.com">Email: jedinfoll@gmail.com</a>
     </div>
-    <p>👁️ Visites uniques (approx.) : <span id="visits">…</span></p>
+    <p>👁️ Visites (tous chargements) : <span id="visits">…</span></p>
     <p>© 2025 Jediñ Foll — Tous droits réservés.</p>
   </footer>
 
-  <!-- COMPTEUR VISITES (approx., évite les bots et double comptage quotidien) -->
+  <!-- COMPTEUR VISITES : incrémente à chaque chargement -->
   <script>
     (function () {
       const el = document.getElementById('visits');
       if (!el) return;
 
       const NAMESPACE = 'jedinfoll.github.io';
-      const KEY = 'site_total_unique';
+      const KEY = 'site_total';
 
-      const isBot = () => {
-        const ua = navigator.userAgent || '';
-        return /bot|crawler|spider|crawling|headless|lighthouse|selenium|phantom/i.test(ua)
-               || navigator.webdriver === true;
-      };
-
-      if (location.hostname === 'localhost') {
-        el.textContent = '—';
-        return;
-      }
-
-      const todayKey = 'visited_' + new Date().toISOString().slice(0, 10);
-
-      const getCount = () =>
-        fetch(`https://api.countapi.xyz/get/${NAMESPACE}/${KEY}`, { cache: 'no-store' })
-          .then(r => r.json())
-          .catch(() => ({ value: 0 }));
-
-      const hitCount = () =>
-        fetch(`https://api.countapi.xyz/hit/${NAMESPACE}/${KEY}`, { cache: 'no-store' })
-          .then(r => r.json())
-          .catch(() => null);
-
-      getCount().then(d => {
-        const v = Number(d && d.value || 0);
-        el.textContent = v.toLocaleString('fr-FR');
-      });
-
-      if (!isBot() && !localStorage.getItem(todayKey)) {
-        hitCount().then(d => {
+      // Frappe (incrémente) puis affiche
+      fetch(`https://api.countapi.xyz/hit/${NAMESPACE}/${KEY}`, { cache: 'no-store' })
+        .then(r => r.json())
+        .then(d => {
           if (d && typeof d.value === 'number') {
             el.textContent = d.value.toLocaleString('fr-FR');
+          } else {
+            el.textContent = '—';
           }
-          localStorage.setItem(todayKey, '1');
-        });
-      }
+        })
+        .catch(() => { el.textContent = '—'; });
     })();
   </script>
-
-  <!-- (Script des étoiles/avis supprimé) -->
 </body>
 </html>
