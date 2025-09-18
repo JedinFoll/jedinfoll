@@ -27,6 +27,25 @@
     .pdf-frame{width:100%;aspect-ratio:1/1.414;max-height:80vh;border:0;background:#fff}
     @media (max-width:600px){.pdf-frame{aspect-ratio:auto;height:70vh}}
     @media print{body{background:#fff;color:#000} header,footer,.card:not(#rules){display:none!important} #rules{box-shadow:none;border:none;background:#fff;color:#000} #rules h2{color:#000}}
+    /* Avis & étoiles */
+    .stars{font-size:1.8rem;user-select:none;display:flex;gap:.1rem}
+    .avg-banner{display:flex;gap:.5rem;align-items:center;margin:.25rem 0 .75rem;flex-wrap:wrap}
+    .avg-stars{font-size:1.6rem}
+    .avg-badges{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+    .badge{background:#0f0f0f;border:1px solid #2a2a2a;color:#fff;border-radius:999px;padding:.2rem .6rem;font-size:.85rem}
+    .reviews-list{display:flex;flex-direction:column;gap:1rem;margin-top:1rem}
+    .review{background:#111;border:1px solid #2a2a2a;border-radius:12px;padding:1rem}
+    .review-header{display:flex;align-items:center;gap:.6rem;margin-bottom:.4rem;font-size:.95rem;color:#ddd}
+    .review-author{font-weight:bold;color:#fff}
+    .review-date{color:#bbb;font-size:.9rem}
+    .review-stars{color:#ffcb77;letter-spacing:.05em}
+    .review-body{white-space:pre-wrap;line-height:1.45}
+    .review-empty{color:#bbb;font-style:italic}
+    .reviews-actions{margin-top:1rem;display:flex;gap:.6rem;flex-wrap:wrap}
+    .reviews-actions .btn{background:linear-gradient(90deg,#2ec4b6,#ffcb77)}
+    #allReviewsPanel{margin-top:1rem;border-top:1px dashed #2a2a2a;padding-top:1rem}
+    #allReviewsList{display:flex;flex-direction:column;gap:1rem}
+    #loadMoreBtn{display:none}
   </style>
 </head>
 <body>
@@ -60,6 +79,7 @@
       <button class="btn" onclick="window.print()">📄 Imprimer la section Règles</button>
     </div>
 
+    <!-- Vidéo -->
     <div class="card" id="videos">
       <h2>Vidéos</h2>
       <div style="aspect-ratio:16/9; max-width:100%;">
@@ -67,16 +87,17 @@
       </div>
     </div>
 
+    <!-- Précommande -->
     <div class="card" id="pricing">
       <h2>Précommande</h2>
       <div class="price">14,99 €</div>
 
-      <!-- Précommande France (+ livraison) -->
+      <!-- France (livraison) -->
       <a href="https://www.paypal.com/ncp/payment/3MJTT9P62VJKY" class="btn">
         🇫🇷 Précommande France — 14,99 € + 5 € livraison
       </a>
 
-      <!-- Précommande Martinique (retrait sur place) -->
+      <!-- Martinique (retrait sur place) -->
       <a href="https://www.paypal.com/ncp/payment/B3JBUBJQBNQWJ" class="btn" style="margin-left:10px; background:linear-gradient(90deg,#06d6a0,#ffd166);">
         🇲🇶 Précommande Martinique — 14,99 € (Retrait sur place)
       </a>
@@ -88,6 +109,7 @@
       </p>
     </div>
 
+    <!-- QR Code -->
     <div class="card">
       <h2>QR Code</h2>
       <div class="qr">
@@ -98,7 +120,45 @@
       <p class="small">Cliquez sur le QR pour télécharger en HD.</p>
     </div>
 
-    <!-- (Bloc Avis & Note retiré provisoirement pour éviter tout dysfonctionnement partagé) -->
+    <!-- Avis & Note -->
+    <div class="card" id="reviews">
+      <h2>Avis & Note</h2>
+
+      <!-- Bandeau moyenne visible -->
+      <div class="avg-banner" aria-live="polite">
+        <div id="avgStars" class="stars avg-stars" aria-label="Note moyenne">☆☆☆☆☆</div>
+        <div class="avg-badges">
+          <span class="badge">Moyenne : <strong><span id="avgValue">—</span>/5</strong></span>
+          <span class="badge">Votes : <strong><span id="totalVotes">0</span></strong></span>
+          <span class="badge">Avis : <strong><span id="totalReviews">0</span></strong></span>
+        </div>
+      </div>
+
+      <!-- Formulaire intégré -->
+      <div class="review-form" style="margin-top:1rem;">
+        <p class="small">Laissez votre note (1–5) et votre avis ci-dessous, puis cliquez sur <em>Envoyer</em>. L’enregistrement est immédiat.</p>
+        <div style="width:100%; max-height:700px; overflow:auto; border:1px solid #2a2a2a; border-radius:12px;">
+          <iframe id="reviewForm" src="https://docs.google.com/forms/d/e/1FAIpQLSdzVO_ZXOXcISfR6lX2gu30EFih8wZrYCdVjjNHtn_QqsLDIg/viewform?embedded=true" width="100%" height="700" frameborder="0" marginheight="0" marginwidth="0" style="background:#0f0f0f;">Chargement…</iframe>
+        </div>
+        <button id="refreshBtn" class="btn" type="button" style="margin-top:.8rem;">🔄 Actualiser la moyenne et les avis</button>
+      </div>
+
+      <!-- 3 derniers avis -->
+      <div class="reviews-list" id="latestReviews">
+        <div class="review-empty">Chargement des derniers avis…</div>
+      </div>
+
+      <!-- Tous les avis -->
+      <div class="reviews-actions">
+        <button id="showAllReviewsBtn" class="btn" type="button">📖 Lire tous les avis</button>
+      </div>
+
+      <div id="allReviewsPanel" hidden>
+        <div id="allReviewsStatus" class="small">Chargement…</div>
+        <div id="allReviewsList"></div>
+        <button id="loadMoreBtn" class="btn" type="button">Charger plus</button>
+      </div>
+    </div>
 
     <div class="card mentions">
       <h2>Mentions légales</h2>
@@ -111,7 +171,7 @@
       </p>
       <p><strong>Hébergement :</strong> GitHub Pages — GitHub Inc., 88 Colin P Kelly Jr St, San Francisco, CA 94107, USA.</p>
       <p><strong>Propriété intellectuelle :</strong> Contenus © Jediñ Foll. Reproduction interdite sans autorisation.</p>
-      <p><strong>Données personnelles :</strong> Les données collectées (commandes, emails) servent uniquement au traitement des achats et ne sont jamais revendues.</p>
+      <p><strong>Données personnelles :</strong> Les avis/notes sont stockés par Google Forms/Sheets.</p>
     </div>
   </main>
 
@@ -123,5 +183,156 @@
     </div>
     <p>© 2025 Jediñ Foll — Tous droits réservés.</p>
   </footer>
+
+  <script>
+    (function(){
+      /* URL CSV publiée (ta feuille Google) */
+      const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQqh2gKDBWqoVbV4hCGADf7UTo5qKHcXk0LGL3mSs0oIrHDekGbYMfugFDLBdoxfptEFbYRedARxrJ5/gviz/tq?tqx=out:csv&gid=1219615797';
+      const PER_PAGE = 20;
+
+      const $ = id => document.getElementById(id);
+      const escapeHTML = s => (s||'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
+
+      const avgStars = $('avgStars'), avgValue = $('avgValue'), totalVotes = $('totalVotes'), totalReviews = $('totalReviews');
+      const latestBox = $('latestReviews');
+      const showAllBtn = $('showAllReviewsBtn');
+      const allPanel = $('allReviewsPanel');
+      const allList = $('allReviewsList');
+      const loadMoreBtn = $('loadMoreBtn');
+      const statusEl = $('allReviewsStatus');
+
+      /* CSV parsing */
+      function parseCSV(text){
+        const rows=[]; let cur=[], val='', inQ=false;
+        for(let i=0;i<text.length;i++){
+          const c=text[i], n=text[i+1];
+          if(inQ){
+            if(c=='"' && n=='"'){ val+='"'; i++; }
+            else if(c=='"'){ inQ=false; }
+            else { val+=c; }
+          }else{
+            if(c=='"'){ inQ=true; }
+            else if(c==','){ cur.push(val); val=''; }
+            else if(c=='\n' || c=='\r'){ if(val!==''||cur.length){ cur.push(val); rows.push(cur); cur=[]; val=''; } }
+            else { val+=c; }
+          }
+        }
+        if(val!==''||cur.length){ cur.push(val); rows.push(cur); }
+        return rows;
+      }
+
+      /* Détecte colonnes (fr/eng) */
+      function getCols(header){
+        return {
+          ts:  header.findIndex(h=>/time|date|horodatage|timestamp/i.test(h)) ?? 0,
+          note:header.findIndex(h=>/note|rating|échelle|scale/i.test(h)) ?? 1,
+          avis:header.findIndex(h=>/avis|commentaire|comment/i.test(h)) ?? 2,
+          nom: header.findIndex(h=>/nom|name/i.test(h)) ?? -1
+        };
+      }
+
+      function compute(rows){
+        if(rows.length<=1) return {avg:0, votes:0, reviews:0, items:[]};
+        const header = rows[0];
+        const data = rows.slice(1).filter(r=>r.some(c=>String(c).trim() !== ''));
+        const cols = getCols(header);
+        let sum=0, votes=0, reviews=0;
+        const items=[];
+        data.forEach(r=>{
+          const rawNote = (r[cols.note]||'').toString().replace(',','.');
+          const note = Math.round(Number(rawNote) || 0);
+          const avis = (r[cols.avis]||'').toString().trim();
+          const nom  = cols.nom>=0 ? (r[cols.nom]||'').toString().trim() : '';
+          const ts   = r[cols.ts] || '';
+          if(note>0){ votes++; sum += note; }
+          if(avis){
+            items.push({timestamp: ts, rating: Math.max(1,Math.min(5,note)), text: avis, name: nom});
+            reviews++;
+          }
+        });
+        const avg = votes ? (sum/votes) : 0;
+        items.sort((a,b)=> new Date(b.timestamp) - new Date(a.timestamp));
+        return {avg, votes, reviews, items};
+      }
+
+      function paintAvg(avg, votes, reviews){
+        const n = Math.round(avg||0);
+        avgStars.textContent = '★'.repeat(n) + '☆'.repeat(5-n);
+        avgValue.textContent = votes ? avg.toFixed(1) : '—';
+        totalVotes.textContent = votes.toString();
+        totalReviews.textContent = reviews.toString();
+      }
+
+      function reviewCard(r){
+        const date = new Date(r.timestamp).toLocaleDateString('fr-FR');
+        const stars = '★'.repeat(r.rating) + '☆'.repeat(5-r.rating);
+        const name = r.name ? '@'+escapeHTML(r.name) : '@Visiteur';
+        return `<div class="review">
+          <div class="review-header">
+            <span class="review-author">${name}</span>
+            <span class="review-date">· ${escapeHTML(date)}</span>
+            <span class="review-stars">— ${stars}</span>
+          </div>
+          <div class="review-body">${escapeHTML(r.text)}</div>
+        </div>`;
+      }
+
+      async function loadStatsAndLatest(){
+        latestBox.innerHTML = `<div class="review-empty">Chargement…</div>`;
+        try{
+          const resp = await fetch(CSV_URL, {cache:'no-store'});
+          const txt = await resp.text();
+          const rows = parseCSV(txt);
+          const {avg, votes, reviews, items} = compute(rows);
+          paintAvg(avg, votes, reviews);
+          const last3 = items.slice(0,3);
+          latestBox.innerHTML = last3.length ? last3.map(reviewCard).join('') : `<div class="review-empty">Pas encore d'avis.</div>`;
+        }catch{
+          latestBox.innerHTML = `<div class="review-empty">Impossible de charger les avis.</div>`;
+        }
+      }
+
+      /* Tous les avis (pagination) */
+      let page = 0;
+      function showAll(){
+        allPanel.hidden = false;
+        statusEl.textContent = 'Chargement…';
+        allList.innerHTML = '';
+        page = 0;
+        loadMore();
+      }
+      async function loadMore(){
+        try{
+          const resp = await fetch(CSV_URL, {cache:'no-store'});
+          const txt = await resp.text();
+          const rows = parseCSV(txt);
+          const {items} = compute(rows);
+          const slice = items.slice(page*PER_PAGE, (page+1)*PER_PAGE);
+          if(slice.length===0){
+            statusEl.textContent = page===0 ? 'Aucun avis.' : 'Tous les avis sont affichés.';
+            loadMoreBtn.style.display='none';
+            return;
+          }
+          const wrap = document.createElement('div');
+          wrap.className='reviews-list';
+          wrap.innerHTML = slice.map(reviewCard).join('');
+          allList.appendChild(wrap);
+          page++;
+          statusEl.textContent = '';
+          loadMoreBtn.style.display = (items.length > page*PER_PAGE) ? 'inline-block' : 'none';
+        }catch{
+          statusEl.textContent = 'Erreur de chargement.';
+          loadMoreBtn.style.display='none';
+        }
+      }
+
+      $('refreshBtn').addEventListener('click', loadStatsAndLatest);
+      $('showAllReviewsBtn').addEventListener('click', showAll);
+      $('loadMoreBtn').addEventListener('click', loadMore);
+
+      // Init
+      loadStatsAndLatest();
+    })();
+  </script>
 </body>
 </html>
