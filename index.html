@@ -109,30 +109,77 @@
       <a href="https://www.facebook.com/Jedi%C3%B1%20Foll" target="_blank">Facebook: Jediñ Foll</a> |
       <a href="mailto:jedinfoll@gmail.com">Email: jedinfoll@gmail.com</a>
     </div>
-    <p>👁️ Visites (tous chargements) : <span id="visits">…</span></p>
+    <p>👁️ Visites (tous chargements) : <span id="visits">—</span></p>
     <p>© 2025 Jediñ Foll — Tous droits réservés.</p>
   </footer>
 
-  <!-- COMPTEUR VISITES : incrémente à chaque chargement -->
+  <!-- COMPTEUR VISITES : multi-fallback + beacon image si fetch bloqué -->
   <script>
     (function () {
       const el = document.getElementById('visits');
       if (!el) return;
 
-      const NAMESPACE = 'jedinfoll.github.io';
-      const KEY = 'site_total';
+      const NAMESPACE = encodeURIComponent('jedinfoll.github.io');
+      const KEY = encodeURIComponent('site_total');
+      const BASES = [
+        'https://api.countapi.dev',
+        'https://api.countapi.xyz',
+        'https://countapi.xyz'
+      ];
 
-      // Frappe (incrémente) puis affiche
-      fetch(`https://api.countapi.xyz/hit/${NAMESPACE}/${KEY}`, { cache: 'no-store' })
-        .then(r => r.json())
-        .then(d => {
-          if (d && typeof d.value === 'number') {
-            el.textContent = d.value.toLocaleString('fr-FR');
-          } else {
-            el.textContent = '—';
+      function fmt(n) {
+        try { return Number(n).toLocaleString('fr-FR'); } catch { return String(n); }
+      }
+
+      async function tryFetch(base) {
+        const hitUrl = `${base}/hit/${NAMESPACE}/${KEY}?_=${Date.now()}`;
+        const res = await fetch(hitUrl, { cache: 'no-store', mode: 'cors' });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const js = await res.json();
+        if (typeof js.value !== 'number') throw new Error('Bad payload');
+        return js.value;
+      }
+
+      function beaconHit(base) {
+        return new Promise((resolve) => {
+          const img = new Image();
+          img.onload = img.onerror = () => resolve();
+          img.src = `${base}/hit/${NAMESPACE}/${KEY}?_=${Date.now()}`;
+          // on laisse l'image incrémenter côté serveur; on résout après load/error
+        });
+      }
+
+      async function getValue(base) {
+        const getUrl = `${base}/get/${NAMESPACE}/${KEY}?_=${Date.now()}`;
+        const res = await fetch(getUrl, { cache: 'no-store', mode: 'cors' });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const js = await res.json();
+        if (typeof js.value !== 'number') throw new Error('Bad payload');
+        return js.value;
+      }
+
+      (async function run() {
+        for (const base of BASES) {
+          try {
+            // 1) tentative fetch standard
+            const v = await tryFetch(base);
+            el.textContent = fmt(v);
+            return;
+          } catch (_) {
+            // 2) fallback: beacon image + lecture via /get
+            try {
+              await beaconHit(base);
+              const v2 = await getValue(base);
+              el.textContent = fmt(v2);
+              return;
+            } catch (_) {
+              // passe au domaine suivant
+            }
           }
-        })
-        .catch(() => { el.textContent = '—'; });
+        }
+        // Dernier recours
+        el.textContent = '—';
+      })();
     })();
   </script>
 </body>
