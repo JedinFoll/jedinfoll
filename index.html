@@ -109,7 +109,41 @@
       <a href="https://www.facebook.com/Jedi%C3%B1%20Foll" target="_blank">Facebook: Jediñ Foll</a> |
       <a href="mailto:jedinfoll@gmail.com">Email: jedinfoll@gmail.com</a>
     </div>
+    <p>👁️ Visites (tous chargements) : <span id="visits">—</span></p>
     <p>© 2025 Jediñ Foll — Tous droits réservés.</p>
   </footer>
+
+  <!-- COMPTEUR VISITES simple (comme avant) -->
+  <script>
+    (function () {
+      const el = document.getElementById('visits');
+      if (!el) return;
+
+      const NAMESPACE = 'jedinfoll.github.io';
+      const KEY = 'site_total';
+
+      // 1) Incrémente
+      fetch(`https://api.countapi.xyz/hit/${encodeURIComponent(NAMESPACE)}/${encodeURIComponent(KEY)}`, { cache: 'no-store' })
+        .then(r => r.json())
+        .then(d => {
+          if (d && typeof d.value === 'number') {
+            el.textContent = d.value.toLocaleString('fr-FR');
+          } else {
+            // 2) Si la frappe ne renvoie rien de correct, tente une simple lecture
+            return fetch(`https://api.countapi.xyz/get/${encodeURIComponent(NAMESPACE)}/${encodeURIComponent(KEY)}`, { cache: 'no-store' })
+              .then(r => r.json())
+              .then(g => el.textContent = (typeof g.value === 'number' ? g.value.toLocaleString('fr-FR') : '—'))
+              .catch(() => el.textContent = '—');
+          }
+        })
+        .catch(() => {
+          // 3) En cas d’échec, tente au moins la lecture
+          fetch(`https://api.countapi.xyz/get/${encodeURIComponent(NAMESPACE)}/${encodeURIComponent(KEY)}`, { cache: 'no-store' })
+            .then(r => r.json())
+            .then(g => el.textContent = (typeof g.value === 'number' ? g.value.toLocaleString('fr-FR') : '—'))
+            .catch(() => el.textContent = '—');
+        });
+    })();
+  </script>
 </body>
 </html>
