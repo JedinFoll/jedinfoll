@@ -81,7 +81,7 @@
       </div>
     </div>
 
-    <!-- NOUVEAU : TARIF & PAIEMENT -->
+    <!-- NOUVEAU : PRÉCOMMANDE -->
     <div class="card" id="pricing">
       <h2>Précommande</h2>
       <div class="price">14,99 €</div>
@@ -156,22 +156,59 @@
       <a href="https://www.facebook.com/Jedi%C3%B1%20Foll" target="_blank">Facebook: Jediñ Foll</a> |
       <a href="mailto:jedinfoll@gmail.com">Email: jedinfoll@gmail.com</a>
     </div>
-    <p>👁️ Visites (site entier) : <span id="visits">…</span></p>
+    <p>👁️ Visites uniques (approx.) : <span id="visits">…</span></p>
     <p>© 2025 Jediñ Foll — Tous droits réservés.</p>
   </footer>
 
-  <!-- Compteur VISITES -->
+  <!-- COMPTEUR VISITES FIABLE -->
   <script>
     (function () {
       const el = document.getElementById('visits');
-      fetch('https://api.countapi.xyz/hit/jedinfoll.github.io/site_total')
-        .then(r => r.json())
-        .then(d => { if (el) el.textContent = (d && typeof d.value==='number') ? d.value.toLocaleString('fr-FR') : '—'; })
-        .catch(() => { if (el) el.textContent = '—'; });
+      if (!el) return;
+
+      const NAMESPACE = 'jedinfoll.github.io';
+      const KEY = 'site_total_unique';
+
+      const isBot = () => {
+        const ua = navigator.userAgent || '';
+        return /bot|crawler|spider|crawling|headless|lighthouse|selenium|phantom/i.test(ua)
+               || navigator.webdriver === true;
+      };
+
+      if (location.hostname === 'localhost') {
+        el.textContent = '—';
+        return;
+      }
+
+      const todayKey = 'visited_' + new Date().toISOString().slice(0, 10);
+
+      const getCount = () =>
+        fetch(`https://api.countapi.xyz/get/${NAMESPACE}/${KEY}`, { cache: 'no-store' })
+          .then(r => r.json())
+          .catch(() => ({ value: 0 }));
+
+      const hitCount = () =>
+        fetch(`https://api.countapi.xyz/hit/${NAMESPACE}/${KEY}`, { cache: 'no-store' })
+          .then(r => r.json())
+          .catch(() => null);
+
+      getCount().then(d => {
+        const v = Number(d && d.value || 0);
+        el.textContent = v.toLocaleString('fr-FR');
+      });
+
+      if (!isBot() && !localStorage.getItem(todayKey)) {
+        hitCount().then(d => {
+          if (d && typeof d.value === 'number') {
+            el.textContent = d.value.toLocaleString('fr-FR');
+          }
+          localStorage.setItem(todayKey, '1');
+        });
+      }
     })();
   </script>
 
-  <!-- Note persistante -->
+  <!-- NOTE persistante -->
   <script>
     (function(){
       const avgStars = document.getElementById('avgStars');
