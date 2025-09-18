@@ -59,6 +59,8 @@
     #allReviewsPanel{margin-top:1rem;border-top:1px dashed #2a2a2a;padding-top:1rem}
     #allReviewsList{display:flex;flex-direction:column;gap:1rem}
     #loadMoreBtn{display:none}
+    .hint{font-size:.9rem;color:#bbb;margin-top:.4rem}
+    .error{color:#ff9e9e}
   </style>
 </head>
 <body>
@@ -105,15 +107,8 @@
       <h2>Précommande</h2>
       <div class="price">14,99 €</div>
 
-      <!-- Précommande France -->
-      <a href="https://www.paypal.com/ncp/payment/PAYPAL_FRANCE_LINK" class="btn">
-        🇫🇷 Précommande France — 14,99 € + 5 € livraison
-      </a>
-
-      <!-- Précommande Martinique -->
-      <a href="https://www.paypal.com/ncp/payment/PAYPAL_MARTINIQUE_LINK" class="btn" style="margin-left:10px; background:linear-gradient(90deg,#06d6a0,#ffd166);">
-        🇲🇶 Précommande Martinique — 14,99 € (Retrait sur place)
-      </a>
+      <a href="https://www.paypal.com/ncp/payment/PAYPAL_FRANCE_LINK" class="btn">🇫🇷 Précommande France — 14,99 € + 5 € livraison</a>
+      <a href="https://www.paypal.com/ncp/payment/PAYPAL_MARTINIQUE_LINK" class="btn" style="margin-left:10px; background:linear-gradient(90deg,#06d6a0,#ffd166);">🇲🇶 Précommande Martinique — 14,99 € (Retrait sur place)</a>
 
       <p class="small" style="margin-top:.8rem;">
         ⏳ Disponible à partir de <strong>mi-juin 2026</strong> (ou plus tôt selon la production).<br>
@@ -137,7 +132,7 @@
     <div class="card" id="reviews">
       <h2>Avis & Note</h2>
 
-      <!-- Bandeau moyenne TOUJOURS visible -->
+      <!-- Bandeau moyenne -->
       <div class="avg-banner" aria-live="polite">
         <div id="avgStars" class="stars avg-stars" aria-label="Note moyenne">☆☆☆☆☆</div>
         <div class="avg-badges">
@@ -147,7 +142,7 @@
         </div>
       </div>
 
-      <!-- Votre note (boutons étoiles) -->
+      <!-- Votre note (cliquable) -->
       <div class="small">Votre note :</div>
       <div class="stars" id="rateStars" aria-label="Noter">
         <button type="button" class="star-btn" data-v="1" aria-label="1 étoile">☆</button>
@@ -156,16 +151,18 @@
         <button type="button" class="star-btn" data-v="4" aria-label="4 étoiles">☆</button>
         <button type="button" class="star-btn" data-v="5" aria-label="5 étoiles">☆</button>
       </div>
+      <div id="voteHint" class="hint"></div>
 
-      <!-- Formulaire avis (création) -->
+      <!-- Formulaire avis -->
       <div class="review-form" style="margin-top:1rem;">
         <label for="reviewText" class="small">Votre avis (quelques lignes) :</label>
         <textarea id="reviewText" placeholder="Dites-nous ce que vous avez pensé du jeu…"></textarea>
         <div class="review-send">
           <button class="btn" id="sendReviewBtn">✍️ Laisser un avis</button>
         </div>
+        <div id="reviewAlt" class="hint"></div>
         <p class="small" style="margin-top:.4rem;">
-          💡 En cliquant, une page GitHub s’ouvre avec votre avis pré-rempli. Validez pour le publier.
+          💡 Après clic, une page GitHub s’ouvre. Il faut valider avec <em>“Submit new issue”</em> pour publier l’avis.
         </p>
       </div>
 
@@ -174,7 +171,7 @@
         <div class="review-empty">Chargement des derniers avis…</div>
       </div>
 
-      <!-- Actions & panneau "tous les avis" -->
+      <!-- Tous les avis -->
       <div class="reviews-actions">
         <button id="showAllReviewsBtn" class="btn" type="button">📖 Lire tous les avis</button>
       </div>
@@ -222,66 +219,53 @@
     <p>© 2025 Jediñ Foll — Tous droits réservés.</p>
   </footer>
 
-  <!-- NOTE + AVIS + COMPTEUR fallback + LECTURE "tous les avis" + COMPTEUR TOTAL D'AVIS -->
+  <!-- JS : notes + avis + compteur -->
   <script>
     (function(){
-      /* ---------- CONFIG Répo pour les avis ---------- */
-      const OWNER='jedinfoll', REPO='jedinfoll', LABEL='avis';
-      const GITHUB_API = `https://api.github.com/repos/${OWNER}/${REPO}`;
-
-      /* ---------- Helpers ---------- */
-      const escapeHTML=s=>s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
-      const formatStars=n=>'★'.repeat(n)+'☆'.repeat(5-n);
-      const parseStarsFromTitle=title=>{const m=(title||'').match(/★/g); return m?m.length:0;};
-      const byId = id => document.getElementById(id);
-
-      /* ---------- Étoiles / moyenne (CountAPI) ---------- */
-      const avgStars=byId('avgStars'), avgValue=byId('avgValue'), totalVotes=byId('totalVotes');
-      const totalReviewsEl=byId('totalReviews');
-      const rateStars=byId('rateStars'), starButtons=Array.from(rateStars.querySelectorAll('.star-btn'));
+      /* ===== CONFIG ===== */
+      const OWNER='jedinfoll', REPO='jedinfoll.github.io', LABEL='avis';
+      const GITHUB_API_BASE = `https://api.github.com/repos/${OWNER}/${REPO}`;
       const COUNT_NS='jedinfoll.github.io';
 
-      const starsString=(n)=>{const a=['☆','☆','☆','☆','☆']; for(let i=0;i<n;i++) a[i]='★'; return a.join('');}
-      function paintAvg(n){ avgStars.textContent = starsString(n); }
+      /* ===== Utils DOM / rendu ===== */
+      const $ = id => document.getElementById(id);
+      const escapeHTML = s => s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
+      const formatStars = n => '★'.repeat(n)+'☆'.repeat(5-n);
+      const parseStarsFromTitle = t => ((t||'').match(/★/g)||[]).length;
+      const starsText = n => {
+        const arr=['☆','☆','☆','☆','☆']; for(let i=0;i<n;i++) arr[i]='★'; return arr.join('');
+      };
+
+      /* ===== Notes (CountAPI + fallback local) ===== */
+      const avgStars=$('avgStars'), avgValue=$('avgValue'), totalVotes=$('totalVotes'), totalReviewsEl=$('totalReviews');
+      const rateStars=$('rateStars'), starButtons=Array.from(rateStars.querySelectorAll('.star-btn')), voteHint=$('voteHint');
+
+      function paintAvg(n){ avgStars.textContent = starsText(n); }
 
       function refreshRating(){
         return Promise.all([1,2,3,4,5].map(v =>
-          fetch(`https://api.countapi.xyz/get/${COUNT_NS}/rating${v}`, {cache:'no-store'}).then(r=>r.json()).catch(()=>({value:0}))
+          fetch(`https://api.countapi.xyz/get/${COUNT_NS}/rating${v}`, {cache:'no-store'})
+            .then(r=>r.json()).catch(()=>({value:0}))
         )).then(vals=>{
           const counts=vals.map(v=>Number(v?.value||0));
           const total=counts.reduce((a,b)=>a+b,0);
           const sum=counts.reduce((a,b,i)=>a+b*(i+1),0);
           const avg=total?sum/total:0;
-          totalVotes.textContent=total.toLocaleString('fr-FR');
-          avgValue.textContent=total?avg.toFixed(1):'—';
+          totalVotes.textContent = total.toLocaleString('fr-FR');
+          avgValue.textContent   = total ? avg.toFixed(1) : '—';
           paintAvg(Math.round(avg));
+        }).catch(()=>{
+          // Fallback affichage local uniquement
+          const local = localStorage.getItem('local_rating_last');
+          if(local){
+            const v = Number(local);
+            paintAvg(v); avgValue.textContent='—'; totalVotes.textContent='—';
+          }
         });
       }
 
-      // Compteur TOTAL d'avis (ouverts + fermés) via Search API (total_count)
-      function refreshTotalReviews(){
-        const q = `repo:${OWNER}/${REPO}+label:${encodeURIComponent(LABEL)}`;
-        const url = `https://api.github.com/search/issues?q=${q}&per_page=1`;
-        return fetch(url, {cache:'no-store'})
-          .then(r=>r.ok?r.json():Promise.reject(r))
-          .then(d=>{ totalReviewsEl.textContent = Number(d.total_count||0).toLocaleString('fr-FR'); })
-          .catch(()=>{ /* silencieux */ });
-      }
-
-      paintAvg(0);
-      refreshRating().catch(()=>{});
-      refreshTotalReviews().catch(()=>{});
-
-      // Mettre à jour au retour sur l'onglet (nouveaux votes/avis éventuels)
-      document.addEventListener('visibilitychange', ()=>{
-        if(!document.hidden){
-          refreshRating().catch(()=>{});
-          refreshTotalReviews().catch(()=>{});
-        }
-      });
-
       function paintStars(count){ starButtons.forEach((b,i)=>{ b.textContent=(i<count)?'★':'☆'; b.classList.toggle('filled', i<count); }); }
-      paintStars(0);
+      paintAvg(0); paintStars(0); refreshRating();
 
       starButtons.forEach(btn=>{
         btn.addEventListener('mouseenter', ()=>paintStars(Number(btn.dataset.v)));
@@ -292,15 +276,20 @@
           const v=Number(btn.dataset.v);
           rateStars.dataset.selected=String(v);
           paintStars(v);
+          localStorage.setItem('local_rating_last', String(v));
+          // tentative CountAPI
           fetch(`https://api.countapi.xyz/hit/${COUNT_NS}/rating${v}?${Date.now()}`, {cache:'no-store'})
-            .then(()=>refreshRating()).catch(()=>{});
+            .then(()=>{ voteHint.textContent='✅ Merci ! Votre note a été enregistrée.'; refreshRating(); })
+            .catch(()=>{ voteHint.innerHTML='⚠️ Votre note est enregistrée localement. Réessayez plus tard.'; });
         };
         btn.addEventListener('click', sendVote);
         btn.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); sendVote(); }});
       });
 
-      /* ---------- Derniers avis (3) ---------- */
-      const latestReviews=byId('latestReviews');
+      document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) refreshRating(); });
+
+      /* ===== Avis : 3 derniers + tous les avis (GitHub Issues) ===== */
+      const latestReviews=$('latestReviews');
       function renderReview(it){
         const user=(it.user&&it.user.login)?it.user.login:'Anonyme';
         const date=new Date(it.created_at).toLocaleDateString('fr-FR');
@@ -317,7 +306,7 @@
         </div>`;
       }
 
-      fetch(`${GITHUB_API}/issues?labels=${encodeURIComponent(LABEL)}&state=open&per_page=3&sort=created&direction=desc`, {cache:'no-store'})
+      fetch(`${GITHUB_API_BASE}/issues?labels=${encodeURIComponent(LABEL)}&state=open&per_page=3&sort=created&direction=desc`, {cache:'no-store'})
         .then(r=>r.ok?r.json():Promise.reject(r))
         .then(items=>{
           if(!Array.isArray(items)||items.length===0){ latestReviews.innerHTML = `<div class="review-empty">Pas encore d'avis. Soyez le premier !</div>`; return; }
@@ -325,12 +314,22 @@
         })
         .catch(()=>{ latestReviews.innerHTML = `<div class="review-empty">Impossible de charger les avis pour le moment.</div>`; });
 
-      /* ---------- Tous les avis (dans la page, paginé) ---------- */
-      const showAllBtn = byId('showAllReviewsBtn');
-      const panel      = byId('allReviewsPanel');
-      const statusEl   = byId('allReviewsStatus');
-      const listAllEl  = byId('allReviewsList');
-      const loadMoreBtn= byId('loadMoreBtn');
+      // Total d’avis (ouverts + fermés)
+      function refreshTotalReviews(){
+        const q = `repo:${OWNER}/${REPO}+label:${LABEL}`;
+        return fetch(`https://api.github.com/search/issues?q=${encodeURIComponent(q)}&per_page=1`, {cache:'no-store'})
+          .then(r=>r.ok?r.json():Promise.reject(r))
+          .then(d=>{ totalReviewsEl.textContent = Number(d.total_count||0).toLocaleString('fr-FR'); })
+          .catch(()=>{ /* silencieux */ });
+      }
+      refreshTotalReviews();
+
+      // Tous les avis (paginé)
+      const showAllBtn = $('showAllReviewsBtn');
+      const panel      = $('allReviewsPanel');
+      const statusEl   = $('allReviewsStatus');
+      const listAllEl  = $('allReviewsList');
+      const loadMoreBtn= $('loadMoreBtn');
 
       let currentPage = 1;
       const PER_PAGE  = 20;
@@ -349,48 +348,36 @@
         loading = true;
         statusEl.textContent = 'Chargement…';
         try{
-          const url = `${GITHUB_API}/issues?labels=${encodeURIComponent(LABEL)}&state=all&per_page=${PER_PAGE}&page=${page}&sort=created&direction=desc`;
+          const url = `${GITHUB_API_BASE}/issues?labels=${encodeURIComponent(LABEL)}&state=all&per_page=${PER_PAGE}&page=${page}&sort=created&direction=desc`;
           const r = await fetch(url, {cache:'no-store'});
           if(!r.ok) throw new Error('HTTP '+r.status);
           const items = await r.json();
           appendReviews(items);
-          if(items.length < PER_PAGE){
-            exhausted = true;
-            loadMoreBtn.style.display = 'none';
-            statusEl.textContent = 'Tous les avis ont été chargés.';
-          }else{
-            loadMoreBtn.style.display = 'inline-block';
-            statusEl.textContent = '';
-          }
-        }catch(e){
-          statusEl.textContent = "Impossible de charger les avis. Réessayez plus tard.";
-          loadMoreBtn.style.display = 'inline-block';
-        }finally{
-          loading = false;
-        }
+          if(items.length < PER_PAGE){ exhausted = true; loadMoreBtn.style.display = 'none'; statusEl.textContent = 'Tous les avis ont été chargés.'; }
+          else { loadMoreBtn.style.display = 'inline-block'; statusEl.textContent = ''; }
+        }catch(e){ statusEl.textContent = "Impossible de charger les avis. Réessayez plus tard."; loadMoreBtn.style.display = 'inline-block'; }
+        finally{ loading = false; }
       }
 
       showAllBtn.addEventListener('click', ()=>{
         panel.hidden = false;
         if(listAllEl.childElementCount === 0 && !loading){
-          currentPage = 1;
-          exhausted = false;
-          listAllEl.innerHTML = '';
-          loadMoreBtn.style.display = 'none';
+          currentPage = 1; exhausted = false; listAllEl.innerHTML = ''; loadMoreBtn.style.display = 'none';
           loadPage(currentPage);
         }
       });
 
       loadMoreBtn.addEventListener('click', ()=>{
         if(loading || exhausted) return;
-        currentPage += 1;
-        loadPage(currentPage);
+        currentPage += 1; loadPage(currentPage);
       });
 
-      /* ---------- Envoi avis (ouvre GitHub issue) ---------- */
-      const reviewText=byId('reviewText');
-      const sendBtn=byId('sendReviewBtn');
-      sendBtn.addEventListener('click',()=>{
+      /* ===== Envoi d’un avis : ouvre GitHub + lien alternatif si popup bloqué ===== */
+      const reviewText=$('reviewText');
+      const sendBtn=$('sendReviewBtn');
+      const reviewAlt=$('reviewAlt');
+
+      sendBtn.addEventListener('click', ()=>{
         const note = Number(rateStars.dataset.selected || 0);
         const txt  = (reviewText.value || '').trim();
         const stars= note ? formatStars(note) : '(pas de note)';
@@ -400,12 +387,21 @@
 ${txt||'Votre avis ici…'}
 
 (Envoyé depuis le site jedinfoll.github.io)`);
-        window.open(`https://github.com/${OWNER}/${REPO}/issues/new?title=${title}&body=${body}&labels=${encodeURIComponent(LABEL)}`,'_blank','noopener');
+
+        const url = `https://github.com/${OWNER}/${REPO}/issues/new?title=${title}&body=${body}&labels=${encodeURIComponent(LABEL)}`;
+        const w = window.open(url, '_blank', 'noopener');
+
+        // Popup bloqué → on affiche un lien cliquable pour publier manuellement
+        if(!w){
+          reviewAlt.innerHTML = `<span class="error">Pop-up bloqué.</span> Cliquez ici pour publier votre avis : <a href="${url}" target="_blank" rel="noopener">Ouvrir la page d’avis</a>`;
+        }else{
+          reviewAlt.textContent = 'La page pour publier votre avis est ouverte. Cliquez sur “Submit new issue”.';
+        }
       });
 
-      /* ---------- Compteur : badge image + fallback numérique ---------- */
-      const badge = byId('hitBadge');
-      const numeric = byId('numericCounter');
+      /* ===== Compteur de visites : badge + fallback ===== */
+      const badge = document.getElementById('hitBadge');
+      const numeric = document.getElementById('numericCounter');
       badge.addEventListener('error', ()=>{ startNumericCounter(); });
       badge.addEventListener('load',  ()=>{ numeric.classList.add('counter-hide'); });
 
