@@ -17,17 +17,18 @@
     h1,h2{color:#fff;margin:0 0 .5rem} h2{color:var(--mint)}
     .price{font-size:1.8rem;font-weight:bold;margin:1rem 0}
     .btn{display:inline-block;padding:.8rem 1.2rem;border-radius:10px;background:linear-gradient(90deg,#00b4d8,#ffcb77);color:#000;font-weight:bold;text-decoration:none}
-    .social-links a{color:var(--mint);text-decoration:none;margin:0 10px;font-weight:bold}
-    .mentions{font-size:.95rem;color:#ddd;margin-top:1rem;text-align:left;line-height:1.55}
-    .flags-inline{display:inline-flex;align-items:center;gap:6px}
-    .flag{height:16px;border-radius:2px;border:1px solid #333}
+    .btn.alt{background:linear-gradient(90deg,#06d6a0,#ffd166)}
     .small{color:#bbb;font-size:.9rem}
     ul{padding-left:1.2rem}
     .pdf-frame{width:100%;aspect-ratio:1/1.414;max-height:80vh;border:0;background:#fff}
     @media (max-width:600px){.pdf-frame{aspect-ratio:auto;height:70vh}}
     @media print{body{background:#fff;color:#000} header,footer,.card:not(#rules){display:none!important} #rules{box-shadow:none;border:none;background:#fff;color:#000} #rules h2{color:#000}}
-    /* Avis & étoiles (affichage) */
+
+    /* Avis & étoiles */
     .stars{font-size:1.8rem;user-select:none;display:flex;gap:.1rem}
+    .star-btn{font:inherit;background:transparent;border:none;padding:.1rem .2rem;cursor:pointer;line-height:1;color:#aaa;transition:transform .05s ease}
+    .star-btn.filled{color:#ffcb77}
+    .star-btn:hover{transform:scale(1.08)}
     .avg-banner{display:flex;gap:.5rem;align-items:center;margin:.25rem 0 .75rem;flex-wrap:wrap}
     .avg-stars{font-size:1.6rem}
     .avg-badges{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
@@ -45,6 +46,7 @@
     #allReviewsPanel{margin-top:1rem;border-top:1px dashed #2a2a2a;padding-top:1rem}
     #allReviewsList{display:flex;flex-direction:column;gap:1rem}
     #loadMoreBtn{display:none}
+    .status{margin-top:.6rem;font-size:.85rem;color:#bbb}
   </style>
 </head>
 <body>
@@ -97,7 +99,7 @@
       </a>
 
       <!-- Martinique (retrait sur place) -->
-      <a href="https://www.paypal.com/ncp/payment/B3JBUBJQBNQWJ" class="btn" style="margin-left:10px; background:linear-gradient(90deg,#06d6a0,#ffd166);">
+      <a href="https://www.paypal.com/ncp/payment/B3JBUBJQBNQWJ" class="btn alt" style="margin-left:10px;">
         🇲🇶 Précommande Martinique — 14,99 € (Retrait sur place)
       </a>
 
@@ -122,7 +124,245 @@
         </div>
       </div>
 
+      <!-- Étoiles "raccourci" : descendre vers le formulaire -->
+      <div class="small">Votre note :</div>
+      <div class="stars" id="rateStars" aria-label="Noter (ouvre le formulaire plus bas)">
+        <button type="button" class="star-btn" data-v="1" aria-label="1 étoile">☆</button>
+        <button type="button" class="star-btn" data-v="2" aria-label="2 étoiles">☆</button>
+        <button type="button" class="star-btn" data-v="3" aria-label="3 étoiles">☆</button>
+        <button type="button" class="star-btn" data-v="4" aria-label="4 étoiles">☆</button>
+        <button type="button" class="star-btn" data-v="5" aria-label="5 étoiles">☆</button>
+      </div>
+      <p class="small" id="starHint" style="margin:.4rem 0 .2rem; display:none;">Descente vers le formulaire… choisissez la même note dans le champ « Note » puis envoyez ✅</p>
+
       <!-- Formulaire intégré -->
       <div class="review-form" style="margin-top:1rem;">
         <p class="small">
-          Laissez votre note (1–5) et
+          Laissez votre note (1–5) et votre avis ci-dessous, puis cliquez sur <em>Envoyer</em>.<br>
+          ⚠️ Si une page blanche « Google Drive » apparaît : Form → <strong>Paramètres</strong> → décochez <em>Restreindre aux utilisateurs</em>, <em>Collecter les e-mails</em>, <em>Limiter à 1 réponse</em>.
+        </p>
+        <div id="formWrap" style="width:100%; max-height:700px; overflow:auto; border:1px solid #2a2a2a; border-radius:12px;">
+          <iframe id="reviewForm" src="https://docs.google.com/forms/d/e/1FAIpQLSdzVO_ZXOXcISfR6lX2gu30EFih8wZrYCdVjjNHtn_QqsLDIg/viewform?embedded=true" width="100%" height="700" frameborder="0" marginheight="0" marginwidth="0" style="background:#0f0f0f;">Chargement…</iframe>
+        </div>
+        <button id="refreshBtn" class="btn" type="button" style="margin-top:.8rem;">🔄 Actualiser la moyenne et les avis</button>
+        <div id="reviewsStatus" class="status" aria-live="polite"></div>
+      </div>
+
+      <!-- 3 derniers avis -->
+      <div class="reviews-list" id="latestReviews">
+        <div class="review-empty">Chargement des derniers avis…</div>
+      </div>
+
+      <!-- Tous les avis -->
+      <div class="reviews-actions">
+        <button id="showAllReviewsBtn" class="btn" type="button">📖 Lire tous les avis</button>
+      </div>
+
+      <div id="allReviewsPanel" hidden>
+        <div id="allReviewsStatus" class="small">Chargement…</div>
+        <div id="allReviewsList"></div>
+        <button id="loadMoreBtn" class="btn" type="button">Charger plus</button>
+      </div>
+    </div>
+
+    <!-- Mentions légales -->
+    <div class="card mentions">
+      <h2>Mentions légales</h2>
+      <p><strong>Éditeur :</strong> Jediñ Foll — Email : <a href="mailto:jedinfoll@gmail.com">jedinfoll@gmail.com</a></p>
+      <p><strong>Responsable de publication :</strong> Jessica Lechertier</p>
+      <p><strong>Fabrication :</strong> Créé en
+        <span class="flags-inline">Martinique
+          <img src="https://raw.githubusercontent.com/jedinfoll/jedinfoll/main/1000079688.jpg" alt="" class="flag">
+        </span>.
+      </p>
+      <p><strong>Hébergement :</strong> GitHub Pages — GitHub Inc., 88 Colin P Kelly Jr St, San Francisco, CA 94107, USA.</p>
+      <p><strong>Propriété intellectuelle :</strong> Contenus © Jediñ Foll. Reproduction interdite sans autorisation.</p>
+      <p><strong>Données personnelles :</strong> Les avis/notes sont stockés par Google Forms/Sheets.</p>
+    </div>
+  </main>
+
+  <footer>
+    <div class="social-links">
+      <a href="https://www.instagram.com/jedinfoll" target="_blank">Instagram: @jedinfoll</a> |
+      <a href="https://www.facebook.com/Jedi%C3%B1%20Foll" target="_blank">Facebook: Jediñ Foll</a> |
+      <a href="mailto:jedinfoll@gmail.com">Email: jedinfoll@gmail.com</a>
+    </div>
+    <p>© 2025 Jediñ Foll — Tous droits réservés.</p>
+  </footer>
+
+  <script>
+    (function(){
+      /* === CONFIG : URL CSV publique de ta feuille === */
+      const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQqh2gKDBWqoVbV4hCGADf7UTo5qKHcXk0LGL3mSs0oIrHDekGbYMfugFDLBdoxfptEFbYRedARxrJ5/gviz/tq?tqx=out:csv&gid=1219615797';
+      const PER_PAGE = 20;
+
+      const $ = id => document.getElementById(id);
+      const statusBox = $('reviewsStatus');
+
+      /* ===== Étoiles (raccourci vers le formulaire) ===== */
+      const rateStars = $('rateStars');
+      const hint = $('starHint');
+      if(rateStars){
+        const btns = Array.from(rateStars.querySelectorAll('.star-btn'));
+        const paint = n => btns.forEach((b,i)=>{ b.textContent=(i<n)?'★':'☆'; b.classList.toggle('filled', i<n); });
+        paint(0);
+        btns.forEach(btn=>{
+          btn.addEventListener('mouseenter',()=>paint(Number(btn.dataset.v)));
+          btn.addEventListener('mouseleave',()=>paint(0));
+          btn.addEventListener('click',()=>{
+            hint.style.display='block';
+            document.getElementById('formWrap').scrollIntoView({behavior:'smooth', block:'start'});
+          });
+        });
+      }
+
+      /* ===== Helpers ===== */
+      const escapeHTML = s => (s||'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
+
+      function detectDelimiter(sample){
+        const head = sample.slice(0, 2000);
+        const c = (head.match(/,/g)||[]).length;
+        const sc = (head.match(/;/g)||[]).length;
+        return sc>c ? ';' : ',';
+      }
+
+      function parseCSVFlexible(text){
+        const delim = detectDelimiter(text);
+        const rows=[]; let cur=[], val='', inQ=false;
+        for(let i=0;i<text.length;i++){
+          const c=text[i], n=text[i+1];
+          if(inQ){
+            if(c=='"' && n=='"'){ val+='"'; i++; }
+            else if(c=='"'){ inQ=false; }
+            else { val+=c; }
+          }else{
+            if(c=='"'){ inQ=true; }
+            else if(c===delim){ cur.push(val); val=''; }
+            else if(c=='\n' || c=='\r'){ if(val!==''||cur.length){ cur.push(val); rows.push(cur); cur=[]; val=''; } }
+            else { val+=c; }
+          }
+        }
+        if(val!==''||cur.length){ cur.push(val); rows.push(cur); }
+        return rows;
+      }
+
+      function findCol(header, regexes){
+        const norm = s => s.toString().toLowerCase()
+          .normalize('NFD').replace(/[\u0300-\u036f]/g,''); // supprime accents
+        const H = header.map(norm);
+        for(const rx of regexes){
+          const i = H.findIndex(h => rx.test(h));
+          if(i>=0) return i;
+        }
+        return -1;
+      }
+
+      function compute(rows){
+        if(!rows || rows.length<=1) return {avg:0, votes:0, reviews:0, items:[]};
+        const header = rows[0];
+        const data = rows.slice(1).filter(r => r.some(c => String(c).trim()!==''));
+        const tsI   = findCol(header, [/^time|date|horodatage|timestamp/]);
+        const noteI = findCol(header, [/note/, /rating/, /echelle/, /scale/]);
+        const avisI = findCol(header, [/avis/, /comment/]);
+        const nomI  = findCol(header, [/nom/, /name/]);
+
+        let sum=0, votes=0, reviews=0;
+        const items=[];
+        data.forEach(r=>{
+          const ts   = tsI>=0   ? r[tsI]   : '';
+          const rawN = noteI>=0 ? (r[noteI]||'').toString().replace(',','.') : '';
+          const note = Math.round(Number(rawN) || 0);
+          const avis = avisI>=0 ? (r[avisI]||'').toString().trim() : '';
+          const nom  = nomI>=0  ? (r[nomI] ||'').toString().trim() : '';
+          if(note>0){ votes++; sum += note; }
+          if(avis){
+            items.push({timestamp: ts, rating: Math.max(1,Math.min(5,note||0)), text: avis, name: nom});
+            reviews++;
+          }
+        });
+        items.sort((a,b)=> new Date(b.timestamp) - new Date(a.timestamp));
+        return {avg: votes? sum/votes : 0, votes, reviews, items};
+      }
+
+      function paintAvg(avg, votes, reviews){
+        const n = Math.round(avg||0);
+        $('avgStars').textContent = '★'.repeat(n) + '☆'.repeat(5-n);
+        $('avgValue').textContent = votes ? avg.toFixed(1) : '—';
+        $('totalVotes').textContent = votes.toString();
+        $('totalReviews').textContent = reviews.toString();
+      }
+
+      function reviewCard(r){
+        const date = new Date(r.timestamp).toLocaleDateString('fr-FR');
+        const stars = '★'.repeat(r.rating) + '☆'.repeat(5-r.rating);
+        const name = r.name ? '@'+escapeHTML(r.name) : '@Visiteur';
+        return `<div class="review">
+          <div class="review-header">
+            <span class="review-author">${name}</span>
+            <span class="review-date">· ${escapeHTML(date)}</span>
+            <span class="review-stars">— ${stars}</span>
+          </div>
+          <div class="review-body">${escapeHTML(r.text)}</div>
+        </div>`;
+      }
+
+      async function fetchCSV(){
+        const t0 = performance.now();
+        try{
+          const resp = await fetch(CSV_URL, {cache:'no-store', mode:'cors'});
+          if(!resp.ok) throw new Error('HTTP '+resp.status);
+          const txt = await resp.text();
+          const rows = parseCSVFlexible(txt);
+          const {avg, votes, reviews, items} = compute(rows);
+          paintAvg(avg, votes, reviews);
+          const last3 = items.slice(0,3);
+          $('latestReviews').innerHTML = last3.length ? last3.map(reviewCard).join('')
+                                                      : `<div class="review-empty">Pas encore d'avis.</div>`;
+          const dt = Math.round(performance.now()-t0);
+          statusBox.textContent = `Dernière mise à jour: ${new Date().toLocaleTimeString('fr-FR')} • ${votes} notes, ${reviews} avis • ${dt} ms`;
+          window.__allReviews = items;
+          return true;
+        }catch(err){
+          $('latestReviews').innerHTML = `<div class="review-empty">Impossible de charger les avis.</div>`;
+          statusBox.textContent = `Erreur de chargement. Vérifie que la feuille est bien "Publiée sur le Web" et accessible en CSV.`;
+          return false;
+        }
+      }
+
+      // Tous les avis (pagination)
+      let page = 0;
+      const PER = 20;
+      function showAll(){
+        $('allReviewsPanel').hidden = false;
+        $('allReviewsStatus').textContent = 'Chargement…';
+        $('allReviewsList').innerHTML = '';
+        page = 0;
+        loadMore();
+      }
+      function loadMore(){
+        const items = window.__allReviews || [];
+        const slice = items.slice(page*PER, (page+1)*PER);
+        if(slice.length===0){
+          $('allReviewsStatus').textContent = page===0 ? 'Aucun avis.' : 'Tous les avis sont affichés.';
+          $('loadMoreBtn').style.display='none';
+          return;
+        }
+        const wrap = document.createElement('div');
+        wrap.className='reviews-list';
+        wrap.innerHTML = slice.map(reviewCard).join('');
+        $('allReviewsList').appendChild(wrap);
+        page++;
+        $('allReviewsStatus').textContent = '';
+        $('loadMoreBtn').style.display = (items.length > page*PER) ? 'inline-block' : 'none';
+      }
+
+      $('refreshBtn').addEventListener('click', fetchCSV);
+      $('showAllReviewsBtn').addEventListener('click', showAll);
+      $('loadMoreBtn').addEventListener('click', loadMore);
+
+      // Init
+      fetchCSV();
+    })();
+  </script>
+</body>
+</html>
