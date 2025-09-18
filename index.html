@@ -35,11 +35,22 @@
       #rules h2 { color:#000; }
     }
     /* Étoiles */
-    .stars { font-size: 1.6rem; user-select:none; }
+    .stars { font-size: 1.8rem; user-select:none; display:flex; gap:.1rem; }
     .rating-line { display:flex; align-items:center; gap:.5rem; flex-wrap:wrap; }
     .rating-summary { font-weight:bold; }
-    .rate-stars { cursor:pointer; }
-    .rate-stars .star { padding:0 .08rem; }
+    .star-btn{
+      font: inherit;
+      background: transparent;
+      border: none;
+      padding: .1rem .2rem;
+      cursor: pointer;
+      line-height: 1;
+      color: #aaa; /* étoiles vides */
+      transition: transform .05s ease;
+    }
+    .star-btn:focus{ outline: 2px dotted #ffcb77; outline-offset: 2px; }
+    .star-btn.filled{ color: #ffcb77; }           /* étoiles pleines (sélection/hover) */
+    .star-btn:hover{ transform: scale(1.05); }
 
     /* Avis (liste) */
     .reviews-list{display:flex; flex-direction:column; gap:1rem; margin-top:1rem;}
@@ -138,17 +149,17 @@
         <div class="rating-summary"><span id="avgValue">—</span> / 5 · <span id="totalVotes">0</span> notes</div>
       </div>
 
-      <!-- Votre note (clic étoiles) -->
+      <!-- Votre note (boutons étoiles) -->
       <div class="small">Votre note :</div>
-      <div class="stars rate-stars" id="rateStars" aria-label="Noter">
-        <span class="star" data-v="1">☆</span>
-        <span class="star" data-v="2">☆</span>
-        <span class="star" data-v="3">☆</span>
-        <span class="star" data-v="4">☆</span>
-        <span class="star" data-v="5">☆</span>
+      <div class="stars" id="rateStars" aria-label="Noter">
+        <button type="button" class="star-btn" data-v="1" aria-label="1 étoile">☆</button>
+        <button type="button" class="star-btn" data-v="2" aria-label="2 étoiles">☆</button>
+        <button type="button" class="star-btn" data-v="3" aria-label="3 étoiles">☆</button>
+        <button type="button" class="star-btn" data-v="4" aria-label="4 étoiles">☆</button>
+        <button type="button" class="star-btn" data-v="5" aria-label="5 étoiles">☆</button>
       </div>
 
-      <!-- Formulaire avis (client-side, ouverture issue GitHub) -->
+      <!-- Formulaire avis -->
       <div class="review-form" style="margin-top:1rem;">
         <label for="reviewText" class="small">Votre avis (quelques lignes) :</label>
         <textarea id="reviewText" placeholder="Dites-nous ce que vous avez pensé du jeu…"></textarea>
@@ -260,12 +271,20 @@
       const avgValue = document.getElementById('avgValue');
       const totalVotes = document.getElementById('totalVotes');
       const rateStars = document.getElementById('rateStars');
+      const starButtons = Array.from(rateStars.querySelectorAll('.star-btn'));
       const reviewText = document.getElementById('reviewText');
       const sendBtn = document.getElementById('sendReviewBtn');
       const latestReviews = document.getElementById('latestReviews');
       const allReviewsLink = document.getElementById('allReviewsLink');
 
-      function paint(elem, n){
+      function paintStars(count){
+        starButtons.forEach((btn, i) => {
+          btn.textContent = (i < count) ? '★' : '☆';
+          btn.classList.toggle('filled', i < count);
+        });
+      }
+
+      function paintAvg(elem, n){
         const arr = ['☆','☆','☆','☆','☆'];
         for(let i=0;i<n;i++) arr[i]='★';
         elem.textContent = arr.join('');
@@ -281,20 +300,33 @@
           const avg = total ? sum/total : 0;
           totalVotes.textContent = total.toLocaleString('fr-FR');
           avgValue.textContent = total ? avg.toFixed(1) : '—';
-          paint(avgStars, Math.round(avg));
+          paintAvg(avgStars, Math.round(avg));
         });
       }
 
-      paint(avgStars, 0);
+      // Initial
+      paintStars(0);
       refreshRating();
 
-      rateStars.addEventListener('click', (e)=>{
-        const s = e.target.closest('.star'); if(!s) return;
-        const v = Number(s.dataset.v||0);
-        fetch(`https://api.countapi.xyz/hit/jedinfoll.github.io/rating${v}`)
-          .then(()=>refreshRating());
-        // On mémorise la dernière note choisie pour préremplir l'avis
-        rateStars.dataset.selected = String(v);
+      // Survol / tactile : prévisualisation
+      starButtons.forEach(btn => {
+        btn.addEventListener('mouseenter', () => paintStars(Number(btn.dataset.v)));
+        btn.addEventListener('mouseleave', () => paintStars(Number(rateStars.dataset.selected || 0)));
+        btn.addEventListener('focus', () => paintStars(Number(btn.dataset.v)));
+        btn.addEventListener('blur', () => paintStars(Number(rateStars.dataset.selected || 0)));
+
+        // Clic / activation clavier
+        const activate = () => {
+          const v = Number(btn.dataset.v);
+          rateStars.dataset.selected = String(v);
+          paintStars(v);
+          fetch(`https://api.countapi.xyz/hit/jedinfoll.github.io/rating${v}`)
+            .then(()=>refreshRating());
+        };
+        btn.addEventListener('click', activate);
+        btn.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activate(); }
+        });
       });
 
       /* ---------- Lien "tous les avis" ---------- */
@@ -315,15 +347,13 @@ ${txt || 'Votre avis ici…'}
 (Envoyé depuis le site jedinfoll.github.io)`
         );
 
-        // URL "New issue" (sans token, l'utilisateur valide côté GitHub)
         const newIssueUrl = `https://github.com/${OWNER}/${REPO}/issues/new?title=${title}&body=${body}&labels=${encodeURIComponent(LABEL)}`;
         window.open(newIssueUrl, '_blank', 'noopener');
       });
 
       /* ---------- Chargement des 3 derniers avis ---------- */
-      function renderEmpty(msg){
-        latestReviews.innerHTML = `<div class="review-empty">${msg}</div>`;
-      }
+      function escapeHTML(s){ return s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;'); }
+      function renderEmpty(msg){ latestReviews.innerHTML = `<div class="review-empty">${msg}</div>`; }
 
       fetch(`https://api.github.com/repos/${OWNER}/${REPO}/issues?labels=${encodeURIComponent(LABEL)}&state=open&per_page=3&sort=created&direction=desc`, { cache: 'no-store' })
         .then(r => r.ok ? r.json() : Promise.reject(r))
@@ -336,7 +366,6 @@ ${txt || 'Votre avis ici…'}
             const user = (it.user && it.user.login) ? it.user.login : 'Anonyme';
             const date = new Date(it.created_at).toLocaleDateString('fr-FR');
             const body = (it.body || '').replace(/^Note:\s*.*$/mi,'').trim();
-            // Essayer d'extraire une note depuis le titre "Avis: ★★★☆☆"
             const m = (it.title || '').match(/★/g);
             const starsCount = m ? m.length : 0;
             const stars = '★'.repeat(starsCount) + '☆'.repeat(5 - starsCount);
@@ -344,11 +373,11 @@ ${txt || 'Votre avis ici…'}
             return `
               <div class="review">
                 <div class="review-header">
-                  <span class="review-author">@${user}</span>
-                  <span class="review-date">· ${date}</span>
+                  <span class="review-author">@${escapeHTML(user)}</span>
+                  <span class="review-date">· ${escapeHTML(date)}</span>
                   <span class="review-stars">— ${stars}</span>
                 </div>
-                <div class="review-body">${body ? body.replaceAll('<','&lt;') : '<em>(sans texte)</em>'}</div>
+                <div class="review-body">${body ? escapeHTML(body) : '<em>(sans texte)</em>'}</div>
               </div>
             `;
           }).join('');
