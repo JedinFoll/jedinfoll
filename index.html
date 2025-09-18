@@ -42,7 +42,7 @@
       <div class="lang">FR / <a href="/jedinfoll/index-en.html">EN</a></div>
     </div>
     <h1>Jediñ Foll</h1>
-    <p>Le jeu de cartes éducatif, drôle et stratégique</p>
+    <p>Le jeu de cartes éducatif, drôle et stratégique au format de poche pour des parties folles où que vous soyez</p>
   </header>
 
   <main>
@@ -109,78 +109,7 @@
       <a href="https://www.facebook.com/Jedi%C3%B1%20Foll" target="_blank">Facebook: Jediñ Foll</a> |
       <a href="mailto:jedinfoll@gmail.com">Email: jedinfoll@gmail.com</a>
     </div>
-    <p>👁️ Visites (tous chargements) : <span id="visits">—</span></p>
     <p>© 2025 Jediñ Foll — Tous droits réservés.</p>
   </footer>
-
-  <!-- COMPTEUR VISITES : multi-fallback + beacon image si fetch bloqué -->
-  <script>
-    (function () {
-      const el = document.getElementById('visits');
-      if (!el) return;
-
-      const NAMESPACE = encodeURIComponent('jedinfoll.github.io');
-      const KEY = encodeURIComponent('site_total');
-      const BASES = [
-        'https://api.countapi.dev',
-        'https://api.countapi.xyz',
-        'https://countapi.xyz'
-      ];
-
-      function fmt(n) {
-        try { return Number(n).toLocaleString('fr-FR'); } catch { return String(n); }
-      }
-
-      async function tryFetch(base) {
-        const hitUrl = `${base}/hit/${NAMESPACE}/${KEY}?_=${Date.now()}`;
-        const res = await fetch(hitUrl, { cache: 'no-store', mode: 'cors' });
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        const js = await res.json();
-        if (typeof js.value !== 'number') throw new Error('Bad payload');
-        return js.value;
-      }
-
-      function beaconHit(base) {
-        return new Promise((resolve) => {
-          const img = new Image();
-          img.onload = img.onerror = () => resolve();
-          img.src = `${base}/hit/${NAMESPACE}/${KEY}?_=${Date.now()}`;
-          // on laisse l'image incrémenter côté serveur; on résout après load/error
-        });
-      }
-
-      async function getValue(base) {
-        const getUrl = `${base}/get/${NAMESPACE}/${KEY}?_=${Date.now()}`;
-        const res = await fetch(getUrl, { cache: 'no-store', mode: 'cors' });
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        const js = await res.json();
-        if (typeof js.value !== 'number') throw new Error('Bad payload');
-        return js.value;
-      }
-
-      (async function run() {
-        for (const base of BASES) {
-          try {
-            // 1) tentative fetch standard
-            const v = await tryFetch(base);
-            el.textContent = fmt(v);
-            return;
-          } catch (_) {
-            // 2) fallback: beacon image + lecture via /get
-            try {
-              await beaconHit(base);
-              const v2 = await getValue(base);
-              el.textContent = fmt(v2);
-              return;
-            } catch (_) {
-              // passe au domaine suivant
-            }
-          }
-        }
-        // Dernier recours
-        el.textContent = '—';
-      })();
-    })();
-  </script>
 </body>
 </html>
