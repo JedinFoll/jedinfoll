@@ -27,38 +27,6 @@
     .pdf-frame{width:100%;aspect-ratio:1/1.414;max-height:80vh;border:0;background:#fff}
     @media (max-width:600px){.pdf-frame{aspect-ratio:auto;height:70vh}}
     @media print{body{background:#fff;color:#000} header,footer,.card:not(#rules){display:none!important} #rules{box-shadow:none;border:none;background:#fff;color:#000} #rules h2{color:#000}}
-    /* Étoiles + Avis */
-    .stars{font-size:1.8rem;user-select:none;display:flex;gap:.1rem}
-    .rating-line{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
-    .rating-summary{font-weight:bold}
-    .star-btn{font:inherit;background:transparent;border:none;padding:.1rem .2rem;cursor:pointer;line-height:1;color:#aaa;transition:transform .05s ease}
-    .star-btn:focus{outline:2px dotted #ffcb77;outline-offset:2px}
-    .star-btn.filled{color:#ffcb77}
-    .star-btn:hover{transform:scale(1.05)}
-    .reviews-list{display:flex;flex-direction:column;gap:1rem;margin-top:1rem}
-    .review{background:#111;border:1px solid #2a2a2a;border-radius:12px;padding:1rem}
-    .review-header{display:flex;align-items:center;gap:.6rem;margin-bottom:.4rem;font-size:.95rem;color:#ddd}
-    .review-author{font-weight:bold;color:#fff}
-    .review-date{color:#bbb;font-size:.9rem}
-    .review-stars{color:#ffcb77;letter-spacing:.05em}
-    .review-body{white-space:pre-wrap;line-height:1.45}
-    .reviews-actions{margin-top:1rem;display:flex;gap:.6rem;flex-wrap:wrap}
-    .reviews-actions .btn{background:linear-gradient(90deg,#2ec4b6,#ffcb77)}
-    .review-empty{color:#bbb;font-style:italic}
-    textarea#reviewText{width:100%;min-height:110px;border-radius:12px;border:1px solid #2a2a2a;padding:.8rem;background:#0f0f0f;color:#fff;resize:vertical}
-    .review-send{margin-top:.6rem}
-    /* Compteur */
-    .counter-wrap{display:flex;justify-content:center;gap:.5rem;align-items:center;flex-wrap:wrap}
-    .counter-hide{display:none}
-    /* Bandeau moyenne visible */
-    .avg-banner{display:flex;gap:.5rem;align-items:center;margin:.25rem 0 .75rem;flex-wrap:wrap}
-    .avg-stars{font-size:1.6rem}
-    .avg-badges{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
-    .badge{background:#0f0f0f;border:1px solid #2a2a2a;color:#fff;border-radius:999px;padding:.2rem .6rem;font-size:.85rem}
-    /* Panneau "tous les avis" */
-    #allReviewsPanel{margin-top:1rem;border-top:1px dashed #2a2a2a;padding-top:1rem}
-    #allReviewsList{display:flex;flex-direction:column;gap:1rem}
-    #loadMoreBtn{display:none}
   </style>
 </head>
 <body>
@@ -92,7 +60,6 @@
       <button class="btn" onclick="window.print()">📄 Imprimer la section Règles</button>
     </div>
 
-    <!-- VIDÉO -->
     <div class="card" id="videos">
       <h2>Vidéos</h2>
       <div style="aspect-ratio:16/9; max-width:100%;">
@@ -100,7 +67,6 @@
       </div>
     </div>
 
-    <!-- PRÉCOMMANDE -->
     <div class="card" id="pricing">
       <h2>Précommande</h2>
       <div class="price">14,99 €</div>
@@ -122,7 +88,6 @@
       </p>
     </div>
 
-    <!-- QR CODE -->
     <div class="card">
       <h2>QR Code</h2>
       <div class="qr">
@@ -133,56 +98,7 @@
       <p class="small">Cliquez sur le QR pour télécharger en HD.</p>
     </div>
 
-    <!-- AVIS & NOTE -->
-    <div class="card" id="reviews">
-      <h2>Avis & Note</h2>
-
-      <!-- Bandeau moyenne -->
-      <div class="avg-banner" aria-live="polite">
-        <div id="avgStars" class="stars avg-stars" aria-label="Note moyenne">☆☆☆☆☆</div>
-        <div class="avg-badges">
-          <span class="badge">Moyenne : <strong><span id="avgValue">—</span>/5</strong></span>
-          <span class="badge">Votes : <strong><span id="totalVotes">0</span></strong></span>
-          <span class="badge">Avis : <strong><span id="totalReviews">0</span></strong></span>
-        </div>
-      </div>
-
-      <!-- Étoiles locales (visuel) -->
-      <div class="small">Votre note :</div>
-      <div class="stars" id="rateStars" aria-label="Noter">
-        <button type="button" class="star-btn" data-v="1" aria-label="1 étoile">☆</button>
-        <button type="button" class="star-btn" data-v="2" aria-label="2 étoiles">☆</button>
-        <button type="button" class="star-btn" data-v="3" aria-label="3 étoiles">☆</button>
-        <button type="button" class="star-btn" data-v="4" aria-label="4 étoiles">☆</button>
-        <button type="button" class="star-btn" data-v="5" aria-label="5 étoiles">☆</button>
-      </div>
-
-      <!-- Formulaire intégré (Google Form) -->
-      <div class="review-form" style="margin-top:1rem;">
-        <p class="small">Laissez votre note (1–5) et votre avis ci-dessous, puis cliquez sur <em>Envoyer</em>. L’enregistrement est immédiat.</p>
-        <div style="width:100%; max-height:700px; overflow:auto; border:1px solid #2a2a2a; border-radius:12px;">
-          <!-- ⛳️ Remplace l’URL ci-dessous par ton lien d’intégration Google Form -->
-          <iframe id="reviewForm" src="GOOGLE_FORM_EMBED_URL" width="100%" height="700" frameborder="0" marginheight="0" marginwidth="0" style="background:#0f0f0f;">Chargement…</iframe>
-        </div>
-        <button id="refreshBtn" class="btn" type="button" style="margin-top:.8rem;">🔄 Actualiser la moyenne et les avis</button>
-      </div>
-
-      <!-- Derniers avis -->
-      <div class="reviews-list" id="latestReviews">
-        <div class="review-empty">Chargement des derniers avis…</div>
-      </div>
-
-      <!-- Tous les avis -->
-      <div class="reviews-actions">
-        <button id="showAllReviewsBtn" class="btn" type="button">📖 Lire tous les avis</button>
-      </div>
-
-      <div id="allReviewsPanel" hidden>
-        <div id="allReviewsStatus" class="small">Chargement…</div>
-        <div id="allReviewsList"></div>
-        <button id="loadMoreBtn" class="btn" type="button">Charger plus</button>
-      </div>
-    </div>
+    <!-- (Bloc Avis & Note retiré provisoirement pour éviter tout dysfonctionnement partagé) -->
 
     <div class="card mentions">
       <h2>Mentions légales</h2>
@@ -205,172 +121,7 @@
       <a href="https://www.facebook.com/Jedi%C3%B1%20Foll" target="_blank">Facebook: Jediñ Foll</a> |
       <a href="mailto:jedinfoll@gmail.com">Email: jedinfoll@gmail.com</a>
     </div>
-
-    <!-- Compteur simple -->
-    <div id="counterRow" class="counter-wrap" aria-live="polite">
-      <span>👁️ Visites :</span>
-      <img id="hitBadge" alt="Compteur de visites"
-        src="https://api.visitorbadge.io/api/visitors?path=jedinfoll%2Fgithub-pages-site&label=Visites&countColor=%232EC4B6&style=flat&labelStyle=upper"
-        referrerpolicy="no-referrer"
-        style="vertical-align:middle;border-radius:6px;max-height:24px"
-      />
-    </div>
-
     <p>© 2025 Jediñ Foll — Tous droits réservés.</p>
   </footer>
-
-  <script>
-    (function(){
-      /* ===== CONFIG : URL CSV publiée ===== */
-      const CSV_URL = 'GOOGLE_SHEET_PUBLISHED_CSV_URL'; // ⛳️ remplace par l’URL CSV publiée de la feuille de réponses
-      const PER_PAGE = 20;
-
-      const $ = id => document.getElementById(id);
-      const escapeHTML = s => s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
-
-      /* Étoiles visuelles */
-      const rateStars = $('rateStars');
-      if(rateStars){
-        const btns = Array.from(rateStars.querySelectorAll('.star-btn'));
-        const paint = n => btns.forEach((b,i)=>{ b.textContent=(i<n)?'★':'☆'; b.classList.toggle('filled', i<n); });
-        paint(0);
-        btns.forEach(btn=>{
-          btn.addEventListener('mouseenter',()=>paint(Number(btn.dataset.v)));
-          btn.addEventListener('mouseleave',()=>paint(0));
-          btn.addEventListener('click',()=>paint(Number(btn.dataset.v)));
-        });
-      }
-
-      /* Lecture CSV + calculs */
-      function parseCSV(text){
-        const rows=[]; let cur=[], val='', inQ=false;
-        for(let i=0;i<text.length;i++){
-          const c=text[i], n=text[i+1];
-          if(inQ){
-            if(c=='"' && n=='"'){ val+='"'; i++; }
-            else if(c=='"'){ inQ=false; }
-            else { val+=c; }
-          }else{
-            if(c=='"'){ inQ=true; }
-            else if(c==','){ cur.push(val); val=''; }
-            else if(c=='\n' || c=='\r'){ if(val!==''||cur.length){ cur.push(val); rows.push(cur); cur=[]; val=''; } }
-            else { val+=c; }
-          }
-        }
-        if(val!==''||cur.length){ cur.push(val); rows.push(cur); }
-        return rows;
-      }
-      function getCols(header){
-        return {
-          ts:  header.findIndex(h=>/time|date|horodatage|timestamp/i.test(h))      ?? 0,
-          note:header.findIndex(h=>/note|rating|échelle|scale/i.test(h))           ?? 1,
-          avis:header.findIndex(h=>/avis|comment/i.test(h))                         ?? 2,
-          nom: header.findIndex(h=>/nom|name/i.test(h))                             ?? -1
-        };
-      }
-      function computeStats(rows){
-        if(rows.length<=1) return {avg:0,totalVotes:0,totalReviews:0,items:[]};
-        const header = rows[0], data = rows.slice(1).filter(r=>r.some(c=>c!=='')); 
-        const cols = getCols(header);
-
-        let totalVotes=0, sum=0, totalReviews=0;
-        const items=[];
-        for(const r of data){
-          const ts   = r[cols.ts]   || '';
-          const note = Number((r[cols.note]||'').toString().replace(',','.')) || 0;
-          const avis = (cols.avis>=0 ? r[cols.avis] : '') || '';
-          const nom  = (cols.nom>=0  ? r[cols.nom]  : '') || '';
-          if(note>0){ totalVotes++; sum += note; }
-          if(avis.trim()) totalReviews++;
-          if(avis.trim()){
-            items.push({timestamp: ts, rating: Math.max(0,Math.min(5,Math.round(note))), text: avis, name: nom});
-          }
-        }
-        items.sort((a,b)=> new Date(b.timestamp) - new Date(a.timestamp));
-        const avg = totalVotes ? sum/totalVotes : 0;
-        return {avg,totalVotes,totalReviews,items};
-      }
-
-      function paintAvg(avg,totalVotes,totalReviews){
-        const avgStars=$('avgStars'), avgValue=$('avgValue'), totalVotesEl=$('totalVotes'), totalReviewsEl=$('totalReviews');
-        const n = Math.round(avg||0);
-        const stars = ['☆','☆','☆','☆','☆']; for(let i=0;i<n;i++) stars[i]='★';
-        avgStars.textContent = stars.join('');
-        avgValue.textContent = totalVotes ? avg.toFixed(1) : '—';
-        totalVotesEl.textContent = totalVotes.toLocaleString('fr-FR');
-        totalReviewsEl.textContent = totalReviews.toLocaleString('fr-FR');
-      }
-      function card(r){
-        const date = new Date(r.timestamp).toLocaleDateString('fr-FR');
-        const stars = '★'.repeat(r.rating)+'☆'.repeat(5-r.rating);
-        const name = r.name ? '@'+escapeHTML(r.name) : '@Visiteur';
-        return `<div class="review">
-          <div class="review-header">
-            <span class="review-author">${name}</span>
-            <span class="review-date">· ${escapeHTML(date)}</span>
-            <span class="review-stars">— ${stars}</span>
-          </div>
-          <div class="review-body">${escapeHTML(r.text)}</div>
-        </div>`;
-      }
-
-      async function loadLatest(){
-        const box = $('latestReviews');
-        box.innerHTML = `<div class="review-empty">Chargement…</div>`;
-        try{
-          const r = await fetch(CSV_URL, {cache:'no-store'});
-          const t = await r.text();
-          const rows = parseCSV(t);
-          const {avg,totalVotes,totalReviews,items} = computeStats(rows);
-          paintAvg(avg,totalVotes,totalReviews);
-          const latest = items.slice(0,3);
-          box.innerHTML = latest.length ? latest.map(card).join('') : `<div class="review-empty">Pas encore d'avis.</div>`;
-          window.__allReviews = items;
-        }catch{
-          box.innerHTML = `<div class="review-empty">Impossible de charger les avis.</div>`;
-        }
-      }
-
-      /* Tous les avis */
-      const showAllBtn = $('showAllReviewsBtn');
-      const panel = $('allReviewsPanel');
-      const statusEl = $('allReviewsStatus');
-      const listAllEl = $('allReviewsList');
-      const loadMoreBtn = $('loadMoreBtn');
-      const PER_PAGE = 20;
-      let page = 0;
-
-      function showPage(){
-        const items = window.__allReviews || [];
-        const start = page*PER_PAGE;
-        const slice = items.slice(start, start+PER_PAGE);
-        if(page===0) listAllEl.innerHTML='';
-        if(slice.length===0){
-          statusEl.textContent = page===0 ? 'Aucun avis.' : 'Tous les avis sont affichés.';
-          loadMoreBtn.style.display='none';
-          return;
-        }
-        const wrap = document.createElement('div');
-        wrap.className='reviews-list';
-        wrap.innerHTML = slice.map(card).join('');
-        listAllEl.appendChild(wrap);
-        page++;
-        statusEl.textContent = '';
-        loadMoreBtn.style.display = (items.length > page*PER_PAGE) ? 'inline-block' : 'none';
-      }
-
-      showAllBtn.addEventListener('click', async ()=>{
-        panel.hidden=false; statusEl.textContent='Chargement…';
-        if(!window.__allReviews){ await loadLatest(); }
-        page=0; showPage();
-      });
-
-      loadMoreBtn.addEventListener('click', showPage);
-      $('refreshBtn').addEventListener('click', ()=>{ loadLatest(); });
-
-      // init
-      loadLatest();
-    })();
-  </script>
 </body>
 </html>
