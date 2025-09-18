@@ -59,8 +59,6 @@
     #allReviewsPanel{margin-top:1rem;border-top:1px dashed #2a2a2a;padding-top:1rem}
     #allReviewsList{display:flex;flex-direction:column;gap:1rem}
     #loadMoreBtn{display:none}
-    .hint{font-size:.9rem;color:#bbb;margin-top:.4rem}
-    .error{color:#ff9e9e}
   </style>
 </head>
 <body>
@@ -94,6 +92,7 @@
       <button class="btn" onclick="window.print()">📄 Imprimer la section Règles</button>
     </div>
 
+    <!-- VIDÉO -->
     <div class="card" id="videos">
       <h2>Vidéos</h2>
       <div style="aspect-ratio:16/9; max-width:100%;">
@@ -101,11 +100,21 @@
       </div>
     </div>
 
+    <!-- PRÉCOMMANDE -->
     <div class="card" id="pricing">
       <h2>Précommande</h2>
       <div class="price">14,99 €</div>
-      <a href="https://www.paypal.com/ncp/payment/PAYPAL_FRANCE_LINK" class="btn">🇫🇷 Précommande France — 14,99 € + 5 € livraison</a>
-      <a href="https://www.paypal.com/ncp/payment/PAYPAL_MARTINIQUE_LINK" class="btn" style="margin-left:10px; background:linear-gradient(90deg,#06d6a0,#ffd166);">🇲🇶 Précommande Martinique — 14,99 € (Retrait sur place)</a>
+
+      <!-- Précommande France (+ livraison) -->
+      <a href="https://www.paypal.com/ncp/payment/3MJTT9P62VJKY" class="btn">
+        🇫🇷 Précommande France — 14,99 € + 5 € livraison
+      </a>
+
+      <!-- Précommande Martinique (retrait sur place) -->
+      <a href="https://www.paypal.com/ncp/payment/B3JBUBJQBNQWJ" class="btn" style="margin-left:10px; background:linear-gradient(90deg,#06d6a0,#ffd166);">
+        🇲🇶 Précommande Martinique — 14,99 € (Retrait sur place)
+      </a>
+
       <p class="small" style="margin-top:.8rem;">
         ⏳ Disponible à partir de <strong>mi-juin 2026</strong> (ou plus tôt selon la production).<br>
         📦 France : ajouter 5 € pour la livraison.<br>
@@ -113,6 +122,7 @@
       </p>
     </div>
 
+    <!-- QR CODE -->
     <div class="card">
       <h2>QR Code</h2>
       <div class="qr">
@@ -123,9 +133,11 @@
       <p class="small">Cliquez sur le QR pour télécharger en HD.</p>
     </div>
 
+    <!-- AVIS & NOTE -->
     <div class="card" id="reviews">
       <h2>Avis & Note</h2>
 
+      <!-- Bandeau moyenne -->
       <div class="avg-banner" aria-live="polite">
         <div id="avgStars" class="stars avg-stars" aria-label="Note moyenne">☆☆☆☆☆</div>
         <div class="avg-badges">
@@ -135,6 +147,7 @@
         </div>
       </div>
 
+      <!-- Étoiles locales (visuel) -->
       <div class="small">Votre note :</div>
       <div class="stars" id="rateStars" aria-label="Noter">
         <button type="button" class="star-btn" data-v="1" aria-label="1 étoile">☆</button>
@@ -143,21 +156,23 @@
         <button type="button" class="star-btn" data-v="4" aria-label="4 étoiles">☆</button>
         <button type="button" class="star-btn" data-v="5" aria-label="5 étoiles">☆</button>
       </div>
-      <div id="voteHint" class="hint"></div>
 
+      <!-- Formulaire intégré (Google Form) -->
       <div class="review-form" style="margin-top:1rem;">
-        <label for="reviewText" class="small">Votre avis (quelques lignes) :</label>
-        <textarea id="reviewText" placeholder="Dites-nous ce que vous avez pensé du jeu…"></textarea>
-        <div class="review-send">
-          <button class="btn" id="sendReviewBtn">✍️ Laisser un avis</button>
+        <p class="small">Laissez votre note (1–5) et votre avis ci-dessous, puis cliquez sur <em>Envoyer</em>. L’enregistrement est immédiat.</p>
+        <div style="width:100%; max-height:700px; overflow:auto; border:1px solid #2a2a2a; border-radius:12px;">
+          <!-- ⛳️ Remplace l’URL ci-dessous par ton lien d’intégration Google Form -->
+          <iframe id="reviewForm" src="GOOGLE_FORM_EMBED_URL" width="100%" height="700" frameborder="0" marginheight="0" marginwidth="0" style="background:#0f0f0f;">Chargement…</iframe>
         </div>
-        <div id="reviewAlt" class="hint"></div>
+        <button id="refreshBtn" class="btn" type="button" style="margin-top:.8rem;">🔄 Actualiser la moyenne et les avis</button>
       </div>
 
+      <!-- Derniers avis -->
       <div class="reviews-list" id="latestReviews">
         <div class="review-empty">Chargement des derniers avis…</div>
       </div>
 
+      <!-- Tous les avis -->
       <div class="reviews-actions">
         <button id="showAllReviewsBtn" class="btn" type="button">📖 Lire tous les avis</button>
       </div>
@@ -191,6 +206,7 @@
       <a href="mailto:jedinfoll@gmail.com">Email: jedinfoll@gmail.com</a>
     </div>
 
+    <!-- Compteur simple -->
     <div id="counterRow" class="counter-wrap" aria-live="polite">
       <span>👁️ Visites :</span>
       <img id="hitBadge" alt="Compteur de visites"
@@ -198,7 +214,6 @@
         referrerpolicy="no-referrer"
         style="vertical-align:middle;border-radius:6px;max-height:24px"
       />
-      <span id="numericCounter" class="counter-hide">…</span>
     </div>
 
     <p>© 2025 Jediñ Foll — Tous droits réservés.</p>
@@ -206,150 +221,155 @@
 
   <script>
     (function(){
-      /* ====== CONFIG ====== */
-      const API = 'YOUR_WEB_APP_URL'; // <<<<<<<<<<<<<<<<<<<<<<<<<<< remplace par l’URL Apps Script publiée
+      /* ===== CONFIG : URL CSV publiée ===== */
+      const CSV_URL = 'GOOGLE_SHEET_PUBLISHED_CSV_URL'; // ⛳️ remplace par l’URL CSV publiée de la feuille de réponses
       const PER_PAGE = 20;
 
       const $ = id => document.getElementById(id);
       const escapeHTML = s => s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
 
-      /* ====== Affichage étoiles / moyenne ====== */
-      const avgStars=$('avgStars'), avgValue=$('avgValue'), totalVotes=$('totalVotes'), totalReviews=$('totalReviews');
-      const rateStars=$('rateStars'), starBtns=Array.from(rateStars.querySelectorAll('.star-btn')), voteHint=$('voteHint');
-      const reviewText=$('reviewText'), sendBtn=$('sendReviewBtn'), reviewAlt=$('reviewAlt');
-
-      function starsText(n){ const a=['☆','☆','☆','☆','☆']; for(let i=0;i<n;i++) a[i]='★'; return a.join(''); }
-      function paintAvg(n){ avgStars.textContent = starsText(n); }
-      function paintStars(n){ starBtns.forEach((b,i)=>{ b.textContent=(i<n)?'★':'☆'; b.classList.toggle('filled', i<n); }); }
-
-      async function fetchStats(){
-        const r = await fetch(`${API}?fn=stats`, {cache:'no-store'});
-        const d = await r.json();
-        avgValue.textContent = d.totalVotes ? d.avg.toFixed(1) : '—';
-        totalVotes.textContent = d.totalVotes.toLocaleString('fr-FR');
-        totalReviews.textContent = d.totalReviews.toLocaleString('fr-FR');
-        paintAvg(Math.round(d.avg || 0));
+      /* Étoiles visuelles */
+      const rateStars = $('rateStars');
+      if(rateStars){
+        const btns = Array.from(rateStars.querySelectorAll('.star-btn'));
+        const paint = n => btns.forEach((b,i)=>{ b.textContent=(i<n)?'★':'☆'; b.classList.toggle('filled', i<n); });
+        paint(0);
+        btns.forEach(btn=>{
+          btn.addEventListener('mouseenter',()=>paint(Number(btn.dataset.v)));
+          btn.addEventListener('mouseleave',()=>paint(0));
+          btn.addEventListener('click',()=>paint(Number(btn.dataset.v)));
+        });
       }
 
-      async function postRating(v){
-        voteHint.textContent = 'Enregistrement…';
-        const r = await fetch(API, {
-          method:'POST',
-          headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({fn:'rate', rating:v})
-        });
-        if(!r.ok) throw new Error('rate failed');
-        voteHint.textContent = '✅ Merci ! Votre note a été enregistrée.';
+      /* Lecture CSV + calculs */
+      function parseCSV(text){
+        const rows=[]; let cur=[], val='', inQ=false;
+        for(let i=0;i<text.length;i++){
+          const c=text[i], n=text[i+1];
+          if(inQ){
+            if(c=='"' && n=='"'){ val+='"'; i++; }
+            else if(c=='"'){ inQ=false; }
+            else { val+=c; }
+          }else{
+            if(c=='"'){ inQ=true; }
+            else if(c==','){ cur.push(val); val=''; }
+            else if(c=='\n' || c=='\r'){ if(val!==''||cur.length){ cur.push(val); rows.push(cur); cur=[]; val=''; } }
+            else { val+=c; }
+          }
+        }
+        if(val!==''||cur.length){ cur.push(val); rows.push(cur); }
+        return rows;
+      }
+      function getCols(header){
+        return {
+          ts:  header.findIndex(h=>/time|date|horodatage|timestamp/i.test(h))      ?? 0,
+          note:header.findIndex(h=>/note|rating|échelle|scale/i.test(h))           ?? 1,
+          avis:header.findIndex(h=>/avis|comment/i.test(h))                         ?? 2,
+          nom: header.findIndex(h=>/nom|name/i.test(h))                             ?? -1
+        };
+      }
+      function computeStats(rows){
+        if(rows.length<=1) return {avg:0,totalVotes:0,totalReviews:0,items:[]};
+        const header = rows[0], data = rows.slice(1).filter(r=>r.some(c=>c!=='')); 
+        const cols = getCols(header);
+
+        let totalVotes=0, sum=0, totalReviews=0;
+        const items=[];
+        for(const r of data){
+          const ts   = r[cols.ts]   || '';
+          const note = Number((r[cols.note]||'').toString().replace(',','.')) || 0;
+          const avis = (cols.avis>=0 ? r[cols.avis] : '') || '';
+          const nom  = (cols.nom>=0  ? r[cols.nom]  : '') || '';
+          if(note>0){ totalVotes++; sum += note; }
+          if(avis.trim()) totalReviews++;
+          if(avis.trim()){
+            items.push({timestamp: ts, rating: Math.max(0,Math.min(5,Math.round(note))), text: avis, name: nom});
+          }
+        }
+        items.sort((a,b)=> new Date(b.timestamp) - new Date(a.timestamp));
+        const avg = totalVotes ? sum/totalVotes : 0;
+        return {avg,totalVotes,totalReviews,items};
       }
 
-      async function postReview(text){
-        reviewAlt.textContent = 'Envoi de votre avis…';
-        const r = await fetch(API, {
-          method:'POST',
-          headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({fn:'review', text})
-        });
-        if(!r.ok) throw new Error('review failed');
-        reviewAlt.textContent = '✅ Merci ! Votre avis a été publié.';
-        reviewText.value = '';
+      function paintAvg(avg,totalVotes,totalReviews){
+        const avgStars=$('avgStars'), avgValue=$('avgValue'), totalVotesEl=$('totalVotes'), totalReviewsEl=$('totalReviews');
+        const n = Math.round(avg||0);
+        const stars = ['☆','☆','☆','☆','☆']; for(let i=0;i<n;i++) stars[i]='★';
+        avgStars.textContent = stars.join('');
+        avgValue.textContent = totalVotes ? avg.toFixed(1) : '—';
+        totalVotesEl.textContent = totalVotes.toLocaleString('fr-FR');
+        totalReviewsEl.textContent = totalReviews.toLocaleString('fr-FR');
       }
-
-      // étoiles : hover + click
-      paintAvg(0); paintStars(0);
-      starBtns.forEach(btn=>{
-        btn.addEventListener('mouseenter',()=>paintStars(Number(btn.dataset.v)));
-        btn.addEventListener('mouseleave',()=>paintStars(0));
-        btn.addEventListener('click', async ()=>{
-          const v = Number(btn.dataset.v);
-          try { await postRating(v); await fetchStats(); }
-          catch{ voteHint.textContent='⚠️ Désolé, impossible d’enregistrer pour le moment.'; }
-        });
-      });
-
-      // Avis : POST direct (pas de popup)
-      sendBtn.addEventListener('click', async ()=>{
-        const text = (reviewText.value||'').trim();
-        if(!text){ reviewAlt.textContent='⚠️ Écris quelques mots avant d’envoyer.'; return; }
-        try { await postReview(text); await fetchStats(); loadLatest(); }
-        catch { reviewAlt.textContent='⚠️ Impossible d’enregistrer pour le moment.'; }
-      });
-
-      /* ====== Derniers avis (3) ====== */
-      const latestReviews=$('latestReviews');
-      function renderReview(row){
-        const date = new Date(row.timestamp).toLocaleDateString('fr-FR');
-        const stars = '★'.repeat(row.rating) + '☆'.repeat(5-row.rating);
-        const user = row.name || 'Visiteur';
-        const body = row.text ? escapeHTML(row.text) : '<em>(sans texte)</em>';
+      function card(r){
+        const date = new Date(r.timestamp).toLocaleDateString('fr-FR');
+        const stars = '★'.repeat(r.rating)+'☆'.repeat(5-r.rating);
+        const name = r.name ? '@'+escapeHTML(r.name) : '@Visiteur';
         return `<div class="review">
           <div class="review-header">
-            <span class="review-author">@${escapeHTML(user)}</span>
+            <span class="review-author">${name}</span>
             <span class="review-date">· ${escapeHTML(date)}</span>
             <span class="review-stars">— ${stars}</span>
           </div>
-          <div class="review-body">${body}</div>
+          <div class="review-body">${escapeHTML(r.text)}</div>
         </div>`;
       }
+
       async function loadLatest(){
-        latestReviews.innerHTML = `<div class="review-empty">Chargement…</div>`;
+        const box = $('latestReviews');
+        box.innerHTML = `<div class="review-empty">Chargement…</div>`;
         try{
-          const r = await fetch(`${API}?fn=list&per=${3}&page=1`, {cache:'no-store'});
-          const d = await r.json();
-          latestReviews.innerHTML = d.items.length ? d.items.map(renderReview).join('') : `<div class="review-empty">Pas encore d'avis.</div>`;
+          const r = await fetch(CSV_URL, {cache:'no-store'});
+          const t = await r.text();
+          const rows = parseCSV(t);
+          const {avg,totalVotes,totalReviews,items} = computeStats(rows);
+          paintAvg(avg,totalVotes,totalReviews);
+          const latest = items.slice(0,3);
+          box.innerHTML = latest.length ? latest.map(card).join('') : `<div class="review-empty">Pas encore d'avis.</div>`;
+          window.__allReviews = items;
         }catch{
-          latestReviews.innerHTML = `<div class="review-empty">Impossible de charger les avis.</div>`;
+          box.innerHTML = `<div class="review-empty">Impossible de charger les avis.</div>`;
         }
       }
 
-      /* ====== Tous les avis paginés ====== */
-      const showAllBtn=$('showAllReviewsBtn'), panel=$('allReviewsPanel'), statusEl=$('allReviewsStatus'), listAllEl=$('allReviewsList'), loadMoreBtn=$('loadMoreBtn');
-      let curPage = 0, exhausted=false, loading=false;
+      /* Tous les avis */
+      const showAllBtn = $('showAllReviewsBtn');
+      const panel = $('allReviewsPanel');
+      const statusEl = $('allReviewsStatus');
+      const listAllEl = $('allReviewsList');
+      const loadMoreBtn = $('loadMoreBtn');
+      const PER_PAGE = 20;
+      let page = 0;
 
-      function appendList(items){
-        const wrap=document.createElement('div'); wrap.className='reviews-list';
-        wrap.innerHTML = items.map(renderReview).join('');
+      function showPage(){
+        const items = window.__allReviews || [];
+        const start = page*PER_PAGE;
+        const slice = items.slice(start, start+PER_PAGE);
+        if(page===0) listAllEl.innerHTML='';
+        if(slice.length===0){
+          statusEl.textContent = page===0 ? 'Aucun avis.' : 'Tous les avis sont affichés.';
+          loadMoreBtn.style.display='none';
+          return;
+        }
+        const wrap = document.createElement('div');
+        wrap.className='reviews-list';
+        wrap.innerHTML = slice.map(card).join('');
         listAllEl.appendChild(wrap);
+        page++;
+        statusEl.textContent = '';
+        loadMoreBtn.style.display = (items.length > page*PER_PAGE) ? 'inline-block' : 'none';
       }
-      async function loadPage(){
-        if(loading || exhausted) return;
-        loading=true; statusEl.textContent='Chargement…';
-        try{
-          const next = curPage + 1;
-          const r = await fetch(`${API}?fn=list&per=${PER_PAGE}&page=${next}`, {cache:'no-store'});
-          const d = await r.json();
-          if(next===1) listAllEl.innerHTML='';
-          appendList(d.items);
-          curPage = next;
-          if(d.items.length < PER_PAGE){ exhausted=true; loadMoreBtn.style.display='none'; statusEl.textContent='Tous les avis ont été chargés.'; }
-          else{ loadMoreBtn.style.display='inline-block'; statusEl.textContent=''; }
-        }catch{
-          statusEl.textContent='Erreur de chargement.';
-          loadMoreBtn.style.display='inline-block';
-        }finally{
-          loading=false;
-        }
-      }
-      showAllBtn.addEventListener('click', ()=>{ panel.hidden=false; if(curPage===0) loadPage(); });
-      loadMoreBtn.addEventListener('click', loadPage);
+
+      showAllBtn.addEventListener('click', async ()=>{
+        panel.hidden=false; statusEl.textContent='Chargement…';
+        if(!window.__allReviews){ await loadLatest(); }
+        page=0; showPage();
+      });
+
+      loadMoreBtn.addEventListener('click', showPage);
+      $('refreshBtn').addEventListener('click', ()=>{ loadLatest(); });
 
       // init
-      fetchStats(); loadLatest();
-
-      /* ====== Compteur de visites : badge + fallback ====== */
-      const badge = document.getElementById('hitBadge');
-      const numeric = document.getElementById('numericCounter');
-      badge.addEventListener('error', ()=>{ startNumericCounter(); });
-      badge.addEventListener('load',  ()=>{ numeric.classList.add('counter-hide'); });
-      function startNumericCounter(){
-        badge.classList.add('counter-hide');
-        numeric.classList.remove('counter-hide');
-        const NS='jedinfoll.github.io', KEY='counter_unique_daily_v2', today='visited_'+new Date().toISOString().slice(0,10);
-        const get =()=>fetch(`https://api.countapi.xyz/get/${NS}/${KEY}`,{cache:'no-store'}).then(r=>r.json()).catch(()=>null);
-        const create=()=>fetch(`https://api.countapi.xyz/create?namespace=${encodeURIComponent(NS)}&key=${encodeURIComponent(KEY)}&value=0`,{cache:'no-store'}).then(r=>r.json()).catch(()=>null);
-        const hit =()=>fetch(`https://api.countapi.xyz/hit/${NS}/${KEY}`,{cache:'no-store'}).then(r=>r.json()).catch(()=>null);
-        const set=v=>numeric.textContent=Number(v).toLocaleString('fr-FR');
-        (async ()=>{ let d=await get(); if(!d||typeof d.value!=='number'){ await create(); d=await get(); } if(d&&typeof d.value==='number'){ set(d.value); } if(!localStorage.getItem(today)){ const h=await hit(); if(h&&typeof h.value==='number') set(h.value); localStorage.setItem(today,'1'); } })();
-      }
+      loadLatest();
     })();
   </script>
 </body>
