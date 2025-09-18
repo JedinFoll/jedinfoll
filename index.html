@@ -50,6 +50,9 @@
     /* Compteur */
     .counter-wrap{display:flex;justify-content:center;gap:.5rem;align-items:center;flex-wrap:wrap}
     .counter-hide{display:none}
+    /* Bandeau moyenne visible */
+    .avg-banner{display:flex;gap:.5rem;align-items:center;margin:.25rem 0 .75rem}
+    .avg-stars{font-size:1.6rem}
   </style>
 </head>
 <body>
@@ -128,10 +131,10 @@
     <div class="card" id="reviews">
       <h2>Avis & Note</h2>
 
-      <!-- Note moyenne -->
-      <div class="rating-line" style="margin-bottom:.5rem;">
-        <div id="avgStars" class="stars" aria-label="Note moyenne" style="pointer-events:none;">☆☆☆☆☆</div>
-        <div class="rating-summary"><span id="avgValue">—</span> / 5 · <span id="totalVotes">0</span> notes</div>
+      <!-- Bandeau moyenne TOUJOURS visible -->
+      <div class="avg-banner" aria-live="polite">
+        <div id="avgStars" class="stars avg-stars" aria-label="Note moyenne">☆☆☆☆☆</div>
+        <div class="rating-summary">Moyenne : <span id="avgValue">—</span>/5 · <span id="totalVotes">0</span> votes</div>
       </div>
 
       <!-- Votre note (boutons étoiles) -->
@@ -192,7 +195,7 @@
       <a href="mailto:jedinfoll@gmail.com">Email: jedinfoll@gmail.com</a>
     </div>
 
-    <!-- COMPTEUR : 1) badge image (sans JS)  2) fallback numérique (JS) -->
+    <!-- Compteur : badge image + fallback numérique -->
     <div id="counterRow" class="counter-wrap" aria-live="polite">
       <span>👁️ Visites :</span>
       <img id="hitBadge" alt="Compteur de visites"
@@ -206,13 +209,13 @@
     <p>© 2025 Jediñ Foll — Tous droits réservés.</p>
   </footer>
 
-  <!-- NOTE + AVIS -->
+  <!-- NOTE + AVIS + COMPTEUR fallback -->
   <script>
     (function(){
       /* ---------- CONFIG Répo pour les avis ---------- */
       const OWNER='jedinfoll', REPO='jedinfoll', LABEL='avis';
 
-      /* ---------- Étoiles (CountAPI) ---------- */
+      /* ---------- Helpers étoiles/affichage ---------- */
       const avgStars=document.getElementById('avgStars');
       const avgValue=document.getElementById('avgValue');
       const totalVotes=document.getElementById('totalVotes');
@@ -223,41 +226,64 @@
       const latestReviews=document.getElementById('latestReviews');
       const allReviewsLink=document.getElementById('allReviewsLink');
 
-      function paintAvg(elem,n){const a=['☆','☆','☆','☆','☆'];for(let i=0;i<n;i++)a[i]='★';elem.textContent=a.join('');}
+      const COUNT_NS='jedinfoll.github.io';
+      function starsString(n){const a=['☆','☆','☆','☆','☆']; for(let i=0;i<n;i++) a[i]='★'; return a.join('');}
+      function paintAvg(n){ avgStars.textContent = starsString(n); }
+
+      // Lecture/affichage moyenne (avec no-store pour éviter le cache)
       function refreshRating(){
-        Promise.all([1,2,3,4,5].map(v=>fetch(`https://api.countapi.xyz/get/jedinfoll.github.io/rating${v}`).then(r=>r.json()).catch(()=>({value:0}))))
-        .then(vals=>{
-          const counts=vals.map(v=>Number(v?.value||0));
-          const total=counts.reduce((a,b)=>a+b,0);
-          const sum=counts.reduce((a,b,i)=>a+b*(i+1),0);
-          const avg=total?sum/total:0;
-          totalVotes.textContent=total.toLocaleString('fr-FR');
-          avgValue.textContent=total?avg.toFixed(1):'—';
-          paintAvg(avgStars,Math.round(avg));
-        }).catch(()=>{});
+        return Promise.all([1,2,3,4,5].map(v =>
+          fetch(`https://api.countapi.xyz/get/${COUNT_NS}/rating${v}`, {cache:'no-store'}).then(r=>r.json()).catch(()=>({value:0}))
+        )).then(vals=>{
+          const counts = vals.map(v => Number(v?.value || 0));
+          const total  = counts.reduce((a,b)=>a+b,0);
+          const sum    = counts.reduce((a,b,i)=>a+b*(i+1),0);
+          const avg    = total ? sum/total : 0;
+          totalVotes.textContent = total.toLocaleString('fr-FR');
+          avgValue.textContent   = total ? avg.toFixed(1) : '—';
+          paintAvg(Math.round(avg));
+        }).catch(()=>{ /* silencieux */ });
       }
-      function paintStars(count){ starButtons.forEach((b,i)=>{b.textContent=(i<count)?'★':'☆'; b.classList.toggle('filled',i<count);}); }
-      paintStars(0); refreshRating();
+
+      // Init moyenne visible dès l’ouverture
+      paintAvg(0);
+      refreshRating();
+
+      // Visual preview des étoiles
+      function paintStars(count){ starButtons.forEach((b,i)=>{ b.textContent=(i<count)?'★':'☆'; b.classList.toggle('filled', i<count); }); }
+      paintStars(0);
+
+      // Survol / focus
       starButtons.forEach(btn=>{
-        btn.addEventListener('mouseenter',()=>paintStars(Number(btn.dataset.v)));
-        btn.addEventListener('mouseleave',()=>paintStars(Number(rateStars.dataset.selected||0)));
-        btn.addEventListener('focus',()=>paintStars(Number(btn.dataset.v)));
-        btn.addEventListener('blur',()=>paintStars(Number(rateStars.dataset.selected||0)));
-        const act=()=>{const v=Number(btn.dataset.v); rateStars.dataset.selected=String(v); paintStars(v); fetch(`https://api.countapi.xyz/hit/jedinfoll.github.io/rating${v}`).then(()=>refreshRating()).catch(()=>{});};
-        btn.addEventListener('click',act);
-        btn.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();act();}});
+        btn.addEventListener('mouseenter', ()=>paintStars(Number(btn.dataset.v)));
+        btn.addEventListener('mouseleave', ()=>paintStars(Number(rateStars.dataset.selected||0)));
+        btn.addEventListener('focus',      ()=>paintStars(Number(btn.dataset.v)));
+        btn.addEventListener('blur',       ()=>paintStars(Number(rateStars.dataset.selected||0)));
+
+        // Clic + clavier -> envoi + MAJ immédiate
+        const sendVote=()=>{
+          const v=Number(btn.dataset.v);
+          rateStars.dataset.selected=String(v);
+          paintStars(v);
+          // on incrémente la case de vote et on relit la moyenne (visible pour tous)
+          fetch(`https://api.countapi.xyz/hit/${COUNT_NS}/rating${v}?${Date.now()}`, {cache:'no-store'})
+            .then(()=>refreshRating());
+        };
+        btn.addEventListener('click', sendVote);
+        btn.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); sendVote(); }});
       });
 
-      /* ---------- Lien "tous les avis" ---------- */
-      allReviewsLink.href=`https://github.com/${OWNER}/${REPO}/issues?q=is%3Aissue+is%3Aopen+label%3A${encodeURIComponent(LABEL)}`;
+      // Rafraîchir la moyenne si l’utilisateur revient sur l’onglet (d’autres notes ont pu arriver)
+      document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) refreshRating(); });
 
-      /* ---------- Envoi avis (ouvre GitHub issue) ---------- */
+      /* ---------- Lien "tous les avis" & envoi avis ---------- */
+      allReviewsLink.href=`https://github.com/${OWNER}/${REPO}/issues?q=is%3Aissue+is%3Aopen+label%3A${encodeURIComponent(LABEL)}`;
       sendBtn.addEventListener('click',()=>{
-        const note=Number(rateStars.dataset.selected||0);
-        const txt=(reviewText.value||'').trim();
-        const stars=note?'★'.repeat(note)+'☆'.repeat(5-note):'(pas de note)';
-        const title=encodeURIComponent(`Avis: ${stars}`);
-        const body=encodeURIComponent(`Note: ${note||'—'}/5
+        const note = Number(rateStars.dataset.selected || 0);
+        const txt  = (reviewText.value || '').trim();
+        const stars= note ? '★'.repeat(note)+'☆'.repeat(5-note) : '(pas de note)';
+        const title= encodeURIComponent(`Avis: ${stars}`);
+        const body = encodeURIComponent(`Note: ${note||'—'}/5
 --------------------
 ${txt||'Votre avis ici…'}
 
@@ -269,40 +295,34 @@ ${txt||'Votre avis ici…'}
       const escapeHTML=s=>s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
       const renderEmpty=msg=>latestReviews.innerHTML=`<div class="review-empty">${msg}</div>`;
       fetch(`https://api.github.com/repos/${OWNER}/${REPO}/issues?labels=${encodeURIComponent(LABEL)}&state=open&per_page=3&sort=created&direction=desc`,{cache:'no-store'})
-      .then(r=>r.ok?r.json():Promise.reject(r))
-      .then(items=>{
-        if(!Array.isArray(items)||items.length===0){renderEmpty("Pas encore d'avis. Soyez le premier !");return;}
-        latestReviews.innerHTML=items.map(it=>{
-          const user=(it.user&&it.user.login)?it.user.login:'Anonyme';
-          const date=new Date(it.created_at).toLocaleDateString('fr-FR');
-          const body=(it.body||'').replace(/^Note:\s*.*$/mi,'').trim();
-          const m=(it.title||'').match(/★/g); const sc=m?m.length:0;
-          const stars='★'.repeat(sc)+'☆'.repeat(5-sc);
-          return `<div class="review">
-            <div class="review-header">
-              <span class="review-author">@${escapeHTML(user)}</span>
-              <span class="review-date">· ${escapeHTML(date)}</span>
-              <span class="review-stars">— ${stars}</span>
-            </div>
-            <div class="review-body">${body?escapeHTML(body):'<em>(sans texte)</em>'}</div>
-          </div>`;
-        }).join('');
-      }).catch(()=>renderEmpty("Impossible de charger les avis pour le moment."));
+        .then(r=>r.ok?r.json():Promise.reject(r))
+        .then(items=>{
+          if(!Array.isArray(items)||items.length===0){renderEmpty("Pas encore d'avis. Soyez le premier !");return;}
+          latestReviews.innerHTML=items.map(it=>{
+            const user=(it.user&&it.user.login)?it.user.login:'Anonyme';
+            const date=new Date(it.created_at).toLocaleDateString('fr-FR');
+            const body=(it.body||'').replace(/^Note:\s*.*$/mi,'').trim();
+            const m=(it.title||'').match(/★/g); const sc=m?m.length:0;
+            const stars='★'.repeat(sc)+'☆'.repeat(5-sc);
+            return `<div class="review">
+              <div class="review-header">
+                <span class="review-author">@${escapeHTML(user)}</span>
+                <span class="review-date">· ${escapeHTML(date)}</span>
+                <span class="review-stars">— ${stars}</span>
+              </div>
+              <div class="review-body">${body?escapeHTML(body):'<em>(sans texte)</em>'}</div>
+            </div>`;
+          }).join('');
+        })
+        .catch(()=>renderEmpty("Impossible de charger les avis pour le moment."));
 
-      /* ---------- COMPTEUR : fallback si le badge image échoue ---------- */
-      const COUNTER_PATH = 'jedinfoll/github-pages-site'; // identifiant du site (libre)
+      /* ---------- Compteur : badge image + fallback numérique ---------- */
       const badge = document.getElementById('hitBadge');
       const numeric = document.getElementById('numericCounter');
-      const row = document.getElementById('counterRow');
-
-      // Si le badge ne charge pas (bloqué / domaine down), on bascule sur un compteur numérique
       badge.addEventListener('error', ()=>{ startNumericCounter(); });
-
-      // Si le badge charge bien, on masque le numérique
-      badge.addEventListener('load', ()=>{ numeric.classList.add('counter-hide'); });
+      badge.addEventListener('load',  ()=>{ numeric.classList.add('counter-hide'); });
 
       function startNumericCounter(){
-        // Affiche le texte numérique et cache le badge
         badge.classList.add('counter-hide');
         numeric.classList.remove('counter-hide');
 
@@ -311,19 +331,17 @@ ${txt||'Votre avis ici…'}
         const todayKey='visited_'+new Date().toISOString().slice(0,10);
         const isBot=()=>/bot|crawler|spider|crawling|headless|lighthouse|selenium|phantom/i.test(navigator.userAgent||'')||navigator.webdriver===true;
 
-        const get=()=>fetch(`https://api.countapi.xyz/get/${NS}/${KEY}`,{cache:'no-store'}).then(r=>r.json()).catch(()=>null);
+        const get =()=>fetch(`https://api.countapi.xyz/get/${NS}/${KEY}`,{cache:'no-store'}).then(r=>r.json()).catch(()=>null);
         const create=()=>fetch(`https://api.countapi.xyz/create?namespace=${encodeURIComponent(NS)}&key=${encodeURIComponent(KEY)}&value=0`,{cache:'no-store'}).then(r=>r.json()).catch(()=>null);
-        const hit=()=>fetch(`https://api.countapi.xyz/hit/${NS}/${KEY}`,{cache:'no-store'}).then(r=>r.json()).catch(()=>null);
+        const hit =()=>fetch(`https://api.countapi.xyz/hit/${NS}/${KEY}`,{cache:'no-store'}).then(r=>r.json()).catch(()=>null);
         const setText=v=>numeric.textContent=Number(v).toLocaleString('fr-FR');
 
         (async ()=>{
           let d=await get();
           if(!d||typeof d.value!=='number'){ await create(); d=await get(); }
           if(d&&typeof d.value==='number'){ setText(d.value); } else { numeric.textContent='—'; }
-
           if(!isBot() && !localStorage.getItem(todayKey)){
-            const h=await hit();
-            if(h&&typeof h.value==='number'){ setText(h.value); }
+            const h=await hit(); if(h&&typeof h.value==='number'){ setText(h.value); }
             localStorage.setItem(todayKey,'1');
           }
         })();
