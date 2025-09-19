@@ -8,30 +8,30 @@
   <style>
     :root{--mint:#2ec4b6;--bg:#1a1a1a}
     *{box-sizing:border-box}
-    body { margin: 0; font-family: Arial, sans-serif; background-color: var(--mint); color: #fff; }
-    header, footer { text-align: center; padding: 1rem; background: var(--bg); }
-    main { max-width: 900px; margin: auto; padding: 1rem; }
-    .topbar { display:flex; justify-content:space-between; align-items:center; max-width:900px; margin:0 auto; }
-    .lang { font-weight:bold; }
-    .lang a { color:#ffcb77; text-decoration:none; margin-left:.5rem; }
-    .card { background: var(--bg); border-radius: 20px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.5); margin: 1rem auto 2rem; }
-    h1, h2 { color: #ffffff; margin:0 0 .5rem; }
-    h2 { color: var(--mint); }
-    .price { font-size: 1.8rem; font-weight: bold; margin: 1rem 0; }
-    .btn { display: inline-block; padding: 0.8rem 1.2rem; border-radius: 10px; background: linear-gradient(90deg, #00b4d8, #ffcb77); color: #000; font-weight: bold; text-decoration: none; }
-    .social-links a { color: var(--mint); text-decoration: none; margin: 0 10px; font-weight: bold; }
-    .mentions { font-size: 0.95rem; color: #ddd; margin-top: 1rem; text-align: left; line-height: 1.55; }
-    .flags-inline { display:inline-flex; align-items:center; gap:6px; }
-    .flag { height: 16px; border-radius:2px; border:1px solid #333; }
-    .small { color:#bbb; font-size:.9rem }
-    ul { padding-left: 1.2rem; }
-    .pdf-frame { width:100%; aspect-ratio: 1/1.414; max-height:80vh; border:0; background:#fff; }
-    @media (max-width:600px){ .pdf-frame{ aspect-ratio:auto; height:70vh; } }
-    @media print {
-      body { background: #fff; color: #000; }
-      header, footer, .card:not(#rules) { display: none !important; }
-      #rules { box-shadow:none; border: none; background:#fff; color:#000; }
-      #rules h2 { color:#000; }
+    body{margin:0;font-family:Arial,sans-serif;background-color:var(--mint);color:#fff}
+    header,footer{text-align:center;padding:1rem;background:var(--bg)}
+    main{max-width:900px;margin:auto;padding:1rem}
+    .topbar{display:flex;justify-content:space-between;align-items:center;max-width:900px;margin:0 auto}
+    .lang{font-weight:bold}
+    .lang a{color:#ffcb77;text-decoration:none;margin-left:.5rem}
+    .card{background:var(--bg);border-radius:20px;padding:1.5rem;box-shadow:0 4px 12px rgba(0,0,0,.5);margin:1rem auto 2rem}
+    h1,h2{color:#fff;margin:0 0 .5rem}
+    h2{color:var(--mint)}
+    .price{font-size:1.8rem;font-weight:bold;margin:1rem 0}
+    .btn{display:inline-block;padding:.8rem 1.2rem;border-radius:10px;background:linear-gradient(90deg,#00b4d8,#ffcb77);color:#000;font-weight:bold;text-decoration:none}
+    .social-links a{color:var(--mint);text-decoration:none;margin:0 10px;font-weight:bold}
+    .mentions{font-size:.95rem;color:#ddd;margin-top:1rem;text-align:left;line-height:1.55}
+    .flags-inline{display:inline-flex;align-items:center;gap:6px}
+    .flag{height:16px;border-radius:2px;border:1px solid #333}
+    .small{color:#bbb;font-size:.9rem}
+    ul{padding-left:1.2rem}
+    .pdf-frame{width:100%;aspect-ratio:1/1.414;max-height:80vh;border:0;background:#fff}
+    @media (max-width:600px){.pdf-frame{aspect-ratio:auto;height:70vh}}
+    @media print{
+      body{background:#fff;color:#000}
+      header,footer,.card:not(#rules){display:none!important}
+      #rules{box-shadow:none;border:none;background:#fff;color:#000}
+      #rules h2{color:#000}
     }
   </style>
 </head>
@@ -109,40 +109,52 @@
       <a href="https://www.facebook.com/Jedi%C3%B1%20Foll" target="_blank">Facebook: Jediñ Foll</a> |
       <a href="mailto:jedinfoll@gmail.com">Email: jedinfoll@gmail.com</a>
     </div>
-    <p>👁️ Visites (tous chargements) : <span id="visits">—</span></p>
+
+    <!-- Compteur visites : 2 images en fallback + JS en secours -->
+    <p style="margin-top:.6rem;">
+      👁️ Visites :
+      <img id="hitPrimary"
+        src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fjedinfoll.github.io%2Fjedinfoll%2F&count_bg=%2300b4d8&title_bg=%231a1a1a&icon=&icon_color=%23ffffff&title=visites&edge_flat=false"
+        alt="Compteur de visites"
+        style="vertical-align:middle"
+        onerror="this.onerror=null; this.src='https://visitor-badge.laobi.icu/badge?page_id=jedinfoll.jedinfoll';"
+      >
+      <span id="hitFallback" style="margin-left:.4rem;"></span>
+    </p>
+
     <p>© 2025 Jediñ Foll — Tous droits réservés.</p>
   </footer>
 
-  <!-- COMPTEUR VISITES simple (comme avant) -->
+  <!-- Secours JS : si les images sont bloquées, on remplit un texte via CountAPI -->
   <script>
-    (function () {
-      const el = document.getElementById('visits');
-      if (!el) return;
+    (function(){
+      const txt = document.getElementById('hitFallback');
+      if(!txt) return;
 
-      const NAMESPACE = 'jedinfoll.github.io';
-      const KEY = 'site_total';
+      // Si le badge image primaire est visible/chargé, on ne fait rien :
+      const img = document.getElementById('hitPrimary');
+      let done = false;
 
-      // 1) Incrémente
-      fetch(`https://api.countapi.xyz/hit/${encodeURIComponent(NAMESPACE)}/${encodeURIComponent(KEY)}`, { cache: 'no-store' })
-        .then(r => r.json())
-        .then(d => {
-          if (d && typeof d.value === 'number') {
-            el.textContent = d.value.toLocaleString('fr-FR');
-          } else {
-            // 2) Si la frappe ne renvoie rien de correct, tente une simple lecture
-            return fetch(`https://api.countapi.xyz/get/${encodeURIComponent(NAMESPACE)}/${encodeURIComponent(KEY)}`, { cache: 'no-store' })
-              .then(r => r.json())
-              .then(g => el.textContent = (typeof g.value === 'number' ? g.value.toLocaleString('fr-FR') : '—'))
-              .catch(() => el.textContent = '—');
-          }
-        })
-        .catch(() => {
-          // 3) En cas d’échec, tente au moins la lecture
-          fetch(`https://api.countapi.xyz/get/${encodeURIComponent(NAMESPACE)}/${encodeURIComponent(KEY)}`, { cache: 'no-store' })
-            .then(r => r.json())
-            .then(g => el.textContent = (typeof g.value === 'number' ? g.value.toLocaleString('fr-FR') : '—'))
-            .catch(() => el.textContent = '—');
-        });
+      function setText(n){ if(!done){ txt.textContent = '('+ n.toLocaleString('fr-FR') +')'; done = true; } }
+
+      // Si l'image se charge, on n'ajoute pas de texte
+      img.addEventListener('load', ()=>{ done = true; });
+
+      // Après 1500 ms, si rien n'a été chargé (adblock), on tente CountAPI
+      setTimeout(async ()=>{
+        if(done) return;
+        try{
+          const ns = encodeURIComponent('jedinfoll.github.io');
+          const key = encodeURIComponent('site_total');
+          // frappe + lecture
+          const hit = await fetch(`https://api.countapi.xyz/hit/${ns}/${key}`, {cache:'no-store', mode:'cors'}).then(r=>r.json());
+          if(typeof hit.value === 'number'){ setText(hit.value); return; }
+          const get = await fetch(`https://api.countapi.xyz/get/${ns}/${key}`, {cache:'no-store', mode:'cors'}).then(r=>r.json());
+          if(typeof get.value === 'number'){ setText(get.value); return; }
+        }catch(e){
+          // ignore
+        }
+      }, 1500);
     })();
   </script>
 </body>
