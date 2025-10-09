@@ -66,28 +66,27 @@
       <button class="btn" onclick="window.print()">📄 Imprimer la section Règles</button>
     </div>
 
-<!-- PRÉCOMMANDE -->
-<div class="card" id="pricing">
-  <h2>Précommande</h2>
-  <div class="price">14,99 €</div>
+    <!-- PRÉCOMMANDE -->
+    <div class="card" id="pricing">
+      <h2>Précommande</h2>
+      <div class="price">14,99 €</div>
 
-  <!-- Précommande France -->
-  <a href="https://www.paypal.com/ncp/payment/3MJTT9P62VJKY?no_shipping=2" class="btn">
-    🇫🇷 Précommande France — 14,99 € + 5 € livraison
-  </a>
+      <!-- Précommande France -->
+      <a href="https://www.paypal.com/ncp/payment/3MJTT9P62VJKY?no_shipping=2" class="btn">
+        🇫🇷 Précommande France — 14,99 € + 5 € livraison
+      </a>
 
-  <!-- Précommande Martinique -->
-  <a href="https://www.paypal.com/ncp/payment/B3JBUBJQBNQWJ" class="btn" style="margin-left:10px; background:linear-gradient(90deg,#06d6a0,#ffd166);">
-    🇲🇶 Précommande Martinique — 14,99 € (Retrait sur place)
-  </a>
+      <!-- Précommande Martinique -->
+      <a href="https://www.paypal.com/ncp/payment/B3JBUBJQBNQWJ" class="btn" style="margin-left:10px; background:linear-gradient(90deg,#06d6a0,#ffd166);">
+        🇲🇶 Précommande Martinique — 14,99 € (Retrait sur place)
+      </a>
 
-  <p class="small" style="margin-top:.8rem;">
-    ⏳ Disponible à partir de <strong>mi-juin 2026</strong> (ou plus tôt selon la production).<br>
-    📦 <strong>France</strong> : ajouter 5 € pour la livraison — l’adresse postale est requise au moment du paiement.<br>
-    📍 <strong>Martinique</strong> : retrait sur place uniquement (aucune expédition).
-  </p>
-</div>
-
+      <p class="small" style="margin-top:.8rem;">
+        ✅ <strong>Disponible dès janvier 2026</strong> (ou plus tôt selon la production).<br>
+        📦 <strong>France</strong> : ajouter 5 € pour la livraison — l’adresse postale est requise au moment du paiement.<br>
+        📍 <strong>Martinique</strong> : retrait sur place uniquement (aucune expédition).
+      </p>
+    </div>
 
     <div class="card mentions">
       <h2>Mentions légales</h2>
@@ -111,7 +110,7 @@
       <a href="mailto:jedinfoll@gmail.com">Email: jedinfoll@gmail.com</a>
     </div>
 
-    <!-- Compteur visites : 2 images en fallback + JS en secours -->
+    <!-- Compteur visites : image fiable + fallback -->
     <p style="margin-top:.6rem;">
       👁️ Visites :
       <img id="hitPrimary"
@@ -126,35 +125,27 @@
     <p>© 2025 Jediñ Foll — Tous droits réservés.</p>
   </footer>
 
-  <!-- Secours JS : si les images sont bloquées, on remplit un texte via CountAPI -->
+  <!-- Secours JS pour compteur -->
   <script>
     (function(){
       const txt = document.getElementById('hitFallback');
       if(!txt) return;
 
-      // Si le badge image primaire est visible/chargé, on ne fait rien :
       const img = document.getElementById('hitPrimary');
       let done = false;
-
       function setText(n){ if(!done){ txt.textContent = '('+ n.toLocaleString('fr-FR') +')'; done = true; } }
-
-      // Si l'image se charge, on n'ajoute pas de texte
       img.addEventListener('load', ()=>{ done = true; });
 
-      // Après 1500 ms, si rien n'a été chargé (adblock), on tente CountAPI
       setTimeout(async ()=>{
         if(done) return;
         try{
           const ns = encodeURIComponent('jedinfoll.github.io');
           const key = encodeURIComponent('site_total');
-          // frappe + lecture
           const hit = await fetch(`https://api.countapi.xyz/hit/${ns}/${key}`, {cache:'no-store', mode:'cors'}).then(r=>r.json());
           if(typeof hit.value === 'number'){ setText(hit.value); return; }
           const get = await fetch(`https://api.countapi.xyz/get/${ns}/${key}`, {cache:'no-store', mode:'cors'}).then(r=>r.json());
           if(typeof get.value === 'number'){ setText(get.value); return; }
-        }catch(e){
-          // ignore
-        }
+        }catch(e){}
       }, 1500);
     })();
   </script>
