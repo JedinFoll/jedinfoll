@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jediñ Foll — The educational, funny & strategic card game</title>
+  <title>Jediñ Foll — The fun, smart & strategic card game</title>
   <link rel="alternate" hreflang="fr" href="/jedinfoll/index.html">
   <style>
     :root{--mint:#2ec4b6;--bg:#1a1a1a}
@@ -15,10 +15,12 @@
     .lang{font-weight:bold}
     .lang a{color:#ffcb77;text-decoration:none;margin-left:.5rem}
     .card{background:var(--bg);border-radius:20px;padding:1.5rem;box-shadow:0 4px 12px rgba(0,0,0,.5);margin:1rem auto 2rem}
-    h1,h2{color:#fff;margin:0 0 .5rem}
+    h1{color:#fff;margin:0 0 .5rem;font-size:3rem;text-transform:uppercase;letter-spacing:1px}
     h2{color:var(--mint)}
     .price{font-size:1.8rem;font-weight:bold;margin:1rem 0}
-    .btn{display:inline-block;padding:.8rem 1.2rem;border-radius:10px;background:linear-gradient(90deg,#00b4d8,#ffcb77);color:#000;font-weight:bold;text-decoration:none}
+    .btn{display:inline-flex;align-items:center;gap:6px;padding:.8rem 1.2rem;border-radius:10px;background:linear-gradient(90deg,#00b4d8,#ffcb77);color:#000;font-weight:bold;text-decoration:none;transition:transform .2s}
+    .btn:hover{transform:scale(1.05)}
+    .btn img.flag{height:16px;border-radius:2px;border:1px solid #333}
     .social-links a{color:var(--mint);text-decoration:none;margin:0 10px;font-weight:bold}
     .mentions{font-size:.95rem;color:#ddd;margin-top:1rem;text-align:left;line-height:1.55}
     .flags-inline{display:inline-flex;align-items:center;gap:6px}
@@ -26,7 +28,10 @@
     .small{color:#bbb;font-size:.9rem}
     ul{padding-left:1.2rem}
     .pdf-frame{width:100%;aspect-ratio:1/1.414;max-height:80vh;border:0;background:#fff}
-    @media (max-width:600px){.pdf-frame{aspect-ratio:auto;height:70vh}}
+    @media (max-width:600px){
+      .pdf-frame{aspect-ratio:auto;height:70vh}
+      h1{font-size:2.3rem}
+    }
     @media print{
       body{background:#fff;color:#000}
       header,footer,.card:not(#rules){display:none!important}
@@ -35,6 +40,7 @@
     }
   </style>
 </head>
+
 <body>
   <header>
     <div class="topbar">
@@ -42,19 +48,49 @@
       <div class="lang">EN / <a href="/jedinfoll/index.html">FR</a></div>
     </div>
     <h1>Jediñ Foll</h1>
-    <p>The educational, funny and strategic pocket card game for crazy fun wherever you are!</p>
+    <p>The educational, funny, and strategic pocket card game for crazy matches wherever you are!</p>
   </header>
 
   <main>
-    <!-- Game presentation -->
+    <!-- Game Presentation -->
     <div class="card">
-      <h2>Jediñ Foll</h2>
+      <h2>About the Game</h2>
       <ul>
         <li>1 to 4 players · 10 to 30 minutes</li>
         <li>For ages 6 and up</li>
-        <li>5 game modes — reach the exact result required according to the chosen mode</li>
+        <li>5 game modes — reach the exact target result according to the chosen mode</li>
         <li>The box contains 102 cards</li>
       </ul>
+    </div>
+
+    <!-- Preorder -->
+    <div class="card" id="pricing">
+      <h2>Preorder</h2>
+      <p style="font-size:1.1rem; color:#ffcb77; font-weight:bold; margin-bottom:1rem;">
+        🎉 Amazing! Only €14.99 for hours of fun, logic and laughter!
+      </p>
+      <div class="price">€14.99</div>
+
+      <!-- Button 1: Jediñ Foll + Shipping -->
+      <a href="https://www.paypal.com/ncp/payment/3MJTT9P62VJKY?no_shipping=2"
+         class="btn" style="font-size:1rem;">
+        🌍 Jediñ Foll €14.99 + Shipping
+      </a>
+
+      <!-- Button 2: Jediñ Foll Martinique -->
+      <a href="https://www.paypal.com/ncp/payment/B3JBUBJQBNQWJ"
+         class="btn"
+         style="margin-left:10px; background:linear-gradient(90deg,#06d6a0,#ffd166); font-size:1rem;">
+        <img src="https://raw.githubusercontent.com/jedinfoll/jedinfoll/main/1000079688.jpg"
+             alt="Martinique flag" class="flag">
+        Jediñ Foll Martinique — €14.99 (Pick-up only)
+      </a>
+
+      <p class="small" style="margin-top:.8rem;">
+        ✅ <strong>Available from January 2026</strong> (or earlier depending on production).<br>
+        📦 <strong>Jediñ Foll + Shipping</strong>: your postal address is required during checkout (extra fees apply depending on your region).<br>
+        📍 <strong>Jediñ Foll Martinique</strong>: local pick-up only (no delivery).<br>
+      </p>
     </div>
 
     <!-- Rules -->
@@ -64,57 +100,34 @@
       <object data="/jedinfoll/regles.pdf" type="application/pdf" class="pdf-frame">
         <iframe src="/jedinfoll/regles.pdf" class="pdf-frame" title="Rules"></iframe>
       </object>
-      <p class="small">If the PDF does not appear, <a href="/jedinfoll/regles.pdf" download>click here to download it</a>.</p>
-      <button class="btn" onclick="window.print()">📄 Print the Rules section</button>
+      <p class="small">If the PDF doesn’t display, <a href="/jedinfoll/regles.pdf" download>click here to download it</a>.</p>
+      <button class="btn" onclick="window.print()">📄 Print the Rules Section</button>
     </div>
 
-    <!-- VIDEOS -->
+    <!-- Videos -->
     <div class="card" id="videos">
       <h2>🎥 Videos</h2>
-      <p class="small">Watch Jediñ Foll in action!</p>
+      <p class="small">Discover Jediñ Foll in action!</p>
 
-      <!-- Example video -->
       <div style="aspect-ratio:16/9; max-width:100%;">
-        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/ID_DE_TA_VIDEO" 
+        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/ID_DE_TA_VIDEO"
           title="Jediñ Foll — Demo" frameborder="0" allowfullscreen></iframe>
       </div>
     </div>
 
-    <!-- PREORDER -->
-    <div class="card" id="pricing">
-      <h2>Preorder</h2>
-      <div class="price">€14.99</div>
-
-      <!-- Button 1 : Jediñ Foll + Shipping -->
-      <a href="https://www.paypal.com/ncp/payment/3MJTT9P62VJKY?no_shipping=2" class="btn" style="font-size:1rem;">
-        🃏 Jediñ Foll + Shipping — €14.99
-      </a>
-
-      <!-- Button 2 : Jediñ Foll Martinique -->
-      <a href="https://www.paypal.com/ncp/payment/B3JBUBJQBNQWJ" class="btn" style="margin-left:10px; background:linear-gradient(90deg,#06d6a0,#ffd166); font-size:1rem;">
-        🇲🇶 Jediñ Foll Martinique — €14.99 (Pick-up only)
-      </a>
-
-      <p class="small" style="margin-top:.8rem;">
-        ✅ <strong>Available from January 2026</strong> (or earlier depending on production).<br>
-        📦 <strong>Jediñ Foll + Shipping</strong>: your postal address will be requested during checkout (add shipping fees depending on your region).<br>
-        📍 <strong>Jediñ Foll Martinique</strong>: pick-up only (no shipping available).
-      </p>
-    </div>
-
-    <!-- Legal mentions -->
+    <!-- Legal -->
     <div class="card mentions">
       <h2>Legal Notice</h2>
       <p><strong>Publisher:</strong> Jediñ Foll — Email: <a href="mailto:jedinfoll@gmail.com">jedinfoll@gmail.com</a></p>
-      <p><strong>Publication manager:</strong> Jessica Lechertier</p>
+      <p><strong>Publication Director:</strong> Jessica Lechertier</p>
       <p><strong>Manufacturing:</strong> Created in
         <span class="flags-inline">Martinique
-          <img src="https://raw.githubusercontent.com/jedinfoll/jedinfoll/main/1000079688.jpg" alt="" class="flag">
+          <img src="https://raw.githubusercontent.com/jedinfoll/jedinfoll/main/1000079688.jpg" alt="Martinique flag" class="flag">
         </span>.
       </p>
       <p><strong>Hosting:</strong> GitHub Pages — GitHub Inc., 88 Colin P Kelly Jr St, San Francisco, CA 94107, USA.</p>
-      <p><strong>Intellectual property:</strong> Content © Jediñ Foll. Reproduction prohibited without authorization.</p>
-      <p><strong>Personal data:</strong> Data collected (orders, emails) are used only to process purchases and are never sold.</p>
+      <p><strong>Intellectual Property:</strong> Content © Jediñ Foll. Reproduction is prohibited without permission.</p>
+      <p><strong>Personal Data:</strong> Collected data (orders, emails) are only used for order processing and are never sold.</p>
     </div>
   </main>
 
@@ -125,37 +138,33 @@
       <a href="mailto:jedinfoll@gmail.com">Email: jedinfoll@gmail.com</a>
     </div>
 
-    <!-- Visit counter -->
+    <!-- Visit Counter -->
     <p style="margin-top:.6rem;">
       👁️ Visits:
       <img id="hitPrimary"
-        src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fjedinfoll.github.io%2Fjedinfoll%2F&count_bg=%2300b4d8&title_bg=%231a1a1a&icon=&icon_color=%23ffffff&title=visits&edge_flat=false"
+        src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fjedinfoll.github.io%2Fjedinfoll%2Findex-en.html&count_bg=%2300b4d8&title_bg=%231a1a1a&icon=&icon_color=%23ffffff&title=visits&edge_flat=false"
         alt="Visit counter"
         style="vertical-align:middle"
-        onerror="this.onerror=null; this.src='https://visitor-badge.laobi.icu/badge?page_id=jedinfoll.jedinfoll';"
-      >
+        onerror="this.onerror=null; this.src='https://visitor-badge.laobi.icu/badge?page_id=jedinfoll.jedinfoll.en';">
       <span id="hitFallback" style="margin-left:.4rem;"></span>
     </p>
 
     <p>© 2025 Jediñ Foll — All rights reserved.</p>
   </footer>
 
-  <!-- Backup JS for visit counter -->
+  <!-- Fallback Counter Script -->
   <script>
     (function(){
       const txt = document.getElementById('hitFallback');
       if(!txt) return;
-
       const img = document.getElementById('hitPrimary');
       let done = false;
       function setText(n){ if(!done){ txt.textContent = '('+ n.toLocaleString('en-US') +')'; done = true; } }
       img.addEventListener('load', ()=>{ done = true; });
-
-      setTimeout(async ()=>{
-        if(done) return;
+      setTimeout(async ()=>{ if(done) return;
         try{
           const ns = encodeURIComponent('jedinfoll.github.io');
-          const key = encodeURIComponent('site_total');
+          const key = encodeURIComponent('site_total_en');
           const hit = await fetch(`https://api.countapi.xyz/hit/${ns}/${key}`, {cache:'no-store', mode:'cors'}).then(r=>r.json());
           if(typeof hit.value === 'number'){ setText(hit.value); return; }
           const get = await fetch(`https://api.countapi.xyz/get/${ns}/${key}`, {cache:'no-store', mode:'cors'}).then(r=>r.json());
