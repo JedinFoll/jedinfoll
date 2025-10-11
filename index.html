@@ -15,7 +15,7 @@
     .lang{font-weight:bold}
     .lang a{color:#ffcb77;text-decoration:none;margin-left:.5rem}
     .card{background:var(--bg);border-radius:20px;padding:1.5rem;box-shadow:0 4px 12px rgba(0,0,0,.5);margin:1rem auto 2rem}
-    h1,h2{color:#fff;margin:0 0 .5rem}
+    h1{color:#fff;margin:0 0 .5rem;font-size:3rem;text-transform:uppercase;letter-spacing:1px}
     h2{color:var(--mint)}
     .price{font-size:1.8rem;font-weight:bold;margin:1rem 0}
     .btn{display:inline-flex;align-items:center;gap:6px;padding:.8rem 1.2rem;border-radius:10px;background:linear-gradient(90deg,#00b4d8,#ffcb77);color:#000;font-weight:bold;text-decoration:none;transition:transform .2s}
@@ -28,7 +28,10 @@
     .small{color:#bbb;font-size:.9rem}
     ul{padding-left:1.2rem}
     .pdf-frame{width:100%;aspect-ratio:1/1.414;max-height:80vh;border:0;background:#fff}
-    @media (max-width:600px){.pdf-frame{aspect-ratio:auto;height:70vh}}
+    @media (max-width:600px){
+      .pdf-frame{aspect-ratio:auto;height:70vh}
+      h1{font-size:2.3rem}
+    }
     @media print{
       body{background:#fff;color:#000}
       header,footer,.card:not(#rules){display:none!important}
@@ -37,6 +40,7 @@
     }
   </style>
 </head>
+
 <body>
   <header>
     <div class="topbar">
@@ -48,7 +52,7 @@
   </header>
 
   <main>
-    <!-- Présentation du jeu -->
+    <!-- Présentation -->
     <div class="card">
       <h2>Jediñ Foll</h2>
       <ul>
@@ -59,7 +63,7 @@
       </ul>
     </div>
 
-    <!-- PRÉCOMMANDE -->
+    <!-- Précommande -->
     <div class="card" id="pricing">
       <h2>Précommande</h2>
       <p style="font-size:1.1rem; color:#ffcb77; font-weight:bold; margin-bottom:1rem;">
@@ -67,15 +71,18 @@
       </p>
       <div class="price">14,99 €</div>
 
-      <!-- Bouton 1 : Jediñ Foll 14.99 + Livraison -->
-      <a href="https://www.paypal.com/ncp/payment/3MJTT9P62VJKY?no_shipping=2" class="btn" style="font-size:1rem;">
-        🃏 Jediñ Foll 14,99 € + Livraison
+      <!-- Bouton France -->
+      <a href="https://www.paypal.com/ncp/payment/3MJTT9P62VJKY?no_shipping=2"
+         class="btn" style="font-size:1rem;">
+        🌍 Jediñ Foll 14,99 € + Livraison
       </a>
 
-      <!-- Bouton 2 : Jediñ Foll Martinique -->
-      <a href="https://www.paypal.com/ncp/payment/B3JBUBJQBNQWJ" 
-         class="btn" style="margin-left:10px; background:linear-gradient(90deg,#06d6a0,#ffd166); font-size:1rem;">
-        <img src="https://raw.githubusercontent.com/jedinfoll/jedinfoll/main/1000079688.jpg" alt="Drapeau Martinique" class="flag">
+      <!-- Bouton Martinique -->
+      <a href="https://www.paypal.com/ncp/payment/B3JBUBJQBNQWJ"
+         class="btn"
+         style="margin-left:10px; background:linear-gradient(90deg,#06d6a0,#ffd166); font-size:1rem;">
+        <img src="https://raw.githubusercontent.com/jedinfoll/jedinfoll/main/1000079688.jpg"
+             alt="Drapeau Martinique" class="flag">
         Jediñ Foll Martinique — 14,99 € (Retrait sur place)
       </a>
 
@@ -87,7 +94,7 @@
       </p>
     </div>
 
-    <!-- RÈGLES -->
+    <!-- Règles -->
     <div class="card" id="rules">
       <h2>Règles du jeu</h2>
       <p class="small">Lecture directe ci-dessous • <a class="btn" href="/jedinfoll/regles.pdf" download>Télécharger le PDF</a></p>
@@ -98,14 +105,13 @@
       <button class="btn" onclick="window.print()">📄 Imprimer la section Règles</button>
     </div>
 
-    <!-- VIDÉOS -->
+    <!-- Vidéos -->
     <div class="card" id="videos">
       <h2>🎥 Vidéos</h2>
       <p class="small">Découvrez Jediñ Foll en action !</p>
 
-      <!-- Exemple vidéo -->
       <div style="aspect-ratio:16/9; max-width:100%;">
-        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/ID_DE_TA_VIDEO" 
+        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/ID_DE_TA_VIDEO"
           title="Jediñ Foll — Démo" frameborder="0" allowfullscreen></iframe>
       </div>
     </div>
@@ -133,22 +139,21 @@
       <a href="mailto:jedinfoll@gmail.com">Email: jedinfoll@gmail.com</a>
     </div>
 
-    <!-- Compteur visites -->
+    <!-- Compteur de visites -->
     <p style="margin-top:.6rem;">
       👁️ Visites :
       <img id="hitPrimary"
         src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fjedinfoll.github.io%2Fjedinfoll%2F&count_bg=%2300b4d8&title_bg=%231a1a1a&icon=&icon_color=%23ffffff&title=visites&edge_flat=false"
         alt="Compteur de visites"
         style="vertical-align:middle"
-        onerror="this.onerror=null; this.src='https://visitor-badge.laobi.icu/badge?page_id=jedinfoll.jedinfoll';"
-      >
+        onerror="this.onerror=null; this.src='https://visitor-badge.laobi.icu/badge?page_id=jedinfoll.jedinfoll';">
       <span id="hitFallback" style="margin-left:.4rem;"></span>
     </p>
 
     <p>© 2025 Jediñ Foll — Tous droits réservés.</p>
   </footer>
 
-  <!-- Secours JS pour compteur -->
+  <!-- Compteur JS de secours -->
   <script>
     (function(){
       const txt = document.getElementById('hitFallback');
