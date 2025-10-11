@@ -73,16 +73,10 @@
       <h2>🎥 Vidéos</h2>
       <p class="small">Découvrez Jediñ Foll en action !</p>
 
-      <!-- Exemple vidéo 1 -->
-      <div style="aspect-ratio:16/9; max-width:100%; margin-bottom:1rem;">
+      <!-- Exemple vidéo -->
+      <div style="aspect-ratio:16/9; max-width:100%;">
         <iframe width="100%" height="100%" src="https://www.youtube.com/embed/ID_DE_TA_VIDEO" 
           title="Jediñ Foll — Démo" frameborder="0" allowfullscreen></iframe>
-      </div>
-
-      <!-- Exemple vidéo 2 (optionnelle) -->
-      <div style="aspect-ratio:16/9; max-width:100%;">
-        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/ID_DUNE_AUTRE_VIDEO" 
-          title="Jediñ Foll — Présentation" frameborder="0" allowfullscreen></iframe>
       </div>
     </div>
 
@@ -91,20 +85,14 @@
       <h2>Précommande</h2>
       <div class="price">14,99 €</div>
 
-      <!-- Précommande France -->
-      <a href="https://www.paypal.com/ncp/payment/3MJTT9P62VJKY?no_shipping=2" class="btn">
-        🇫🇷 Précommande France — 14,99 € + 5 € livraison
-      </a>
-
-      <!-- Précommande Martinique -->
-      <a href="https://www.paypal.com/ncp/payment/B3JBUBJQBNQWJ" class="btn" style="margin-left:10px; background:linear-gradient(90deg,#06d6a0,#ffd166);">
-        🇲🇶 Précommande Martinique — 14,99 € (Retrait sur place)
+      <!-- Nouveau bouton unique -->
+      <a href="https://www.paypal.com/ncp/payment/3MJTT9P62VJKY?no_shipping=2" class="btn" style="font-size:1rem;">
+        🃏 Précommander Jediñ Foll — 14,99 € + livraison
       </a>
 
       <p class="small" style="margin-top:.8rem;">
         ✅ <strong>Disponible dès janvier 2026</strong> (ou plus tôt selon la production).<br>
-        📦 <strong>France</strong> : ajouter 5 € pour la livraison — l’adresse postale est requise au moment du paiement.<br>
-        📍 <strong>Martinique</strong> : retrait sur place uniquement (aucune expédition).
+        📦 Livraison en France et dans les DOM — adresse postale demandée lors du paiement.
       </p>
     </div>
 
@@ -116,7 +104,7 @@
       <p><strong>Fabrication :</strong> Créé en
         <span class="flags-inline">Martinique
           <img src="https://raw.githubusercontent.com/jedinfoll/jedinfoll/main/1000079688.jpg" alt="" class="flag">
-        </span>.
+        </span> et imprimé en Bretagne.
       </p>
       <p><strong>Hébergement :</strong> GitHub Pages — GitHub Inc., 88 Colin P Kelly Jr St, San Francisco, CA 94107, USA.</p>
       <p><strong>Propriété intellectuelle :</strong> Contenus © Jediñ Foll. Reproduction interdite sans autorisation.</p>
@@ -127,12 +115,11 @@
   <footer>
     <div class="social-links">
       <a href="https://www.instagram.com/jedinfoll" target="_blank">Instagram: @jedinfoll</a> |
-      <!-- Remplace le lien ci-dessous par https://www.facebook.com/TON_HANDLE si tu as un @nom d’utilisateur -->
       <a href="https://www.facebook.com/search/top?q=Jedi%C3%B1%20Foll" target="_blank">Facebook: Jediñ Foll</a> |
       <a href="mailto:jedinfoll@gmail.com">Email: jedinfoll@gmail.com</a>
     </div>
 
-    <!-- Compteur visites : image fiable + fallback -->
+    <!-- Compteur visites -->
     <p style="margin-top:.6rem;">
       👁️ Visites :
       <img id="hitPrimary"
@@ -147,7 +134,7 @@
     <p>© 2025 Jediñ Foll — Tous droits réservés.</p>
   </footer>
 
-  <!-- Secours JS pour compteur -->
+  <!-- JS secours compteur -->
   <script>
     (function(){
       const txt = document.getElementById('hitFallback');
