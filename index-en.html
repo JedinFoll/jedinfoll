@@ -3,194 +3,171 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jediñ Foll — Educational, Funny & Strategic Card Game</title>
+  <title>Jediñ Foll — Educational, Fun and Strategic Card Game</title>
   <link rel="alternate" hreflang="fr" href="/jedinfoll/index.html">
   <style>
     :root{--mint:#2ec4b6;--bg:#1a1a1a}
     *{box-sizing:border-box}
-    body { margin: 0; font-family: Arial, sans-serif; background-color: var(--mint); color: #fff; }
-    header, footer { text-align: center; padding: 1rem; background: var(--bg); }
-    main { max-width: 900px; margin: auto; padding: 1rem; }
-    .topbar { display:flex; justify-content:space-between; align-items:center; max-width:900px; margin:0 auto; }
-    .lang { font-weight:bold; }
-    .lang a { color:#ffcb77; text-decoration:none; margin-left:.5rem; }
-    .card { background: var(--bg); border-radius: 20px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.5); margin: 1rem auto 2rem; }
-    h1, h2 { color: #ffffff; margin:0 0 .5rem; }
-    h2 { color: var(--mint); }
-    .price { font-size: 1.8rem; font-weight: bold; margin: 1rem 0; }
-    .btn { display: inline-block; padding: 0.8rem 1.2rem; border-radius: 10px; background: linear-gradient(90deg, #00b4d8, #ffcb77); color: #000; font-weight: bold; text-decoration: none; }
-    .btn.secondary { background: linear-gradient(90deg, #9d4edd, #ffcb77); }
-    .btn.tertiary { background: linear-gradient(90deg, #ff595e, #ffca3a); }
-    .qr { text-align: center; margin-top: 1rem; }
-    .social-links a { color: var(--mint); text-decoration: none; margin: 0 10px; font-weight: bold; }
-    .mentions { font-size: 0.95rem; color: #ddd; margin-top: 1rem; text-align: left; line-height: 1.55; }
-    .flags-inline { display:inline-flex; align-items:center; gap:6px; }
-    .flag { height: 16px; border-radius:2px; border:1px solid #333; }
-    .small { color:#bbb; font-size:.9rem }
-    ul { padding-left: 1.2rem; }
-    .pdf-frame { width:100%; aspect-ratio: 1/1.414; max-height:80vh; border:0; background:#fff; }
-    @media (max-width:600px){ .pdf-frame{ aspect-ratio:auto; height:70vh; } }
-    @media print {
-      body { background:#fff; color:#000; }
-      header, footer, .card:not(#rules) { display:none !important; }
-      #rules { box-shadow:none; border:none; background:#fff; color:#000; }
-      #rules h2 { color:#000; }
+    body{margin:0;font-family:Arial,sans-serif;background-color:var(--mint);color:#fff}
+    header,footer{text-align:center;padding:1rem;background:var(--bg)}
+    main{max-width:900px;margin:auto;padding:1rem}
+    .topbar{display:flex;justify-content:space-between;align-items:center;max-width:900px;margin:0 auto}
+    .lang{font-weight:bold}
+    .lang a{color:#ffcb77;text-decoration:none;margin-left:.5rem}
+    .card{background:var(--bg);border-radius:20px;padding:1.5rem;box-shadow:0 4px 12px rgba(0,0,0,.5);margin:1rem auto 2rem}
+    h1,h2{color:#fff;margin:0 0 .5rem}
+    h2{color:var(--mint)}
+    .price{font-size:1.8rem;font-weight:bold;margin:1rem 0}
+    .btn{display:inline-block;padding:.8rem 1.2rem;border-radius:10px;background:linear-gradient(90deg,#00b4d8,#ffcb77);color:#000;font-weight:bold;text-decoration:none}
+    .social-links a{color:var(--mint);text-decoration:none;margin:0 10px;font-weight:bold}
+    .mentions{font-size:.95rem;color:#ddd;margin-top:1rem;text-align:left;line-height:1.55}
+    .flags-inline{display:inline-flex;align-items:center;gap:6px}
+    .flag{height:16px;border-radius:2px;border:1px solid #333}
+    .small{color:#bbb;font-size:.9rem}
+    ul{padding-left:1.2rem}
+    .pdf-frame{width:100%;aspect-ratio:1/1.414;max-height:80vh;border:0;background:#fff}
+    @media (max-width:600px){.pdf-frame{aspect-ratio:auto;height:70vh}}
+    @media print{
+      body{background:#fff;color:#000}
+      header,footer,.card:not(#rules){display:none!important}
+      #rules{box-shadow:none;border:none;background:#fff;color:#000}
+      #rules h2{color:#000}
     }
-    .stars { font-size: 1.6rem; user-select:none; }
-    .rating-line { display:flex; align-items:center; gap:.5rem; flex-wrap:wrap; }
-    .rating-summary { font-weight:bold; }
-    .rate-stars { cursor:pointer; }
-    .rate-stars .star { padding:0 .08rem; }
   </style>
 </head>
 <body>
   <header>
     <div class="topbar">
       <div></div>
-      <div class="lang"><a href="/jedinfoll/index.html">FR</a> / EN</div>
+      <div class="lang">EN / <a href="/jedinfoll/index.html">FR</a></div>
     </div>
     <h1>Jediñ Foll</h1>
-    <p>The educational, funny and strategic card game</p>
+    <p>The educational, fun and strategic card game in a pocket format for crazy games wherever you are!</p>
   </header>
 
   <main>
+    <!-- Game presentation -->
     <div class="card">
       <h2>Jediñ Foll</h2>
       <ul>
         <li>1 to 4 players · 10 to 30 minutes</li>
-        <li>From age 6</li>
-        <li>5 game modes — reach exactly the requested result depending on the chosen mode</li>
+        <li>From age 6+</li>
+        <li>5 game modes — reach the exact result required depending on the chosen mode</li>
         <li>The box contains 102 cards</li>
       </ul>
     </div>
 
+    <!-- Rules -->
     <div class="card" id="rules">
       <h2>Game Rules</h2>
-      <p class="small">Inline viewer below • <a class="btn" href="/jedinfoll/regles.pdf" download>Download PDF</a></p>
+      <p class="small">Read directly below • <a class="btn" href="/jedinfoll/regles.pdf" download>Download PDF</a></p>
       <object data="/jedinfoll/regles.pdf" type="application/pdf" class="pdf-frame">
         <iframe src="/jedinfoll/regles.pdf" class="pdf-frame" title="Rules"></iframe>
       </object>
-      <p class="small">If the PDF doesn’t show, <a href="/jedinfoll/regles.pdf" download>click here to download</a>.</p>
-      <button class="btn" onclick="window.print()">📄 Print Rules section</button>
+      <p class="small">If the PDF does not display, <a href="/jedinfoll/regles.pdf" download>click here to download it</a>.</p>
+      <button class="btn" onclick="window.print()">📄 Print Rules Section</button>
     </div>
 
-    <div class="card">
-      <h2>Videos</h2>
+    <!-- VIDEOS -->
+    <div class="card" id="videos">
+      <h2>🎥 Videos</h2>
+      <p class="small">Discover Jediñ Foll in action!</p>
+
+      <!-- Example video 1 -->
+      <div style="aspect-ratio:16/9; max-width:100%; margin-bottom:1rem;">
+        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/ID_DE_TA_VIDEO" 
+          title="Jediñ Foll — Demo" frameborder="0" allowfullscreen></iframe>
+      </div>
+
+      <!-- Example video 2 (optional) -->
       <div style="aspect-ratio:16/9; max-width:100%;">
-        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/ID_DE_TA_VIDEO" title="Jediñ Foll — Demo" frameborder="0" allowfullscreen></iframe>
+        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/ID_DUNE_AUTRE_VIDEO" 
+          title="Jediñ Foll — Presentation" frameborder="0" allowfullscreen></iframe>
       </div>
     </div>
 
-    <div class="card">
-      <h2>Price & Payment</h2>
+    <!-- PREORDER -->
+    <div class="card" id="pricing">
+      <h2>Preorder</h2>
       <div class="price">€14.99</div>
-      <a href="https://www.paypal.com/ncp/payment/YTGSTLCPBDEL2" class="btn">Buy France / Europe</a>
-      <a href="https://www.paypal.com/ncp/payment/72PCSSBL8TJ38" class="btn secondary" style="margin-left:10px;">Buy International</a>
-      <a href="https://www.paypal.com/ncp/payment/8BSJ9NH8TDBGU" class="btn tertiary" style="margin-left:10px;">Buy without shipping</a>
-      <p class="small">Allow up to 15 working days for shipping</p>
+
+      <!-- Preorder France -->
+      <a href="https://www.paypal.com/ncp/payment/3MJTT9P62VJKY?no_shipping=2" class="btn">
+        🇫🇷 Preorder France — €14.99 + €5 shipping
+      </a>
+
+      <!-- Preorder Martinique -->
+      <a href="https://www.paypal.com/ncp/payment/B3JBUBJQBNQWJ" class="btn" style="margin-left:10px; background:linear-gradient(90deg,#06d6a0,#ffd166);">
+        🇲🇶 Preorder Martinique — €14.99 (Pick-up only)
+      </a>
+
+      <p class="small" style="margin-top:.8rem;">
+        ✅ <strong>Available from January 2026</strong> (or earlier depending on production).<br>
+        📦 <strong>France</strong>: add €5 for shipping — the postal address is required during payment.<br>
+        📍 <strong>Martinique</strong>: pick-up only (no delivery).
+      </p>
     </div>
 
-    <div class="card">
-      <h2>QR Code</h2>
-      <div class="qr">
-        <a href="https://api.qrserver.com/v1/create-qr-code/?size=2000x2000&data=https://jedinfoll.github.io/jedinfoll/" download>
-          <img src="https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=https://jedinfoll.github.io/jedinfoll/" alt="QR Code to Jediñ Foll" style="max-width:300px;">
-        </a>
-      </div>
-      <p class="small">Click the QR to download in HD.</p>
-    </div>
-
-    <!-- RATING ONLY — no comments -->
-    <div class="card" id="reviews">
-      <h2>Rating</h2>
-      <div class="rating-line">
-        <div id="avgStars" class="stars" aria-label="Average rating" style="pointer-events:none;">☆☆☆☆☆</div>
-        <div class="rating-summary"><span id="avgValue">—</span> / 5 · <span id="totalVotes">0</span> ratings</div>
-      </div>
-      <div class="small">Your rating:</div>
-      <div class="stars rate-stars" id="rateStars" aria-label="Rate">
-        <span class="star" data-v="1">☆</span>
-        <span class="star" data-v="2">☆</span>
-        <span class="star" data-v="3">☆</span>
-        <span class="star" data-v="4">☆</span>
-        <span class="star" data-v="5">☆</span>
-      </div>
-    </div>
-
+    <!-- Legal mentions -->
     <div class="card mentions">
-      <h2>Legal mentions</h2>
+      <h2>Legal Notice</h2>
       <p><strong>Publisher:</strong> Jediñ Foll — Email: <a href="mailto:jedinfoll@gmail.com">jedinfoll@gmail.com</a></p>
-      <p><strong>Publication manager:</strong> Jessica Lechertier</p>
+      <p><strong>Publication Director:</strong> Jessica Lechertier</p>
       <p><strong>Manufacturing:</strong> Created in
         <span class="flags-inline">Martinique
           <img src="https://raw.githubusercontent.com/jedinfoll/jedinfoll/main/1000079688.jpg" alt="" class="flag">
-        </span>
-        and printed in
-        <span class="flags-inline">Brittany
-          <img src="https://upload.wikimedia.org/wikipedia/commons/2/29/Flag_of_Brittany_%28Gwenn_ha_du%29.svg" alt="" class="flag">
         </span>.
       </p>
       <p><strong>Hosting:</strong> GitHub Pages — GitHub Inc., 88 Colin P Kelly Jr St, San Francisco, CA 94107, USA.</p>
-      <p><strong>Intellectual property:</strong> Content © Jediñ Foll. Reproduction without permission prohibited.</p>
-      <p><strong>Personal data:</strong> Data collected (orders, emails) are only used to process purchases and are never resold.</p>
+      <p><strong>Intellectual Property:</strong> Contents © Jediñ Foll. Reproduction without permission is prohibited.</p>
+      <p><strong>Personal Data:</strong> Collected data (orders, emails) are used only for order processing and never sold.</p>
     </div>
   </main>
 
   <footer>
     <div class="social-links">
       <a href="https://www.instagram.com/jedinfoll" target="_blank">Instagram: @jedinfoll</a> |
-      <a href="https://www.facebook.com/Jedi%C3%B1%20Foll" target="_blank">Facebook: Jediñ Foll</a> |
+      <a href="https://www.facebook.com/search/top?q=Jedi%C3%B1%20Foll" target="_blank">Facebook: Jediñ Foll</a> |
       <a href="mailto:jedinfoll@gmail.com">Email: jedinfoll@gmail.com</a>
     </div>
-    <p>👁️ Visits (whole site): <span id="visits">…</span></p>
+
+    <!-- Visit counter -->
+    <p style="margin-top:.6rem;">
+      👁️ Visits:
+      <img id="hitPrimary"
+        src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fjedinfoll.github.io%2Fjedinfoll%2F&count_bg=%2300b4d8&title_bg=%231a1a1a&icon=&icon_color=%23ffffff&title=visits&edge_flat=false"
+        alt="Visit counter"
+        style="vertical-align:middle"
+        onerror="this.onerror=null; this.src='https://visitor-badge.laobi.icu/badge?page_id=jedinfoll.jedinfoll';"
+      >
+      <span id="hitFallback" style="margin-left:.4rem;"></span>
+    </p>
+
     <p>© 2025 Jediñ Foll — All rights reserved.</p>
   </footer>
 
-  <!-- Shared VISIT counter -->
-  <script>
-    (function () {
-      const el = document.getElementById('visits');
-      fetch('https://api.countapi.xyz/hit/jedinfoll.github.io/site_total')
-        .then(r => r.json())
-        .then(d => { if (el) el.textContent = (d && typeof d.value==='number') ? d.value.toLocaleString('en-US') : '—'; })
-        .catch(() => { if (el) el.textContent = '—'; });
-    })();
-  </script>
-
-  <!-- Shared rating -->
+  <!-- JS fallback for counter -->
   <script>
     (function(){
-      const avgStars = document.getElementById('avgStars');
-      const avgValue = document.getElementById('avgValue');
-      const totalVotes = document.getElementById('totalVotes');
+      const txt = document.getElementById('hitFallback');
+      if(!txt) return;
 
-      function paint(elem, n){
-        const arr = ['☆','☆','☆','☆','☆'];
-        for(let i=0;i<n;i++) arr[i]='★';
-        elem.textContent = arr.join('');
-      }
+      const img = document.getElementById('hitPrimary');
+      let done = false;
+      function setText(n){ if(!done){ txt.textContent = '('+ n.toLocaleString('en-US') +')'; done = true; } }
+      img.addEventListener('load', ()=>{ done = true; });
 
-      function refresh(){
-        Promise.all([1,2,3,4,5].map(v =>
-          fetch(`https://api.countapi.xyz/get/jedinfoll.github.io/rating${v}`).then(r=>r.json()).catch(()=>({value:0}))
-        )).then(vals=>{
-          const counts = vals.map(v => Number(v?.value || 0));
-          const total = counts.reduce((a,b)=>a+b,0);
-          const sum = counts.reduce((a,b,i)=>a+b*(i+1),0);
-          const avg = total ? sum/total : 0;
-          totalVotes.textContent = total.toLocaleString('en-US');
-          avgValue.textContent = total ? avg.toFixed(1) : '—';
-          paint(avgStars, Math.round(avg));
-        });
-      }
-
-      paint(avgStars, 0);
-      document.getElementById('rateStars').addEventListener('click', (e)=>{
-        const s = e.target.closest('.star'); if(!s) return;
-        const v = Number(s.dataset.v||0);
-        fetch(`https://api.countapi.xyz/hit/jedinfoll.github.io/rating${v}`).then(()=>refresh());
-      });
-      refresh();
+      setTimeout(async ()=>{
+        if(done) return;
+        try{
+          const ns = encodeURIComponent('jedinfoll.github.io');
+          const key = encodeURIComponent('site_total');
+          const hit = await fetch(`https://api.countapi.xyz/hit/${ns}/${key}`, {cache:'no-store', mode:'cors'}).then(r=>r.json());
+          if(typeof hit.value === 'number'){ setText(hit.value); return; }
+          const get = await fetch(`https://api.countapi.xyz/get/${ns}/${key}`, {cache:'no-store', mode:'cors'}).then(r=>r.json());
+          if(typeof get.value === 'number'){ setText(get.value); return; }
+        }catch(e){}
+      }, 1500);
     })();
   </script>
 </body>
