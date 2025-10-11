@@ -18,7 +18,8 @@
     h1,h2{color:#fff;margin:0 0 .5rem}
     h2{color:var(--mint)}
     .price{font-size:1.8rem;font-weight:bold;margin:1rem 0}
-    .btn{display:inline-block;padding:.8rem 1.2rem;border-radius:10px;background:linear-gradient(90deg,#00b4d8,#ffcb77);color:#000;font-weight:bold;text-decoration:none}
+    .btn{display:inline-block;padding:.8rem 1.2rem;border-radius:10px;background:linear-gradient(90deg,#00b4d8,#ffcb77);color:#000;font-weight:bold;text-decoration:none;transition:transform .2s}
+    .btn:hover{transform:scale(1.05)}
     .social-links a{color:var(--mint);text-decoration:none;margin:0 10px;font-weight:bold}
     .mentions{font-size:.95rem;color:#ddd;margin-top:1rem;text-align:left;line-height:1.55}
     .flags-inline{display:inline-flex;align-items:center;gap:6px}
@@ -57,7 +58,33 @@
       </ul>
     </div>
 
-    <!-- Règles -->
+    <!-- PRÉCOMMANDE -->
+    <div class="card" id="pricing">
+      <h2>Précommande</h2>
+      <p style="font-size:1.1rem; color:#ffcb77; font-weight:bold; margin-bottom:1rem;">
+        🎉 Incroyable ! Seulement 14,99 € pour des heures de jeu, de logique et de rires !
+      </p>
+      <div class="price">14,99 €</div>
+
+      <!-- Bouton 1 : Jediñ Foll + Livraison -->
+      <a href="https://www.paypal.com/ncp/payment/3MJTT9P62VJKY?no_shipping=2" class="btn" style="font-size:1rem;">
+        🃏 Jediñ Foll + Livraison — 14,99 €
+      </a>
+
+      <!-- Bouton 2 : Jediñ Foll Martinique -->
+      <a href="https://www.paypal.com/ncp/payment/B3JBUBJQBNQWJ" class="btn" style="margin-left:10px; background:linear-gradient(90deg,#06d6a0,#ffd166); font-size:1rem;">
+        🇲🇶 Jediñ Foll Martinique — 14,99 € (Retrait sur place)
+      </a>
+
+      <p class="small" style="margin-top:.8rem;">
+        ✅ <strong>Disponible dès janvier 2026</strong> (ou plus tôt selon la production).<br>
+        📦 <strong>Jediñ Foll + Livraison</strong> : l’adresse postale est demandée au moment du paiement (ajoutez les frais selon votre zone).<br>
+        📍 <strong>Jediñ Foll Martinique</strong> : retrait sur place uniquement (aucune expédition).<br>
+        💌 Une fois votre précommande validée, vous recevrez un email de confirmation avec tous les détails.
+      </p>
+    </div>
+
+    <!-- RÈGLES -->
     <div class="card" id="rules">
       <h2>Règles du jeu</h2>
       <p class="small">Lecture directe ci-dessous • <a class="btn" href="/jedinfoll/regles.pdf" download>Télécharger le PDF</a></p>
@@ -78,28 +105,6 @@
         <iframe width="100%" height="100%" src="https://www.youtube.com/embed/ID_DE_TA_VIDEO" 
           title="Jediñ Foll — Démo" frameborder="0" allowfullscreen></iframe>
       </div>
-    </div>
-
-    <!-- PRÉCOMMANDE -->
-    <div class="card" id="pricing">
-      <h2>Précommande</h2>
-      <div class="price">14,99 €</div>
-
-      <!-- Bouton 1 : Jediñ Foll + Livraison -->
-      <a href="https://www.paypal.com/ncp/payment/3MJTT9P62VJKY?no_shipping=2" class="btn" style="font-size:1rem;">
-        🃏 Jediñ Foll + Livraison — 14,99 €
-      </a>
-
-      <!-- Bouton 2 : Jediñ Foll Martinique -->
-      <a href="https://www.paypal.com/ncp/payment/B3JBUBJQBNQWJ" class="btn" style="margin-left:10px; background:linear-gradient(90deg,#06d6a0,#ffd166); font-size:1rem;">
-        🇲🇶 Jediñ Foll Martinique — 14,99 € (Retrait sur place)
-      </a>
-
-      <p class="small" style="margin-top:.8rem;">
-        ✅ <strong>Disponible dès janvier 2026</strong> <br>
-        📦 <strong>Jediñ Foll + Livraison</strong> : adresse postale demandée au moment du paiement (ajoutez les frais selon votre zone).<br>
-        📍 <strong>Jediñ Foll Martinique</strong> : retrait sur place uniquement (aucune expédition).
-      </p>
     </div>
 
     <!-- Mentions légales -->
@@ -145,14 +150,11 @@
     (function(){
       const txt = document.getElementById('hitFallback');
       if(!txt) return;
-
       const img = document.getElementById('hitPrimary');
       let done = false;
       function setText(n){ if(!done){ txt.textContent = '('+ n.toLocaleString('fr-FR') +')'; done = true; } }
       img.addEventListener('load', ()=>{ done = true; });
-
-      setTimeout(async ()=>{
-        if(done) return;
+      setTimeout(async ()=>{ if(done) return;
         try{
           const ns = encodeURIComponent('jedinfoll.github.io');
           const key = encodeURIComponent('site_total');
