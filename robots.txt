@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://jedinfoll.github.io/jedinfoll/sitemap.xml
