@@ -1,8 +1,8 @@
-<!DOCTYPE html> 
+ <!DOCTYPE html> 
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <!-- 🔍 Vérification Google Search Console -->
+  <!-- 🔍 Vérification Google Search Console (NOUVEAU TOKEN) -->
   <meta name="google-site-verification" content="BMiWgt93b7slIKRSflASmkSRk3ScKjMdTYRbjbCn514" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -73,9 +73,7 @@
     .small{color:#bbb;font-size:.9rem}
     ul{padding-left:1.2rem}
     .pdf-frame{width:100%;aspect-ratio:1/1.414;max-height:80vh;border:0;background:#fff}
-    /* On masque juste l'apercu PDF intégré sur mobile (<=600px) */
     @media (max-width:600px){
-      .pdf-wrapper{display:none;}
       .pdf-frame{aspect-ratio:auto;height:70vh}
       h1{font-size:2.3rem}
     }
@@ -84,19 +82,6 @@
       header,footer,.card:not(#rules){display:none!important}
       #rules{box-shadow:none;border:none;background:#fff;color:#000}
       #rules h2{color:#000}
-    }
-
-    /* Bandeau SEO/noms variantes */
-    .brand-alias-box{
-      font-size:0.9rem;
-      color:#000;
-      background:#ffcb77;
-      padding:.8rem 1rem;
-      border-radius:10px;
-      font-weight:bold;
-      line-height:1.4;
-      margin:0 0 1rem;
-      box-shadow:0 4px 10px rgba(0,0,0,.2);
     }
   </style>
 </head>
@@ -112,14 +97,6 @@
   </header>
 
   <main>
-
-    <!-- Bandeau d'aide pour Google mobile + gens qui tapent "Jedin Foll" -->
-    <div class="brand-alias-box">
-      Vous cherchez "Jediñ Foll", "Jedin Foll", "Jedi n Foll" ou "Jadine Foll" ?
-      C'est le même jeu 😁 : un jeu de cartes de calcul, logique et sabotage.
-      1 à 4 joueurs, dès 6 ans, parties de 10 à 30 minutes. Précommande 14,99 €.
-    </div>
-
     <!-- Présentation -->
     <div class="card">
       <h2>Jediñ Foll</h2>
@@ -165,24 +142,11 @@
     <!-- Règles -->
     <div class="card" id="rules">
       <h2>Règles du jeu</h2>
-
-      <p class="small">
-        Lecture directe ci-dessous (ordinateur) •
-        <a class="btn" href="/jedinfoll/regles.pdf" download>Télécharger le PDF</a>
-      </p>
-
-      <!-- Aperçu PDF intégré (cache pour mobile via .pdf-wrapper {display:none;} ) -->
-      <div class="pdf-wrapper">
-        <object data="/jedinfoll/regles.pdf" type="application/pdf" class="pdf-frame" aria-label="Règles PDF">
-          <iframe src="/jedinfoll/regles.pdf" class="pdf-frame" title="Règles"></iframe>
-        </object>
-      </div>
-
-      <p class="small">
-        Si le PDF ne s’affiche pas, 
-        <a href="/jedinfoll/regles.pdf" download>cliquez ici pour le télécharger</a>.
-      </p>
-
+      <p class="small">Lecture directe ci-dessous • <a class="btn" href="/jedinfoll/regles.pdf" download>Télécharger le PDF</a></p>
+      <object data="/jedinfoll/regles.pdf" type="application/pdf" class="pdf-frame">
+        <iframe src="/jedinfoll/regles.pdf" class="pdf-frame" title="Règles"></iframe>
+      </object>
+      <p class="small">Si le PDF ne s’affiche pas, <a href="/jedinfoll/regles.pdf" download>cliquez ici pour le télécharger</a>.</p>
       <button class="btn" onclick="window.print()">📄 Imprimer la section Règles</button>
     </div>
 
@@ -233,8 +197,8 @@
     <p>© 2025 Jediñ Foll — Tous droits réservés.</p>
   </footer>
 
-  <!-- Compteur JS de secours, en defer pour ne pas bloquer le rendu mobile -->
-  <script defer>
+  <!-- Compteur JS de secours -->
+  <script>
     (function(){
       const txt=document.getElementById('hitFallback');
       if(!txt)return;
