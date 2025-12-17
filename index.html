@@ -6,12 +6,13 @@
   <meta name="google-site-verification" content="Kg37Dlqlg1SsrHM-tId7oM1iOp9Ebmj2kpi-oe0GooI" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jediñ Foll (Jedin Foll) — Jeu de cartes éducatif, drôle et stratégique</title>
+
+  <title>Jediñ Foll (Jedin Foll, jedinfoll) — Jeu de cartes éducatif, drôle et stratégique</title>
 
   <!-- SEO -->
-  <meta name="description" content="Jediñ Foll (Jedin Foll) — le jeu de cartes éducatif, drôle et stratégique au format de poche. 1 à 4 joueurs, 10 à 30 min, 5 modes de jeu. Précommande 14,99 €.">
+  <meta name="description" content="Jediñ Foll (Jedin Foll, jedinfoll) — le jeu de cartes éducatif, drôle et stratégique au format de poche. 1 à 4 joueurs, 10 à 30 min, 5 modes de jeu. Précommande 14,99 €.">
   <meta name="robots" content="index, follow, max-image-preview:large">
-  <meta name="googlebot" content="index, follow">jediñ foll, jedin foll.
+  <meta name="googlebot" content="index, follow">
 
   <!-- Canonical + hreflang -->
   <link rel="canonical" href="https://jedinfoll.github.io/jedinfoll/">
@@ -106,7 +107,12 @@
         <li>5 modes de jeu — atteindre exactement le résultat demandé selon le mode choisi</li>
         <li>La boîte contient 102 cartes</li>
       </ul>
-    
+
+      <!-- 🔍 Ajout SEO pour que Google associe toutes les orthographes -->
+      <p class="small">
+        Vous pouvez aussi nous chercher sous <strong>“Jedin Foll”</strong> (sans ñ) ou <strong>“jedinfoll”</strong> (tout attaché) :
+        ce sont bien les mêmes, le jeu Jediñ Foll 😉
+      </p>
     </div>
 
     <!-- Précommande -->
@@ -206,7 +212,8 @@
       let done=false;
       function setText(n){if(!done){txt.textContent='('+n.toLocaleString('fr-FR')+')';done=true;}}
       img.addEventListener('load',()=>{done=true;});
-      setTimeout(async()=>{if(done)return;
+      setTimeout(async()=>{
+        if(done)return;
         try{
           const ns=encodeURIComponent('jedinfoll.github.io');
           const key=encodeURIComponent('site_total');
