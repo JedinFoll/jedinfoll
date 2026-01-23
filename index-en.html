@@ -64,6 +64,11 @@
     .btn:hover{transform:scale(1.05)}
     .small{color:#bbb;font-size:.9rem}
     .pdf-frame{width:100%;aspect-ratio:1/1.414;max-height:80vh;border:0;background:#fff}
+
+    /* 🔽 AJOUT POUR LE DRAPEAU ET LIENS */
+    .flags-inline{display:inline-flex;align-items:center;gap:6px}
+    .flag{height:16px;width:auto;border-radius:2px;border:1px solid #333;vertical-align:middle}
+    .social-links a{color:var(--mint);text-decoration:none;margin:0 10px;font-weight:bold}
   </style>
 </head>
 
@@ -89,7 +94,6 @@
     <li>5 game modes</li>
     <li>102 cards in the box</li>
   </ul>
-
 </div>
 
 <!-- Order -->
@@ -119,64 +123,32 @@
   <object data="/jedinfoll/rules.pdf" type="application/pdf" class="pdf-frame"></object>
 </div>
 
- <!-- Mentions légales -->
-    <div class="card mentions">
-      <h2>Mentions légales</h2>
-      <p><strong>Éditeur :</strong> Inari — 
-        Email : <a href="mailto:jedinfoll@gmail.com">jedinfoll@gmail.com</a></p>
-      <p><strong>Responsable de publication :</strong> Jessica Lechertier</p>
-      <p><strong>Fabrication :</strong> Créé en
-        <span class="flags-inline">Martinique
-          <img src="https://raw.githubusercontent.com/jedinfoll/jedinfoll/main/1000079688.jpg" alt="Drapeau Martinique" class="flag">
-        </span>.
-      </p>
-      <p><strong>Hébergement :</strong> GitHub Pages — GitHub Inc., 88 Colin P Kelly Jr St, San Francisco, CA 94107, USA.</p>
-      <p><strong>Propriété intellectuelle :</strong> Contenus © Jediñ Foll. Reproduction interdite sans autorisation.</p>
-      <p><strong>Données personnelles :</strong> Les données collectées (commandes, emails) servent uniquement au traitement des achats et ne sont jamais revendues.</p>
-    </div>
-  </main>
+<!-- Mentions légales -->
+<div class="card mentions">
+  <h2>Mentions légales</h2>
+  <p><strong>Éditeur :</strong> Inari — Email : <a href="mailto:jedinfoll@gmail.com">jedinfoll@gmail.com</a></p>
+  <p><strong>Responsable de publication :</strong> Jessica Lechertier</p>
+  <p><strong>Fabrication :</strong> Créé en 
+    <span class="flags-inline">Martinique
+      <img src="https://raw.githubusercontent.com/jedinfoll/jedinfoll/main/1000079688.jpg" alt="Drapeau Martinique" class="flag">
+    </span>.
+  </p>
+  <p><strong>Hébergement :</strong> GitHub Pages — GitHub Inc., 88 Colin P Kelly Jr St, San Francisco, CA 94107, USA.</p>
+  <p><strong>Propriété intellectuelle :</strong> Contenus © Jediñ Foll. Reproduction interdite sans autorisation.</p>
+  <p><strong>Données personnelles :</strong> Les données collectées (commandes, emails) servent uniquement au traitement des achats et ne sont jamais revendues.</p>
+</div>
 
-  <footer>
-    <div class="social-links">
-      <a href="https://www.instagram.com/jedinfoll" target="_blank">Instagram : @jedinfoll</a> |
-      <a href="https://www.facebook.com/search/top?q=Jedi%C3%B1%20Foll" target="_blank">Facebook : Jediñ Foll</a> |
-      <a href="mailto:jedinfoll@gmail.com">Email : jedinfoll@gmail.com</a>
-    </div>
+</main>
 
-    <!-- Compteur de visites -->
-    <p style="margin-top:.6rem;">
-      👁️ Visites :
-      <img id="hitPrimary"
-        src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fjedinfoll.github.io%2Fjedinfoll%2F&count_bg=%2300b4d8&title_bg=%231a1a1a&icon=&icon_color=%23ffffff&title=visites&edge_flat=false"
-        alt="Compteur de visites"
-        style="vertical-align:middle"
-        onerror="this.onerror=null;this.src='https://visitor-badge.laobi.icu/badge?page_id=jedinfoll.jedinfoll';">
-      <span id="hitFallback" style="margin-left:.4rem;"></span>
-    </p>
+<footer>
+  <div class="social-links">
+    <a href="https://www.instagram.com/jedinfoll" target="_blank">Instagram : @jedinfoll</a> |
+    <a href="https://www.facebook.com/search/top?q=Jedi%C3%B1%20Foll" target="_blank">Facebook : Jediñ Foll</a> |
+    <a href="mailto:jedinfoll@gmail.com">Email : jedinfoll@gmail.com</a>
+  </div>
 
-    <p>© 2025 Jediñ Foll — Tous droits réservés.</p>
-  </footer>
+  <p>© 2025 Jediñ Foll — Tous droits réservés.</p>
+</footer>
 
-  <!-- Compteur JS de secours -->
-  <script>
-    (function(){
-      const txt=document.getElementById('hitFallback');
-      if(!txt)return;
-      const img=document.getElementById('hitPrimary');
-      let done=false;
-      function setText(n){if(!done){txt.textContent='('+n.toLocaleString('fr-FR')+')';done=true;}}
-      img.addEventListener('load',()=>{done=true;});
-      setTimeout(async()=>{if(done)return;
-        try{
-          const ns=encodeURIComponent('jedinfoll.github.io');
-          const key=encodeURIComponent('site_total');
-          const hit=await fetch(`https://api.countapi.xyz/hit/${ns}/${key}`,{cache:'no-store',mode:'cors'}).then(r=>r.json());
-          if(typeof hit.value==='number'){setText(hit.value);return;}
-          const get=await fetch(`https://api.countapi.xyz/get/${ns}/${key}`,{cache:'no-store',mode:'cors'}).then(r=>r.json());
-          if(typeof get.value==='number'){setText(get.value);return;}
-        }catch(e){}
-      },1500);
-    })();
-  </script>
 </body>
 </html>
