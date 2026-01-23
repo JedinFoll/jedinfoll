@@ -1,24 +1,227 @@
-<!-- Précommande -->
-<div class="card" id="pricing">
-  <h2>Précommande</h2>
-  <div class="price">14,99 €</div>
+<!DOCTYPE html> 
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Bouton France + livraison -->
-  <a href="https://www.paypal.com/ncp/payment/3MJTT9P62VJKY?no_shipping=2" class="btn">
-    🌍 Acheter avec livraison
-  </a>
+  <title>Jediñ Foll (Jedin Foll) — Jeu de cartes éducatif, drôle et stratégique</title>
 
-  <!-- Bouton Martinique retrait -->
-  <a href="https://www.paypal.com/ncp/payment/B3JBUBJQBNQWJ" class="btn" style="margin-left:10px;">
-    <img src="https://raw.githubusercontent.com/jedinfoll/jedinfoll/main/1000079688.jpg" class="flag">
-    Retrait Martinique
-  </a>
+  <!-- SEO -->
+  <meta name="description" content="Jediñ Foll (Jedin Foll) — le jeu de cartes éducatif, drôle et stratégique au format de poche. 1 à 4 joueurs, 10 à 30 min, 5 modes de jeu. Commande 14,99 €.">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="googlebot" content="index, follow">
 
-  <!-- Message important -->
-  <p class="small" style="margin-top:1rem;">
-    📦 <strong>N’oubliez pas de laisser votre adresse pour la livraison</strong><br>
-    📞 <strong>et votre numéro de téléphone pour le retrait en Martinique.</strong>
-  </p>
+  <!-- Canonical + hreflang -->
+  <link rel="canonical" href="https://jedinfoll.github.io/jedinfoll/">
+  <link rel="alternate" hreflang="fr" href="https://jedinfoll.github.io/jedinfoll/">
+  <link rel="alternate" hreflang="en" href="https://jedinfoll.github.io/jedinfoll/index-en.html">
+  <link rel="alternate" hreflang="x-default" href="https://jedinfoll.github.io/jedinfoll/">
 
-  <p class="small">Disponible janvier 2026</p>
-</div>
+  <!-- Open Graph / Social -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Jediñ Foll">
+  <meta property="og:title" content="Jediñ Foll (Jedin Foll) — Jeu de cartes éducatif, drôle et stratégique">
+  <meta property="og:description" content="Le pocket game qui fait tourner les méninges ! 1–4 joueurs, 10–30 min. Commande 14,99 €.">
+  <meta property="og:url" content="https://jedinfoll.github.io/jedinfoll/">
+  <meta property="og:image" content="https://raw.githubusercontent.com/jedinfoll/jedinfoll/main/1000079688.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- JSON-LD Product -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "Jediñ Foll",
+    "alternateName": "Jedin Foll",
+    "description": "Jeu de cartes éducatif, drôle et stratégique. 1 à 4 joueurs, 10–30 min, 5 modes de jeu.",
+    "image": "https://raw.githubusercontent.com/jedinfoll/jedinfoll/main/1000079688.jpg",
+    "brand": { "@type": "Brand", "name": "Jediñ Foll" },
+    "offers": [{
+      "@type": "Offer",
+      "url": "https://jedinfoll.github.io/jedinfoll/",
+      "priceCurrency": "EUR",
+      "price": "14.99",
+      "availability": "https://schema.org/PreOrder",
+      "availabilityStarts": "2026-01-01",
+      "seller": { "@type": "Organization", "name": "Jediñ Foll" }
+    }]
+  }
+  </script>
+
+  <style>
+    :root{--mint:#2ec4b6;--bg:#1a1a1a}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Arial,sans-serif;background-color:var(--mint);color:#fff}
+    header,footer{text-align:center;padding:1rem;background:var(--bg)}
+    main{max-width:900px;margin:auto;padding:1rem}
+    .topbar{display:flex;justify-content:space-between;align-items:center;max-width:900px;margin:0 auto}
+    .lang{font-weight:bold}
+    .lang a{color:#ffcb77;text-decoration:none;margin-left:.5rem}
+    .card{background:var(--bg);border-radius:20px;padding:1.5rem;box-shadow:0 4px 12px rgba(0,0,0,.5);margin:1rem auto 2rem}
+    h1{color:#fff;margin:0 0 .5rem;font-size:3rem;text-transform:uppercase;letter-spacing:1px}
+    h2{color:var(--mint)}
+    .price{font-size:1.8rem;font-weight:bold;margin:1rem 0}
+    .btn{display:inline-flex;align-items:center;gap:6px;padding:.8rem 1.2rem;border-radius:10px;background:linear-gradient(90deg,#00b4d8,#ffcb77);color:#000;font-weight:bold;text-decoration:none;transition:transform .2s}
+    .btn:hover{transform:scale(1.05)}
+    .btn img.flag{height:16px;border-radius:2px;border:1px solid #333}
+    .social-links a{color:var(--mint);text-decoration:none;margin:0 10px;font-weight:bold}
+    .mentions{font-size:.95rem;color:#ddd;margin-top:1rem;text-align:left;line-height:1.55}
+    .flags-inline{display:inline-flex;align-items:center;gap:6px}
+    .flag{height:16px;border-radius:2px;border:1px solid #333}
+    .small{color:#bbb;font-size:.9rem}
+    ul{padding-left:1.2rem}
+    .pdf-frame{width:100%;aspect-ratio:1/1.414;max-height:80vh;border:0;background:#fff}
+    @media (max-width:600px){
+      .pdf-frame{aspect-ratio:auto;height:70vh}
+      h1{font-size:2.3rem}
+    }
+    @media print{
+      body{background:#fff;color:#000}
+      header,footer,.card:not(#rules){display:none!important}
+      #rules{box-shadow:none;border:none;background:#fff;color:#000}
+      #rules h2{color:#000}
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="topbar">
+      <div></div>
+      <div class="lang">FR / <a href="/jedinfoll/index-en.html">EN</a></div>
+    </div>
+    <h1>Jediñ Foll</h1>
+    <p>Le jeu de cartes éducatif, drôle et stratégique au format de poche pour des parties folles où que vous soyez</p>
+  </header>
+
+  <main>
+    <!-- Présentation -->
+    <div class="card">
+      <h2>Jediñ Foll</h2>
+      <ul>
+        <li>1 à 4 joueurs · 10 à 30 minutes</li>
+        <li>À partir de 6 ans</li>
+        <li>5 modes de jeu — atteindre exactement le résultat demandé selon le mode choisi</li>
+        <li>La boîte contient 102 cartes</li>
+      </ul>
+      <p class="small">On nous cherche parfois sous “<strong>Jedin Foll</strong>” (sans ñ) : c’est bien le même jeu 😉.</p>
+    </div>
+
+    <!-- Commande -->
+    <div class="card" id="pricing">
+      <h2>Commande</h2>
+
+      <p style="font-size:1.1rem; color:#ffcb77; font-weight:bold; margin-bottom:1rem;">
+        🎉 Seulement 14,99 € pour des heures de jeu, de logique et de rires !
+      </p>
+
+      <div class="price">14,99 €</div>
+
+      <!-- Bouton France + livraison -->
+      <a href="https://www.paypal.com/ncp/payment/3MJTT9P62VJKY?no_shipping=2"
+         class="btn" style="font-size:1rem;">
+        🌍 Jediñ Foll 14,99 € + Livraison
+      </a>
+
+      <!-- Bouton Martinique (retrait) -->
+      <a href="https://www.paypal.com/ncp/payment/B3JBUBJQBNQWJ"
+         class="btn"
+         style="margin-left:10px; background:linear-gradient(90deg,#06d6a0,#ffd166); font-size:1rem;">
+        <img src="https://raw.githubusercontent.com/jedinfoll/jedinfoll/main/1000079688.jpg"
+             alt="Drapeau Martinique" class="flag">
+        Jediñ Foll Martinique — 14,99 € (Retrait sur place)
+      </a>
+
+      <p class="small" style="margin-top:1rem;">
+        📦 <strong>N’oubliez pas de laisser votre adresse pour la livraison</strong><br>
+        📞 <strong>et votre numéro de téléphone pour le retrait en Martinique.</strong>
+      </p>
+
+      <p class="small" style="margin-top:.8rem;">
+        ✅ <strong>Disponible dès janvier 2026</strong><br>
+        📦 <strong>Jediñ Foll + Livraison</strong> : l’adresse postale est demandée au moment du paiement (ajoutez les frais selon votre zone).<br>
+        📍 <strong>Jediñ Foll Martinique</strong> : retrait sur place uniquement (aucune expédition).
+      </p>
+    </div>
+
+    <!-- Règles -->
+    <div class="card" id="rules">
+      <h2>Règles du jeu</h2>
+      <p class="small">Lecture directe ci-dessous • <a class="btn" href="/jedinfoll/regles.pdf" download>Télécharger le PDF</a></p>
+      <object data="/jedinfoll/regles.pdf" type="application/pdf" class="pdf-frame">
+        <iframe src="/jedinfoll/regles.pdf" class="pdf-frame" title="Règles"></iframe>
+      </object>
+      <p class="small">Si le PDF ne s’affiche pas, <a href="/jedinfoll/regles.pdf" download>cliquez ici pour le télécharger</a>.</p>
+      <button class="btn" onclick="window.print()">📄 Imprimer la section Règles</button>
+    </div>
+
+    <!-- Vidéos -->
+    <div class="card" id="videos">
+      <h2>🎥 Vidéos</h2>
+      <p class="small">Découvrez Jediñ Foll en action !</p>
+      <div style="aspect-ratio:16/9; max-width:100%;">
+        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/ID_DE_TA_VIDEO"
+          title="Jediñ Foll — Démo" frameborder="0" allowfullscreen></iframe>
+      </div>
+    </div>
+
+    <!-- Mentions légales -->
+    <div class="card mentions">
+      <h2>Mentions légales</h2>
+      <p><strong>Éditeur :</strong> Jediñ Foll — Email : <a href="mailto:jedinfoll@gmail.com">jedinfoll@gmail.com</a></p>
+      <p><strong>Responsable de publication :</strong> Jessica Lechertier</p>
+      <p><strong>Fabrication :</strong> Créé en
+        <span class="flags-inline">Martinique
+          <img src="https://raw.githubusercontent.com/jedinfoll/jedinfoll/main/1000079688.jpg" alt="Drapeau Martinique" class="flag">
+        </span>.
+      </p>
+      <p><strong>Hébergement :</strong> GitHub Pages — GitHub Inc., 88 Colin P Kelly Jr St, San Francisco, CA 94107, USA.</p>
+      <p><strong>Propriété intellectuelle :</strong> Contenus © Jediñ Foll. Reproduction interdite sans autorisation.</p>
+      <p><strong>Données personnelles :</strong> Les données collectées (commandes, emails) servent uniquement au traitement des achats et ne sont jamais revendues.</p>
+    </div>
+  </main>
+
+  <footer>
+    <div class="social-links">
+      <a href="https://www.instagram.com/jedinfoll" target="_blank">Instagram : @jedinfoll</a> |
+      <a href="https://www.facebook.com/search/top?q=Jedi%C3%B1%20Foll" target="_blank">Facebook : Jediñ Foll</a> |
+      <a href="mailto:jedinfoll@gmail.com">Email : jedinfoll@gmail.com</a>
+    </div>
+
+    <!-- Compteur de visites -->
+    <p style="margin-top:.6rem;">
+      👁️ Visites :
+      <img id="hitPrimary"
+        src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fjedinfoll.github.io%2Fjedinfoll%2F&count_bg=%2300b4d8&title_bg=%231a1a1a&icon=&icon_color=%23ffffff&title=visites&edge_flat=false"
+        alt="Compteur de visites"
+        style="vertical-align:middle"
+        onerror="this.onerror=null;this.src='https://visitor-badge.laobi.icu/badge?page_id=jedinfoll.jedinfoll';">
+      <span id="hitFallback" style="margin-left:.4rem;"></span>
+    </p>
+
+    <p>© 2025 Jediñ Foll — Tous droits réservés.</p>
+  </footer>
+
+  <!-- Compteur JS de secours -->
+  <script>
+    (function(){
+      const txt=document.getElementById('hitFallback');
+      if(!txt)return;
+      const img=document.getElementById('hitPrimary');
+      let done=false;
+      function setText(n){if(!done){txt.textContent='('+n.toLocaleString('fr-FR')+')';done=true;}}
+      img.addEventListener('load',()=>{done=true;});
+      setTimeout(async()=>{if(done)return;
+        try{
+          const ns=encodeURIComponent('jedinfoll.github.io');
+          const key=encodeURIComponent('site_total');
+          const hit=await fetch(`https://api.countapi.xyz/hit/${ns}/${key}`,{cache:'no-store',mode:'cors'}).then(r=>r.json());
+          if(typeof hit.value==='number'){setText(hit.value);return;}
+          const get=await fetch(`https://api.countapi.xyz/get/${ns}/${key}`,{cache:'no-store',mode:'cors'}).then(r=>r.json());
+          if(typeof get.value==='number'){setText(get.value);return;}
+        }catch(e){}
+      },1500);
+    })();
+  </script>
+</body>
+</html>
