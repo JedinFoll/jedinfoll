@@ -137,16 +137,145 @@
       </p>
     </div>
 
-    <!-- Règles -->
-    <div class="card" id="rules">
-      <h2>Règles du jeu</h2>
-      <p class="small">Lecture directe ci-dessous • <a class="btn" href="/jedinfoll/regles.pdf" download>Télécharger le PDF</a></p>
-      <object data="/jedinfoll/regles.pdf" type="application/pdf" class="pdf-frame">
-        <iframe src="/jedinfoll/regles.pdf" class="pdf-frame" title="Règles"></iframe>
-      </object>
-      <p class="small">Si le PDF ne s’affiche pas, <a href="/jedinfoll/regles.pdf" download>cliquez ici pour le télécharger</a>.</p>
-      <button class="btn" onclick="window.print()">📄 Imprimer la section Règles</button>
+   <!-- Règles -->
+<div class="card" id="rules">
+  <h2>Règles du jeu</h2>
+
+  <div class="rules-meta">
+    <div class="pill">👥 1 à 4 joueurs</div>
+    <div class="pill">👶 Dès 6 ans</div>
+    <div class="pill">⏱️ 15 à 30 min</div>
+    <div class="pill">🃏 102 cartes</div>
+  </div>
+
+  <p class="small" style="margin:.8rem 0 1.2rem;">
+    Lecture facile sur mobile •
+    <a class="btn" href="/jedinfoll/regles.pdf" download style="margin-left:.4rem;">📥 Télécharger le PDF</a>
+  </p>
+
+  <details class="rules-block" open>
+    <summary>🎯 Objectif du jeu</summary>
+    <div class="rules-content">
+      <h3>Modes de jeu</h3>
+      <ul>
+        <li><strong>Mode 1 :</strong> atteindre <strong>exactement 20 points</strong> en utilisant les chiffres de 0 à 5 et les signes <strong>+</strong> et <strong>-</strong> dans une seule ligne de calcul. On n’utilise que <strong>1 carte “Jediñ Foll”</strong>.</li>
+        <li><strong>Mode 2 :</strong> atteindre <strong>exactement 30 points</strong> en utilisant les chiffres de 0 à 9 et les signes <strong>+</strong> et <strong>-</strong> dans une seule ligne de calcul. On n’utilise que <strong>1 carte “Jediñ Foll”</strong>.</li>
+        <li><strong>Mode 3 :</strong> atteindre <strong>exactement 100 points</strong> en utilisant les chiffres de 0 à 5 et <strong>tous les signes</strong> en <strong>2 lignes de calcul</strong>. On utilise les <strong>2 cartes “Jediñ Foll”</strong>.</li>
+        <li><strong>Mode 4 :</strong> atteindre <strong>exactement 100 points</strong> en utilisant les chiffres de 0 à 9 et <strong>tous les signes</strong> en <strong>2 lignes de calcul</strong>. On utilise les <strong>2 cartes “Jediñ Foll”</strong>.</li>
+      </ul>
     </div>
+  </details>
+
+  <details class="rules-block">
+    <summary>🧠 Déroulement du jeu</summary>
+    <div class="rules-content">
+      <h3>Distribution</h3>
+      <p>Chaque joueur commence avec <strong>7 cartes en main</strong>.</p>
+
+      <h3>Premier joueur</h3>
+      <p>Le joueur qui a le plus de points avec ses <strong>cartes jaunes</strong> commence la partie.</p>
+
+      <h3>À chaque tour</h3>
+      <p>Le joueur doit jouer <strong>2 cartes</strong> de sa main :</p>
+      <ul>
+        <li>soit dans son propre jeu,</li>
+        <li>soit dans le jeu d’un adversaire,</li>
+        <li>soit dans la défausse.</li>
+      </ul>
+
+      <p>Après avoir joué ses 2 cartes, le joueur prend <strong>2 nouvelles cartes</strong> pour avoir de nouveau <strong>7 cartes en main</strong> (dans la pioche ou dans la défausse).</p>
+
+      <p>Lors de son tour, un joueur peut choisir de <strong>défausser une carte</strong> de sa ligne de calcul <strong>sans que cela ne compte comme une action</strong>. Cela permet de réajuster son jeu sans pénalité.</p>
+
+      <p>Un joueur peut choisir de <strong>retirer une ligne de calcul</strong> (soit une ligne de <strong>×</strong> et <strong>÷</strong>, soit une ligne <strong>+</strong> et <strong>-</strong>) de son propre jeu : elle est placée dans la défausse. Cela permet de réorganiser ou ajuster son jeu, mais le joueur <strong>passe son tour</strong>.</p>
+    </div>
+  </details>
+
+  <details class="rules-block">
+    <summary>➕✖️ Modes 3 & 4 (2 lignes de calcul)</summary>
+    <div class="rules-content">
+      <p>Les joueurs doivent réaliser <strong>deux lignes de calcul</strong> :</p>
+      <ul>
+        <li>Une ligne pour <strong>×</strong> et <strong>÷</strong></li>
+        <li>Une ligne pour <strong>+</strong> et <strong>-</strong></li>
+      </ul>
+
+      <p>Les résultats des deux lignes s'additionnent, <strong>sauf</strong> si le résultat de la ligne des signes <strong>+</strong> et <strong>-</strong> est négatif : dans ce cas, cette ligne se <strong>soustrait</strong> du total de la ligne <strong>×</strong> et <strong>÷</strong>.</p>
+
+      <p>Si une division donne un résultat décimal, le joueur doit prendre le chiffre supérieur (<strong>arrondi vers le haut</strong>). Exemple : 3,2 → 4.</p>
+
+      <p>Pour calculer sa ligne, on va <strong>de gauche à droite</strong>.</p>
+    </div>
+  </details>
+
+  <details class="rules-block">
+    <summary>🏁 Conditions de victoire</summary>
+    <div class="rules-content">
+      <p>Le premier joueur à atteindre <strong>exactement</strong> l’objectif de points de son mode de jeu <strong>gagne la partie</strong>.</p>
+
+      <p>Avant d’annoncer sa victoire, un joueur doit être sûr de son total de points. Si une erreur est détectée, chaque autre joueur choisit une carte de la ligne de calcul parmi celles du joueur concerné, la retire de son jeu et la place dans la défausse.</p>
+
+      <p>Un joueur ne peut pas se déclarer vainqueur si des cartes isolées (non intégrées dans les calculs) restent posées dans ses lignes de jeu.</p>
+
+      <p class="hint"><strong>Conseil :</strong> Pour plus de fun, limitez-vous à <strong>1 min</strong> maximum de temps de réponse.</p>
+      <p class="hint">Vous pouvez aussi moduler les objectifs : <strong>50</strong>, <strong>150 points</strong>…</p>
+    </div>
+  </details>
+
+  <details class="rules-block">
+    <summary>🃏 Pioche & Défausse</summary>
+    <div class="rules-content">
+      <p><strong>Défausse visible :</strong> La défausse est toujours visible. Les joueurs peuvent choisir de piocher soit dans la pioche, soit dans la défausse.</p>
+      <p><strong>Reconstitution :</strong> Lorsque la pioche est épuisée, retournez la défausse et formez une nouvelle pioche. Le jeu continue jusqu’à ce qu’un joueur atteigne l’objectif de points.</p>
+      <p>Toutes les cartes remplacées ou retirées du jeu vont dans la défausse. Lorsqu'une ligne entière est retirée, le joueur peut choisir l'ordre des cartes posées dans la défausse.</p>
+    </div>
+  </details>
+
+  <details class="rules-block">
+    <summary>🧾 Résumé des cartes</summary>
+    <div class="rules-content">
+      <h3>Cartes jaunes (80)</h3>
+      <p>Représentent des chiffres de 0 à 9. Elles peuvent être uniquement utilisées dans son propre jeu ou pour remplacer une carte jaune déjà présente dans son jeu. <strong>Les signes avec les signes et les chiffres avec des chiffres.</strong></p>
+
+      <h3>Cartes “Jediñ Foll” (2)</h3>
+      <p>Permettent de forcer un adversaire à retirer une ligne de calcul de son jeu. Cela perturbe le jeu des adversaires et ralentit leur progression.</p>
+
+      <h3>Cartes roses (14)</h3>
+      <p>Chaque carte rose est un exemplaire unique et permet de remplacer une carte (jaune ou rose) dans le jeu d’un adversaire ou dans son propre jeu.</p>
+      <p>Une fois posée, l'emplacement rose reste ainsi jusqu'à la fin de la partie ou jusqu’à l’enlèvement de la ligne.</p>
+      <p>Les cartes roses sont essentielles pour perturber les plans des autres joueurs et contrôler votre propre jeu. Utilisez-les de manière stratégique.</p>
+      <p><strong>Attention :</strong> en cas de changement de signe il ne faut pas que les deux lignes de calculs soient de mêmes signes et il ne faut pas faire cohabiter deux signes qui ne doivent pas être sur la même ligne.</p>
+
+      <h3>Cartes “Choix Multiples” (6)</h3>
+      <p>Permettent de choisir un chiffre ou un signe parmi plusieurs options disponibles. Elles offrent une grande flexibilité pour s’adapter aux situations de jeu.</p>
+    </div>
+  </details>
+
+  <details class="rules-block">
+    <summary>🎲 Mode solo</summary>
+    <div class="rules-content">
+      <p>Oui, vous pouvez jouer seul à Jediñ Foll ! Ce mode solo est un défi stratégique où vous devez atteindre l’objectif du mode que vous avez choisi avant d’épuiser la pioche.</p>
+      <p>Mélangez <strong>30 cartes</strong> au hasard parmi le jeu complet et placez-les face cachée en tant que pioche. Commencez la partie avec <strong>7 cartes en main</strong>.</p>
+
+      <h3>À chaque tour</h3>
+      <ul>
+        <li>Jouez 2 cartes de votre main.</li>
+        <li>Piochez 2 nouvelles cartes pour revenir à 7 en main.</li>
+        <li>Retournez immédiatement la carte suivante de la pioche :</li>
+      </ul>
+
+      <p><strong>Si c’est une carte rose ou un Jediñ Foll</strong>, appliquez son effet immédiatement.<br>
+         <strong>Si c’est une carte jaune</strong>, placez-la directement dans la défausse et continuez à jouer normalement.</p>
+
+      <p>La défausse est face cachée : récupération de cartes impossible. Vous devez atteindre exactement l’objectif avant que la pioche ne soit vide.</p>
+      <p><strong>Si la pioche est épuisée avant que l’objectif ne soit atteint, vous perdez.</strong></p>
+
+      <p class="final"><strong>Amusez-vous bien et bonne chance pour vos parties de Jediñ Foll !</strong></p>
+    </div>
+  </details>
+
+  <button class="btn" onclick="window.print()">📄 Imprimer la section Règles</button>
+</div>
 
     <!-- Vidéos -->
     <div class="card" id="videos">
