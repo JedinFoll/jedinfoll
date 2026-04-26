@@ -105,22 +105,71 @@
         <li>La boîte contient 102 cartes</li>
       </ul>
     </div>
+<!-- Commande -->
+<div class="card" id="pricing">
+  <h2>Commande</h2>
 
-    <!-- Commande -->
-    <div class="card" id="pricing">
-      <h2>Commande</h2>
+  <p style="font-size:1.1rem; color:#ffcb77; font-weight:bold; margin-bottom:1rem;">
+    🎉 Seulement 14,99 € pour des heures de jeu, de logique, de rires et d'apprentissage !
+  </p>
 
-      <p style="font-size:1.1rem; color:#ffcb77; font-weight:bold; margin-bottom:1rem;">
-        🎉 Seulement 14,99 € pour des heures de jeu, de logique, de rires et d'apprentissage !
-      </p>
+  <div class="price">À partir de 14,99 €</div>
 
-      <div class="price">14,99 €</div>
+  <!-- Achat France avec livraison -->
+  <label for="choixCommande" style="display:block; margin-bottom:.5rem; font-weight:bold;">
+    Choisissez votre quantité avec livraison :
+  </label>
 
-      <!-- Bouton France + livraison -->
-      <a href="https://www.paypal.com/ncp/payment/3MJTT9P62VJKY?no_shipping=2"
-         class="btn" style="font-size:1rem;">
-        🌍 Jediñ Foll 14,99 € + Livraison
-      </a>
+  <select id="choixCommande"
+          style="width:100%; max-width:420px; padding:.8rem; border-radius:10px; font-size:1rem; margin-bottom:1rem;">
+    <option value="">-- Sélectionnez une option --</option>
+    <option value="LIEN_PAYPAL_2_JEUX">2 Jediñ Foll + livraison 8 €</option>
+    <option value="LIEN_PAYPAL_3_JEUX">3 Jediñ Foll + livraison 8 €</option>
+    <option value="LIEN_PAYPAL_4_JEUX">4 Jediñ Foll + livraison 10 €</option>
+    <option value="LIEN_PAYPAL_5_JEUX">5 Jediñ Foll + livraison 10 €</option>
+    <option value="LIEN_PAYPAL_6_JEUX">6 Jediñ Foll + livraison 10 €</option>
+  </select>
+
+  <br>
+
+  <button class="btn" onclick="payerCommande()" style="font-size:1rem; border:none; cursor:pointer;">
+    🌍 Commander avec livraison
+  </button>
+
+  <hr style="margin:1.5rem 0; border:0; border-top:1px solid #444;">
+
+  <!-- Bouton Martinique et Saint-Malo retrait -->
+  <a href="https://www.paypal.com/ncp/payment/B3JBUBJQBNQWJ"
+     class="btn"
+     style="background:linear-gradient(90deg,#06d6a0,#ffd166); font-size:1rem;">
+    <img src="https://raw.githubusercontent.com/jedinfoll/jedinfoll/main/1000079688.jpg"
+         alt="Martinique" class="flag">
+    <img src="https://raw.githubusercontent.com/jedinfoll/jedinfoll/main/drapeaumalouin.jpg"
+         alt="Saint-Malo" class="flag">
+    Jediñ Foll Martinique et Saint-Malo — 14,99 € retrait sur place
+  </a>
+
+  <p class="small" style="margin-top:1rem;">
+    📦 <strong>IMPORTANT : laissez votre adresse + téléphone pour la livraison.</strong><br>
+    📞 <strong>IMPORTANT pour le retrait en MARTINIQUE et SAINT-MALO :</strong><br>
+    votre numéro de téléphone WhatsApp au 07 59 71 74 83 est indispensable.
+  </p>
+</div>
+
+<script>
+  function payerCommande() {
+    const select = document.getElementById("choixCommande");
+    const lien = select.value;
+
+    if (!lien) {
+      alert("Veuillez choisir une quantité avant de commander.");
+      return;
+    }
+
+    window.location.href = lien;
+  }
+</script>
+ 
 
       <!-- Bouton Martinique et Saint-Malo (retrait) -->
       <a href="https://www.paypal.com/ncp/payment/B3JBUBJQBNQWJ"
