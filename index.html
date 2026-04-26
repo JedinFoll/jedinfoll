@@ -119,18 +119,15 @@
   <label for="choixCommande" style="display:block; margin-bottom:.5rem; font-weight:bold;">
     Choisissez votre quantité avec livraison :
   </label>
-
-  <select id="choixCommande"
-          style="width:100%; max-width:420px; padding:.8rem; border-radius:10px; font-size:1rem; margin-bottom:1rem;">
-    <option value="">-- Sélectionnez une option --</option>
-    <option value="LIEN_PAYPAL_1_JEU">1 Jediñ Foll + livraison 5 €</option>
-    <option value="LIEN_PAYPAL_2_JEUX">2 Jediñ Foll + livraison 8 €</option>
-    <option value="LIEN_PAYPAL_3_JEUX">3 Jediñ Foll + livraison 8 €</option>
-    <option value="LIEN_PAYPAL_4_JEUX">4 Jediñ Foll + livraison 10 €</option>
-    <option value="LIEN_PAYPAL_5_JEUX">5 Jediñ Foll + livraison 10 €</option>
-    <option value="LIEN_PAYPAL_6_JEUX">6 Jediñ Foll + livraison 10 €</option>
-  </select>
-
+<select id="choixCommande" class="custom-select">
+  <option value="">-- Sélectionnez une option --</option>
+  <option value="LIEN_PAYPAL_1_JEU">1 Jediñ Foll + livraison 5 €</option>
+  <option value="LIEN_PAYPAL_2_JEUX">2 Jediñ Foll + livraison 8 €</option>
+  <option value="LIEN_PAYPAL_3_JEUX">3 Jediñ Foll + livraison 8 €</option>
+  <option value="LIEN_PAYPAL_4_JEUX">4 Jediñ Foll + livraison 10 €</option>
+  <option value="LIEN_PAYPAL_5_JEUX">5 Jediñ Foll + livraison 10 €</option>
+  <option value="LIEN_PAYPAL_6_JEUX">6 Jediñ Foll + livraison 10 €</option>
+</select>
   <br>
 
   <button class="btn" onclick="payerCommande()" style="font-size:1rem; border:none; cursor:pointer;">
