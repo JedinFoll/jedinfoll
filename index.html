@@ -389,74 +389,137 @@ footer{
       </div>
 
     </div>
+<!-- ================================= -->
+<!-- COMMANDE -->
+<!-- ================================= -->
+
+<div class="card" id="pricing"
+     style="text-align:center; padding:2.5rem 1.5rem;">
+
+  <!-- GRAND TITRE -->
+  <h2 style="
+      font-size:3.8rem;
+      font-weight:800;
+      color:#2ec4b6;
+      margin:0 0 .5rem;
+      line-height:1.1;">
+    Commande
+  </h2>
+
+  <!-- PRIX EN ROSE FUCHSIA -->
+  <div class="price" style="
+      font-size:2.5rem;
+      font-weight:800;
+      color:#ff1f78;
+      margin:.5rem 0 1.5rem;">
+    À partir de 14,99 €
+  </div>
 
 
-    <!-- ================================= -->
-    <!-- COMMANDE -->
-    <!-- ================================= -->
+  <!-- BOUTON LIVRAISON -->
+  <div class="dropdown-commande"
+       style="display:block; width:100%;">
 
-    <div class="card" id="pricing">
+    <button
+      class="btn"
+      onclick="toggleMenu(event)"
+      style="
+        font-size:1.1rem;
+        border:none;
+        cursor:pointer;
+        width:100%;
+        max-width:420px;
+        justify-content:center;
+        padding:1rem 1.2rem;
+      ">
+      🌍 Commander avec livraison ▼
+    </button>
 
-      <h2>Commande</h2>
 
-      <div class="price">À partir de 14,99 €</div>
+    <!-- MENU DÉROULANT -->
+    <div id="menuCommande"
+         class="menu-commande"
+         style="
+           left:50%;
+           transform:translateX(-50%);
+           width:100%;
+           max-width:420px;
+         ">
 
-      <!-- Bouton déroulant avec livraison -->
-      <div class="dropdown-commande">
-
-        <button
-          class="btn"
-          onclick="toggleMenu(event)"
-          style="font-size:1rem; border:none; cursor:pointer;">
-          🌍 Commander avec livraison ▼
-        </button>
-
-        <div id="menuCommande" class="menu-commande">
-
-          <a href="https://www.paypal.com/ncp/payment/3MJTT9P62VJKY">
-            1 Jediñ Foll + livraison 5 €
-          </a>
-
-          <a href="https://www.paypal.com/ncp/payment/293BU8G4EQYV8">
-            2 Jediñ Foll + livraison 8 €
-          </a>
-
-          <a href="https://www.paypal.com/ncp/payment/XS2BZC9L8349J">
-            3 Jediñ Foll + livraison 8 €
-          </a>
-
-          <a href="https://www.paypal.com/ncp/payment/XML8XN4A74JRC">
-            4 Jediñ Foll + livraison 10 €
-          </a>
-
-          <a href="https://www.paypal.com/ncp/payment/9ME4GC9K43Y5Q">
-            5 Jediñ Foll + livraison 10 €
-          </a>
-
-          <a href="https://www.paypal.com/ncp/payment/TQLQBYCDVCKX6">
-            6 Jediñ Foll + livraison 10 €
-          </a>
-
-        </div>
-      </div>
-
-      <br><br>
-
-      <!-- Bouton Guadeloupe et Saint-Malo retrait -->
-      <a href="https://www.paypal.com/ncp/payment/B3JBUBJQBNQWJ"
-         class="btn"
-         style="background:linear-gradient(90deg,#06d6a0,#ffd166); font-size:1rem;">
-        Retrait Guadeloupe et Saint-Malo
+      <a href="https://www.paypal.com/ncp/payment/3MJTT9P62VJKY">
+        1 Jediñ Foll + livraison 5 €
       </a>
 
-      <p class="small" style="margin-top:1rem;">
-        📦 <strong>IMPORTANT : laissez votre adresse + téléphone pour la livraison.</strong><br>
-        📞 <strong>IMPORTANT pour le retrait en GUADELOUPE et SAINT-MALO :</strong><br>
-        votre numéro de téléphone WhatsApp au 07 59 71 74 83 est indispensable.
-      </p>
+      <a href="https://www.paypal.com/ncp/payment/293BU8G4EQYV8">
+        2 Jediñ Foll + livraison 8 €
+      </a>
+
+      <a href="https://www.paypal.com/ncp/payment/XS2BZC9L8349J">
+        3 Jediñ Foll + livraison 8 €
+      </a>
+
+      <a href="https://www.paypal.com/ncp/payment/XML8XN4A74JRC">
+        4 Jediñ Foll + livraison 10 €
+      </a>
+
+      <a href="https://www.paypal.com/ncp/payment/9ME4GC9K43Y5Q">
+        5 Jediñ Foll + livraison 10 €
+      </a>
+
+      <a href="https://www.paypal.com/ncp/payment/TQLQBYCDVCKX6">
+        6 Jediñ Foll + livraison 10 €
+      </a>
 
     </div>
 
+  </div>
+
+
+  <!-- BOUTON RETRAIT -->
+  <div style="margin-top:1rem;">
+
+    <a href="https://www.paypal.com/ncp/payment/B3JBUBJQBNQWJ"
+       class="btn"
+       style="
+         background:linear-gradient(90deg,#06d6a0,#ffd166);
+         font-size:1.1rem;
+         width:100%;
+         max-width:420px;
+         justify-content:center;
+         padding:1rem 1.2rem;
+       ">
+      Retrait Guadeloupe et Saint-Malo
+    </a>
+
+  </div>
+
+
+  <!-- INFORMATIONS IMPORTANTES -->
+  <div style="
+      margin:2rem auto 0;
+      max-width:700px;
+      text-align:center;
+      color:#fff;
+      line-height:1.45;
+      font-size:1rem;
+    ">
+
+    <p style="margin:.4rem 0;">
+      📦 <strong>IMPORTANT :</strong>
+      laissez votre adresse + téléphone<br>
+      pour la livraison.
+    </p>
+
+    <p style="margin:1rem 0 0;">
+      📞 <strong>IMPORTANT pour le retrait en GUADELOUPE et SAINT-MALO :</strong><br>
+      votre numéro de téléphone WhatsApp au
+      <strong>07 59 71 74 83</strong><br>
+      est indispensable.
+    </p>
+
+  </div>
+
+</div>
 
        <!-- ================================= -->
     <!-- RÈGLES -->
